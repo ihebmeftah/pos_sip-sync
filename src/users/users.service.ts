@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
 import { UserBase } from 'src/database/base/user.base';
@@ -17,15 +17,18 @@ export class UsersService {
         private readonly adminRepository: Repository<Admin>,
         @InjectRepository(Employer)
         private readonly employerRepository: Repository<Employer>,
+        @Inject(forwardRef(() => BuildingService))
         private readonly buildingService: BuildingService,
     ) { }
-    // Start Admin functionnality
+
+    //* Start Admin functionnality
     public async createAdmin(createAdminDto: CreateAdminDto) {
         if (await this.existsAdminByEmail(createAdminDto.email))
             throw new ConflictException("Admin with this email already exists");
         if (await this.existsAdminByPhone(createAdminDto.phone))
             throw new ConflictException("Admin with this phone already exists");
         const createdAdmin = await this.adminRepository.create(createAdminDto);
+        createdAdmin.role = UserRole.Admin;
         return await this.adminRepository.save(createdAdmin);
     }
     public async findAllAdmins() {
@@ -36,9 +39,7 @@ export class UsersService {
         if (!admin) throw new NotFoundException("Admin not found");
         return admin;
     }
-    public async findOneAdminByEmail(email: string): Promise<UserBase | null> {
-        return await this.adminRepository.findOneBy({ email });
-    }
+
     private async existsAdminByEmail(email: string) {
         return await this.adminRepository.existsBy({ email });
     }
@@ -59,6 +60,7 @@ export class UsersService {
             throw new ConflictException("Employer with this phone already exists");
         const createdEmployer = await this.employerRepository.create(createEmployerDto);
         createdEmployer.building = building;
+        createdEmployer.role = UserRole.Employer;
         return await this.employerRepository.save(createdEmployer);
     }
     public async findAllEmployers(buildingId: UUID) {
@@ -76,15 +78,7 @@ export class UsersService {
         return employer;
     }
 
-    public async findOneEmployerByEmail(email: string): Promise<UserBase> {
-        const employer = await this.employerRepository.findOne({
-            where: { email },
-            relations: { building: true },
-        });
-        if (!employer) throw new NotFoundException("Employer not found");
-        return employer;
 
-    }
     private async existsEmployerByEmail(email: string) {
         return await this.employerRepository.existsBy({ email });
     }
@@ -93,11 +87,11 @@ export class UsersService {
         return await this.employerRepository.existsBy({ phone });
     }
 
-    // Auth helper functions
+    //* Auth helper functions
     public async findUserByEmail(email: string): Promise<UserBase> {
-        let user = await this.findOneAdminByEmail(email);
+        let user = await this.adminRepository.findOneBy({ email });
         if (user) return { ...user, role: UserRole.Admin };
-        user = await this.findOneEmployerByEmail(email);
+        user = await this.employerRepository.findOneBy({ email });
         if (user) return { ...user, role: UserRole.Employer };
         throw new NotFoundException("User not found");
     }

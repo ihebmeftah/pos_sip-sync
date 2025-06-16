@@ -10,6 +10,7 @@ import { UsersModule } from 'src/users/users.module';
     TypeOrmModule.forFeature([
       Building
     ]),
+    UsersModule,
   ],
   controllers: [BuildingController],
   providers: [BuildingService],

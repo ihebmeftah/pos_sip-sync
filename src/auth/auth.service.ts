@@ -34,29 +34,27 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    /*  let role: UserRole = UserRole.Admin;
-     let user: UserBase | null;
-     if (registerDto.role.toLowerCase() == "client") {
-       // user = await this.customerService.create(registerDto);
-       role = UserRole.Client;
-     } else if (registerDto.role.toLowerCase() == "owner") {
-       //  user = await this.adminService.create(registerDto);
-     } else {
-       throw new BadRequestException("Role not found");
-     }
-     if (!user) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
-     if (!user.active) {
-       throw new UnauthorizedException("User is not active");
-     }
-     const payload = {
-       role,
-       ...user,
-     };
-     return {
-       token: this.jwtService.sign(payload),
-       role,
-       ...user,
-     }; */
+    let user: UserBase;
+    /*    if (registerDto.role.toLowerCase() == "client") {
+         // user = await this.customerService.create(registerDto);
+         role = UserRole.Client;
+       } else  */
+    if (registerDto.role.toLowerCase() == "owner") {
+      user = await this.UsersService.createAdmin(registerDto);
+    } else {
+      throw new BadRequestException("Role not found");
+    }
+    if (!user) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
+    if (!user.active) {
+      throw new UnauthorizedException("User is not active");
+    }
+    const payload = {
+      ...user,
+    };
+    return {
+      token: this.jwtService.sign(payload),
+      ...user,
+    };
   }
 
 }

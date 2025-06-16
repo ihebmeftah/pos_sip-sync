@@ -11,6 +11,7 @@ import { OrderStatus } from 'src/enums/order_status';
 import { Article } from 'src/article/entities/article.entity';
 import { TableStatus } from 'src/enums/table_status';
 import { UserRole } from 'src/enums/user.roles';
+import { LoggedUser } from 'src/auth/strategy/loggeduser';
 
 @Injectable()
 export class OrderService {
@@ -27,7 +28,7 @@ export class OrderService {
 
     async passOrder(
         createOrderDto: CreateOrderDto,
-        user,
+        user: LoggedUser,
     ) {
         const table = await this.tablesService.findOne(createOrderDto.tableId);
         const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId);
@@ -57,43 +58,22 @@ export class OrderService {
         return savedOrder;
     }
 
-    async findOrderOfBuilding(buildingId: UUID, user) {
-        if (user.role === UserRole.Employer || user.role === UserRole.Client) {
-            return await this.orderRepo.find({
-                where: {
-                    table: {
-                        building: { id: buildingId }
+    async findOrderOfBuilding(buildingId: UUID) {
+        return await this.orderRepo.find({
+            where: {
+                table: { building: { id: buildingId } }
+            },
+            order: {
+                createdAt: "DESC",
+                items: {
+                    payed: "ASC",
+                    article: {
+                        name: "ASC"
                     },
-                    items: {
-                        passedById: user.id
-                    }
-                },
-                order: {
-                    createdAt: "DESC",
-                    items: {
-                        payed: "ASC",
-                        article: {
-                            name: "ASC"
-                        },
-                    }
-                }
-            });
-        } else
-            return await this.orderRepo.find({
-                where: {
-                    table: { building: { id: buildingId } }
-                },
-                order: {
-                    createdAt: "DESC",
-                    items: {
-                        payed: "ASC",
-                        article: {
-                            name: "ASC"
-                        },
 
-                    }
                 }
-            });
+            }
+        });
     }
     async getOrderItems(orderId: UUID) {
         return this.orderItemRepo.find({

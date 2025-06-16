@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login_dto';
 import { JwtAuthGuard } from './guard/auth.guard';
-import { register } from 'module';
 import { RegisterDto } from './dto/register_dto';
+import { CurrUser } from 'src/decorators/curr-user.decorator';
+import { LoggedUser } from './strategy/loggeduser';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +21,7 @@ export class AuthController {
   }
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async verify(@Request() req) {
-    /// { userId, email , role}
-    return req.user;
+  async verify(@CurrUser() user: LoggedUser) {
+    return user;
   }
 }

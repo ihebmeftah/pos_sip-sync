@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseUUIDPipe, UploadedFile, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { CreateBuildingDto } from './dto/create-building.dto';
-import { UpdateBuildingDto } from './dto/update-building.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { UserRole } from 'src/enums/user.roles';
 import { UUID } from 'crypto';
+import { CurrUser } from 'src/decorators/curr-user.decorator';
+import { LoggedUser } from 'src/auth/strategy/loggeduser';
 
 @Controller('building')
 @Roles(UserRole.Admin)
@@ -17,9 +18,9 @@ export class BuildingController {
   @Post()
   create(
     @Body() createBuildingDto: CreateBuildingDto,
-    @Req() req: any,
+    @CurrUser() user: LoggedUser,
   ) {
-    const userId: UUID = req.user.id;
+    const userId: UUID = user.id;
     return this.buildingService.create(userId,
       createBuildingDto)
   }
@@ -27,12 +28,10 @@ export class BuildingController {
   @Get()
   @Roles(UserRole.Admin, UserRole.Client)
   findAll(
-    @Req() req: any,
+    @CurrUser() user: LoggedUser,
   ) {
-    const role = req.user.role;
-    if (role == UserRole.Admin) {
-      const adminId: UUID = req.user.id;
-      return this.buildingService.findAllOfOwner(adminId);
+    if (user.role == UserRole.Admin) {
+      return this.buildingService.findAllOfOwner(user.id);
     }
     return this.buildingService.findAll();
   }
@@ -41,6 +40,4 @@ export class BuildingController {
   findOne(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.buildingService.findOne(id);
   }
-
-
 }

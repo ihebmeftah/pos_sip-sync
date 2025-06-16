@@ -9,6 +9,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from 'src/enums/user.roles';
+import { LoggedUser } from 'src/auth/strategy/loggeduser';
+import { CurrUser } from 'src/decorators/curr-user.decorator';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
@@ -24,9 +26,8 @@ export class OrderController {
     @Get()
     async findOrderOfBuilding(
         @BuildingId() buildingId: UUID,
-        @Req() req: any,
     ) {
-        return await this.orderService.findOrderOfBuilding(buildingId, req.user);
+        return await this.orderService.findOrderOfBuilding(buildingId);
     }
 
     @Get(":id")
@@ -46,9 +47,9 @@ export class OrderController {
     @Post()
     async passOrder(
         @Body() createOrderDto: CreateOrderDto,
-        @Req() req: any,
+        @CurrUser() user: LoggedUser,
     ) {
-        return await this.orderService.passOrder(createOrderDto, req.user);
+        return await this.orderService.passOrder(createOrderDto, user);
     }
 
     @Patch("/item/:id")

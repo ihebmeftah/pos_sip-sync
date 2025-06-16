@@ -5,6 +5,7 @@ import { UserRole } from 'src/enums/user.roles';
 import { UserBase } from 'src/database/base/user.base';
 import { RegisterDto } from './dto/register_dto';
 import { UsersService } from '../users/users.service';
+import { LoggedUser } from './strategy/loggeduser';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +19,10 @@ export class AuthService {
     if (!user.active) {
       throw new UnauthorizedException("User is not active");
     }
-    const isMatch = loginDto.password == user.password //await compare(loginDto.password, account.password);
+    const isMatch = loginDto.password == user.password
+    //await compare(loginDto.password, account.password);
     if (isMatch) {
-      const payload = {
+      const payload: LoggedUser = {
         id: user.id,
         email: user.email,
         role: user.role,
@@ -48,8 +50,10 @@ export class AuthService {
     if (!user.active) {
       throw new UnauthorizedException("User is not active");
     }
-    const payload = {
-      ...user,
+    const payload: LoggedUser = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
     };
     return {
       token: this.jwtService.sign(payload),

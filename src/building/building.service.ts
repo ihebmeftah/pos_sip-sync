@@ -1,23 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { Repository } from 'typeorm';
 import { Building } from './entities/building.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
-import { AdminService } from 'src/admin/admin.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class BuildingService {
   constructor(
     @InjectRepository(Building)
     private readonly buildingRepo: Repository<Building>,
-    private readonly adminservice: AdminService,
+    private readonly userService: UsersService,
   ) { }
-  async create(ownerId: UUID, 
-    createBuildingDto: CreateBuildingDto, 
- ): Promise<Building> {
-    const admin = await this.adminservice.findOne(ownerId);
+  async create(ownerId: UUID,
+    createBuildingDto: CreateBuildingDto,
+  ): Promise<Building> {
+    const admin = await this.userService.findOneAdmin(ownerId);
     const building = await this.buildingRepo.create(createBuildingDto);
     building.admin = admin;
     return this.buildingRepo.save(building);

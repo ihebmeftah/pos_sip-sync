@@ -7,7 +7,6 @@ import { Table } from './entities/table.entity';
 import { BuildingService } from 'src/building/building.service';
 import { UUID } from 'crypto';
 import { OrderService } from 'src/order/order.service';
-import { Reservation } from '../reservations/entities/reservation.entity';
 
 @Injectable()
 export class TablesService {
@@ -64,31 +63,15 @@ export class TablesService {
       where: {
         building: { id: buildingId },
       },
-      relations: {
-        reservations: true,
-      },
       order: {
         createdAt: 'ASC',
       },
-      select: {
-        reservations: {
-          start: true,
-          end: true,
-          customerName: true,
-        }
-      }
     });
-    const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     for (const table of tables) {
       const order = await this.orderService.checkTableHaveOrder(table.id);
       if (order) {
         table.status = TableStatus.occupied;
       }
-      table.reservations = table.reservations.filter((reservation) => {
-        return reservation.start >= startOfDay && reservation.end <= endOfDay;
-      });
     }
     if (status) {
       tables = tables.filter((t) => t.status == status)
@@ -98,17 +81,5 @@ export class TablesService {
 
   getTableCurrentOrder(tableId: UUID) {
     return this.orderService.checkTableHaveOrder(tableId);
-  }
-
-  async getNbTableStatus(buildingId: UUID) {
-    const tables = await this.findTablesOfBuilding(buildingId);
-    const available = tables.filter((table) => table.status == TableStatus.available).length;
-    const occupied = tables.filter((table) => table.status == TableStatus.occupied).length;
-    const reserved = tables.filter((table) => table.reservations.length > 0).length;
-    return {
-      available,
-      occupied,
-      reserved: 0
-    }
   }
 }

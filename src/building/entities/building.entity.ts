@@ -1,8 +1,7 @@
 import { UUID } from 'crypto';
-import { Admin } from 'src/admin/entities/admin.entity';
 import { TimestampBaseEntity } from 'src/database/base/timestampbase';
-import { Employer } from 'src/employer/entities/employer.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Admin } from 'src/users/entities/admin.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Building extends TimestampBaseEntity {

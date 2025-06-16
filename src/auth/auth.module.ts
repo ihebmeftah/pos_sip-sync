@@ -4,9 +4,8 @@ import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JWTStrategy } from 'src/auth/strategy/jwt.strategy';
-import { EmployerModule } from 'src/employer/employer.module';
-import { AdminModule } from 'src/admin/admin.module';
-import { CustomerModule } from 'src/customer/customer.module';
+import { UsersModule } from 'src/users/users.module';
+
 
 @Module({
   imports: [
@@ -15,9 +14,7 @@ import { CustomerModule } from 'src/customer/customer.module';
         expiresIn: '12h',
       },
     }),
-    EmployerModule,
-    AdminModule,
-    CustomerModule,
+    UsersModule,
     PassportModule,
   ],
   controllers: [AuthController],

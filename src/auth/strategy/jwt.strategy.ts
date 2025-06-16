@@ -11,8 +11,12 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
             secretOrKey: 'HAD_12X#@',
         });
     }
-    
+
     async validate(payload) {
-        return payload;
+        return {
+            id: payload.id,
+            email: payload.email,
+            role: payload.role,
+        };
     }
 }

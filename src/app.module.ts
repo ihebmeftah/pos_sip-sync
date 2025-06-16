@@ -8,9 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ArticleModule } from './article/article.module';
 import { OrderModule } from './order/order.module';
-import { ReservationsModule } from './reservations/reservations.module';
-import { CustomerModule } from './customer/customer.module';
-import { StatsModule } from './stats/stats.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -24,9 +22,7 @@ import { StatsModule } from './stats/stats.module';
     AuthModule,
     ArticleModule,
     OrderModule,
-    ReservationsModule,
-    CustomerModule,
-    StatsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

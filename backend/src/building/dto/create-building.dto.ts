@@ -30,4 +30,5 @@ export class CreateBuildingDto {
     lat: number
 
     logo: string
+    photos: string[]
 }

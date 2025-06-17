@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -8,6 +8,7 @@ import { UserRole } from 'src/enums/user.roles';
 import { UUID } from 'crypto';
 import { CurrUser } from 'src/decorators/curr-user.decorator';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
+import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
 
 @Controller('building')
 @Roles(UserRole.Admin)
@@ -16,13 +17,28 @@ export class BuildingController {
   constructor(private readonly buildingService: BuildingService) { }
 
   @Post()
+  @UseInterceptors(
+    CustomFileUploadInterceptor([
+      { name: 'logo', maxCount: 1 },
+      { name: 'photos', maxCount: 10 }, // adjust maxCount as needed
+    ], './uploads/building')
+  )
   create(
     @Body() createBuildingDto: CreateBuildingDto,
     @CurrUser() user: LoggedUser,
+    @UploadedFiles() files: {
+      logo?: Express.Multer.File[];
+      photos?: Express.Multer.File[]
+    }
   ) {
     const userId: UUID = user.id;
-    return this.buildingService.create(userId,
-      createBuildingDto)
+    if (files.logo && files.logo[0]) {
+      createBuildingDto.logo = files.logo[0].path;
+    }
+    if (files.photos) {
+      createBuildingDto.photos = files.photos.map(f => f.path);
+    }
+    return this.buildingService.create(userId, createBuildingDto);
   }
 
   @Get()

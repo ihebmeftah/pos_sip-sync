@@ -20,20 +20,20 @@ export class BuildingController {
   @UseInterceptors(
     CustomFileUploadInterceptor([
       { name: 'logo', maxCount: 1 },
-      { name: 'photos', maxCount: 10 }, // adjust maxCount as needed
+      { name: 'photos', maxCount: 10 },
     ], './uploads/building')
   )
   create(
     @Body() createBuildingDto: CreateBuildingDto,
     @CurrUser() user: LoggedUser,
     @UploadedFiles() files: {
-      logo?: Express.Multer.File[];
+      logo?: Express.Multer.File;
       photos?: Express.Multer.File[]
     }
   ) {
     const userId: UUID = user.id;
     if (files.logo && files.logo[0]) {
-      createBuildingDto.logo = files.logo[0].path;
+      createBuildingDto.logo = files.logo.path;
     }
     if (files.photos) {
       createBuildingDto.photos = files.photos.map(f => f.path);

@@ -32,7 +32,7 @@ export class BuildingController {
     }
   ) {
     const userId: UUID = user.id;
-    if (files.logo && files.logo[0]) {
+    if (files.logo) {
       createBuildingDto.logo = files.logo.path;
     }
     if (files.photos) {

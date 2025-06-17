@@ -10,10 +10,11 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
     }),
-
   );
 
-  await app.listen(parseInt(process.env.PORT!));
+  // Use default port 3000 if process.env.PORT is not set or not a number
+  const port = parseInt(process.env.PORT || '3000', 10);
+  await app.listen(port);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

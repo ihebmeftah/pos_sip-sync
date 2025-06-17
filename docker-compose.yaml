@@ -1,4 +1,22 @@
 services:
+  app:
+    build: .
+    container_name: pos-nest-app
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=admindb
+      - DB_PASSWORD=admindb
+      - DB_NAME=pos
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    restart: always
+    # Uncomment if you want to mount local uploads for development
+    # volumes:
+    #   - ./uploads:/app/uploads
   db:
     image: postgres:16.3
     restart: always

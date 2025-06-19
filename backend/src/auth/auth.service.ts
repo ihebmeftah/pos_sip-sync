@@ -32,7 +32,7 @@ export class AuthService {
         ...user,
       };
     }
-    throw new BadRequestException("Password incorrect");;
+    throw new UnauthorizedException("Password incorrect");;
   }
 
   async register(registerDto: RegisterDto) {

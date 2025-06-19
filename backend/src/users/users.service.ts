@@ -1,4 +1,4 @@
-import { ConflictException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
 import { UserBase } from 'src/database/base/user.base';
@@ -93,7 +93,7 @@ export class UsersService {
         if (user) return { ...user, role: UserRole.Admin };
         user = await this.employerRepository.findOneBy({ email });
         if (user) return { ...user, role: UserRole.Employer };
-        throw new NotFoundException("User not found");
+        throw new UnauthorizedException();
     }
 
 }

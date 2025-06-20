@@ -21,7 +21,7 @@ export class Building extends TimestampBaseEntity {
     lat: number
     @Column({ nullable: true })
     logo: string
-    @Column("simple-array", { nullable: true, array: true })
+    @Column("text", { nullable: true, array: true })
     photos: string[]
     @ManyToOne(() => Admin, { nullable: false })
     admin: Admin

@@ -19,8 +19,6 @@ export class BuildingService {
     const admin = await this.userService.findOneAdmin(ownerId);
     const building = await this.buildingRepo.create(createBuildingDto);
     building.admin = admin;
-    building.photos = createBuildingDto.photos;
-    building.logo = createBuildingDto.logo;
     return this.buildingRepo.save(building);
   }
 

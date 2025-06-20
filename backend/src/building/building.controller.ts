@@ -33,7 +33,7 @@ export class BuildingController {
   ) {
     const userId: UUID = user.id;
     if (files.logo) {
-      createBuildingDto.logo = files.logo.path;
+      createBuildingDto.logo = files.logo[0].path;
     }
     if (files.photos) {
       createBuildingDto.photos = files.photos.map(f => f.path);

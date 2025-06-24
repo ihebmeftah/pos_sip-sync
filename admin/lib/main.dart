@@ -6,6 +6,10 @@ import 'package:get/get.dart';
 
 import 'app/routes/app_pages.dart';
 
+String url = GetPlatform.isAndroid
+    ? "http://100.0.0.0:3000"
+    : 'http://localhost:3000'
+          "/api/v1";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage().init();

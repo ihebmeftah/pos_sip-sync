@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:admin/app/data/apis/apis_exceptions.dart';
+import 'package:admin/app/data/local/local_storage.dart';
+import 'package:admin/app/routes/app_pages.dart';
 import 'package:get/get.dart' as getx;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -13,14 +15,20 @@ abstract class HttpHelper {
         : 'http://localhost:3000'
               "/api/v1",
   );
-  static Map<String, String> get _defaultHeaders => {};
+  static Map<String, String> get _defaultHeaders => {
+    if (LocalStorage().user != null) 'Authorization': LocalStorage().token,
+    if (LocalStorage().building != null)
+      'buildingid': LocalStorage().buildingId,
+  };
   static Future<T> get<T>({
     required String endpoint,
     Map<String, String>? headers,
+    Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
+    final uri = _buildUri(endpoint, queryParams);
     final response = await http.get(
-      Uri.parse('$_baseUrl$endpoint'),
+      uri,
       headers: {..._defaultHeaders, if (headers != null) ...headers},
     );
     return _handleResponse<T>(
@@ -34,10 +42,12 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
+    Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
+    final uri = _buildUri(endpoint, queryParams);
     final response = await http.post(
-      Uri.parse('$_baseUrl$endpoint'),
+      uri,
       headers: {
         ..._defaultHeaders,
         'Content-Type': 'application/json',
@@ -56,11 +66,12 @@ abstract class HttpHelper {
   static Future<T> multipart<T>({
     required String endpoint,
     Map<String, String>? headers,
+    Map<String, dynamic>? queryParams,
     required Map<String, String> fields,
     required List<http.MultipartFile> files,
     required T Function(dynamic json) fromJson,
   }) async {
-    final uri = Uri.parse('$_baseUrl$endpoint');
+    final uri = _buildUri(endpoint, queryParams);
     final request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       ..._defaultHeaders,
@@ -81,10 +92,12 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
+    Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
+    final uri = _buildUri(endpoint, queryParams);
     final response = await http.put(
-      Uri.parse('$_baseUrl$endpoint'),
+      uri,
       headers: {
         ..._defaultHeaders,
         'Content-Type': 'application/json',
@@ -103,10 +116,12 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
+    Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
+    final uri = _buildUri(endpoint, queryParams);
     final response = await http.patch(
-      Uri.parse('$_baseUrl$endpoint'),
+      uri,
       headers: {
         ..._defaultHeaders,
         'Content-Type': 'application/json',
@@ -125,10 +140,12 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
+    Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
+    final uri = _buildUri(endpoint, queryParams);
     final response = await http.delete(
-      Uri.parse('$_baseUrl$endpoint'),
+      uri,
       headers: {
         ..._defaultHeaders,
         'Content-Type': 'application/json',
@@ -143,11 +160,26 @@ abstract class HttpHelper {
     );
   }
 
-  static T _handleResponse<T>({
+  // Helper to build Uri with query params
+  static Uri _buildUri(String endpoint, Map<String, dynamic>? queryParams) {
+    final base = '$_baseUrl$endpoint';
+    if (queryParams == null || queryParams.isEmpty) {
+      return Uri.parse(base);
+    }
+    final uri = Uri.parse(base);
+    return uri.replace(
+      queryParameters: {
+        ...uri.queryParameters,
+        ...queryParams.map((k, v) => MapEntry(k, v.toString())),
+      },
+    );
+  }
+
+  static Future<T> _handleResponse<T>({
     required Response response,
     required String endpoint,
     required T Function(dynamic json) fromJson,
-  }) {
+  }) async {
     log("""
     ----- 🔘 HTTP LOGGER 🔘 -----
     ${response.statusCode >= 200 && response.statusCode <= 299 ? "🟢" : "🔴"} ${response.statusCode} STATUS CODE : ${response.statusCode}
@@ -162,6 +194,8 @@ abstract class HttpHelper {
     if (response.statusCode == 400) {
       throw BadRequestException('Bad Request: ${response.body}');
     } else if (response.statusCode == 401) {
+      await LocalStorage().clear();
+      getx.Get.offAllNamed(Routes.AUTH);
       throw UnauthorizedException('Unauthorized: ${response.body}');
     } else if (response.statusCode == 403) {
       throw ForrbidenException('Forbidden: ${response.body}');

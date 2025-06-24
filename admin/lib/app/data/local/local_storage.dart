@@ -1,3 +1,4 @@
+import 'package:admin/app/data/model/building/building.dart';
 import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -34,6 +35,17 @@ class LocalStorage {
     return LoginUser.fromJson(_storage.read<Map<String, dynamic>>('user')!);
   }
 
+  Future<bool> saveBuilding(Building v) async {
+    await _storage.write('building', v.toJson());
+    return true;
+  }
+
+  Building? get building {
+    if (!_storage.hasData('building')) return null;
+    return Building.fromJson(_storage.read<Map<String, dynamic>>('building')!);
+  }
+
+  String get buildingId => building!.id;
   Future<bool> clear() async {
     await _storage.erase();
     return true;

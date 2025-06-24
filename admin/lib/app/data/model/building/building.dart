@@ -1,0 +1,30 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'building.g.dart';
+
+@JsonSerializable()
+class Building {
+  String id;
+  String name;
+  String openingTime;
+  String closingTime;
+  String location;
+  double? long;
+  double? lat;
+  String? logo;
+  List<String>? photos;
+
+  Building({
+    required this.id,
+    required this.name,
+    required this.openingTime,
+    required this.closingTime,
+    required this.location,
+    this.long,
+    this.lat,
+    this.logo,
+    this.photos,
+  });
+  factory Building.fromJson(Map<String, dynamic> json) =>
+      _$BuildingFromJson(json);
+  Map<String, dynamic> toJson() => _$BuildingToJson(this);
+}

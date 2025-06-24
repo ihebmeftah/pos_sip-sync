@@ -1,0 +1,1 @@
+enum TableStatus { available, occupied }

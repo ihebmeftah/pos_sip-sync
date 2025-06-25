@@ -1,14 +1,24 @@
-import 'package:admin/app/middleware/authenticated_middleware.dart';
 import 'package:get/get.dart';
 
+import '../middleware/authenticated_middleware.dart';
+import '../modules/article/bindings/article_form_binding.dart';
+import '../modules/article/views/article_form_view.dart';
+import '../modules/article/bindings/article_binding.dart';
+import '../modules/article/views/article_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/buildings/bindings/buildings_binding.dart';
 import '../modules/buildings/views/buildings_view.dart';
+import '../modules/categorie/bindings/categorie_binding.dart';
+import '../modules/categorie/bindings/categorie_form_binding.dart';
+import '../modules/categorie/views/categorie_form_view.dart';
+import '../modules/categorie/views/categorie_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/index/bindings/index_binding.dart';
 import '../modules/index/views/index_view.dart';
+import '../modules/inventory/bindings/inventory_binding.dart';
+import '../modules/inventory/views/inventory_view.dart';
 import '../modules/tables/bindings/tables_binding.dart';
 import '../modules/tables/views/tables_view.dart';
 
@@ -26,7 +36,12 @@ class AppPages {
     GetPage(
       name: _Paths.INDEX,
       page: () => const IndexView(),
-      bindings: [IndexBinding(), HomeBinding(), TablesBinding()],
+      bindings: [
+        IndexBinding(),
+        HomeBinding(),
+        TablesBinding(),
+        InventoryBinding(),
+      ],
     ),
     GetPage(
       name: _Paths.TABLES,
@@ -43,6 +58,45 @@ class AppPages {
       name: _Paths.BUILDINGS,
       page: () => const BuildingsView(),
       binding: BuildingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVENTORY,
+      page: () => const InventoryView(),
+      binding: InventoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.CATEGORIE,
+      page: () => const CategorieView(),
+      binding: CategorieBinding(),
+      children: [
+        GetPage(
+          name: '${_Paths.CATEGORIE_FORM}/:id', // for update
+          page: () => const CategorieFormView(),
+          binding: CategorieFormBinding(),
+        ),
+        GetPage(
+          name: _Paths.CATEGORIE_FORM,
+          page: () => const CategorieFormView(),
+          binding: CategorieFormBinding(),
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.ARTICLE,
+      page: () => const ArticleView(),
+      binding: ArticleBinding(),
+      children: [
+        GetPage(
+          name: '${_Paths.ARTICLE_FORM}/:id',
+          page: () => const ArticleFormView(),
+          binding: ArticleFormBinding(),
+        ),
+        GetPage(
+          name: _Paths.ARTICLE_FORM,
+          page: () => const ArticleFormView(),
+          binding: ArticleFormBinding(),
+        ),
+      ],
     ),
   ];
 }

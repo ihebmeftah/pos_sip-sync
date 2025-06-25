@@ -1,0 +1,32 @@
+import 'package:admin/app/data/apis/categories_api.dart';
+import 'package:admin/app/modules/categorie/controllers/categorie_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class CategorieFormController extends GetxController with StateMixin {
+  final catFormKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+
+  @override
+  void onInit() {
+    change(null, status: RxStatus.success());
+    super.onInit();
+  }
+
+  craeteCategory() async {
+    try {
+      if (catFormKey.currentState!.validate()) {
+        change(null, status: RxStatus.loading());
+        await CategoriesApi().createCategories(
+          name: nameController.text,
+          description: descController.text,
+        );
+        Get.find<CategorieController>().getCategories();
+        Get.back();
+      }
+    } catch (e) {
+      change(null, status: RxStatus.error("Failed to create category"));
+    }
+  }
+}

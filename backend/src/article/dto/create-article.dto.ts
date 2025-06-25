@@ -1,4 +1,4 @@
-import { isDecimal, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, IsUUID, Min } from "class-validator";
+import { IsDecimal, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, IsUUID, Min } from "class-validator";
 import { UUID } from "crypto";
 
 export class CreateArticleDto {
@@ -14,7 +14,6 @@ export class CreateArticleDto {
     @IsOptional()
     image: string;
     @IsNumber()
-    @IsPositive()
     @Min(1)
     price: number;
     @IsUUID()

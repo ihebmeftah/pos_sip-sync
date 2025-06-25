@@ -1,3 +1,4 @@
+import 'package:admin/app/common/appbottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -44,94 +45,77 @@ class TablesView extends GetView<TablesController> {
                   itemCount: controller.tables.length,
                   itemBuilder: (context, index) => TableItemWidget(
                     onTap: () {
-                      Get.bottomSheet(
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                spacing: 20,
+                      bottomSheet(
+                        onConfirm: () {},
+                        confirmeButtonText: "Pass Order",
+                        children: [
+                          Row(
+                            spacing: 20,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/images/svg/table.svg',
+                                width: 30,
+                                height: 30,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SvgPicture.asset(
-                                    'assets/images/svg/table.svg',
-                                    width: 30,
-                                    height: 30,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.black,
-                                      BlendMode.srcIn,
+                                  Text(
+                                    controller.tables[index].name
+                                        .split('.')
+                                        .first,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        controller.tables[index].name
-                                            .split('.')
-                                            .first,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Max seats ${controller.tables[index].seatsMax}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          controller.tables[index].status ==
-                                              TableStatus.occupied
-                                          ? Colors.red.shade700
-                                          : Colors.greenAccent.shade700,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "${controller.tables[index].status.name.capitalize}",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
+                                  Text(
+                                    "Max seats ${controller.tables[index].seatsMax}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey.shade600,
                                     ),
                                   ),
                                 ],
                               ),
-                              ListTile(
-                                leading: Icon(Icons.music_note),
-                                title: Text('View & Edit'),
-                                onTap: () => {},
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.videocam),
-                                title: Text('Video'),
-                                onTap: () => {},
-                              ),
                               Spacer(),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                child: const Text("Pass order"),
-                              ),
-                              TextButton(
-                                onPressed: Get.back,
-                                child: const Text("Close"),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color:
+                                      controller.tables[index].status ==
+                                          TableStatus.occupied
+                                      ? Colors.red.shade700
+                                      : Colors.greenAccent.shade700,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${controller.tables[index].status.name.capitalize}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                        ),
-
-                        backgroundColor: Colors.white,
+                          ListTile(
+                            leading: Icon(Icons.music_note),
+                            title: Text('View & Edit'),
+                            onTap: () => {},
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.videocam),
+                            title: Text('Video'),
+                            onTap: () => {},
+                          ),
+                        ],
                       );
                     },
                     table: controller.tables[index],

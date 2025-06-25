@@ -1,3 +1,4 @@
+import 'package:admin/app/modules/inventory/views/inventory_view.dart';
 import 'package:admin/app/modules/tables/views/tables_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -93,7 +94,7 @@ class IndexView extends GetView<IndexController> {
         children: [
           HomeView(),
           Center(child: Text('Orders View')),
-          Center(child: Text('Inventory View')),
+          InventoryView(),
           TablesView(),
         ],
       ),

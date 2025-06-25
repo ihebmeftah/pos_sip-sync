@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class BuildingsController extends GetxController
     with StateMixin<List<Building>> {
-  bool dispList = true;
+  bool dispList = false;
   final buildings = <Building>[].obs;
   @override
   void onInit() async {

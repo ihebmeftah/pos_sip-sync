@@ -20,6 +20,7 @@ class CategoriesApi {
     return HttpHelper.post<Categorie>(
       endpoint: '/categroy',
       body: {'name': name, if (description != null) 'description': description},
+      files: [SingleFile(key: 'image')],
       fromJson: (data) {
         return Categorie.fromJson(data);
       },

@@ -50,29 +50,49 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
-    List<File> files = const [],
+    List<FileUpload>? files,
     Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
     try {
       FormData? formData;
-
-      formData = FormData();
-      (body as Map<String, dynamic>).forEach((key, value) {
-        formData!.fields.add(MapEntry(key, value.toString()));
-      });
-      for (final file in files) {
-        final fileName = file.path.split('/').last;
-        formData.files.add(
-          MapEntry(
-            'files',
-            await MultipartFile.fromFile(file.path, filename: fileName),
-          ),
-        );
+      if (files != null) {
+        formData = FormData();
+        (body as Map<String, dynamic>).forEach((key, value) {
+          formData!.fields.add(MapEntry(key, value.toString()));
+        });
+        for (final fileUpload in files) {
+          if (fileUpload is SingleFile) {
+            if (fileUpload.file != null) {
+              final fileName = fileUpload.file!.path.split('/').last;
+              formData.files.add(
+                MapEntry(
+                  fileUpload.key,
+                  MultipartFile.fromFileSync(
+                    fileUpload.file!.path,
+                    filename: fileName,
+                  ),
+                ),
+              );
+            }
+          } else if (fileUpload is MultipleFile) {
+            if (fileUpload.files.isNotEmpty) {
+              for (final file in fileUpload.files) {
+                final fileName = file.path.split('/').last;
+                formData.files.add(
+                  MapEntry(
+                    fileUpload.key,
+                    MultipartFile.fromFileSync(file.path, filename: fileName),
+                  ),
+                );
+              }
+            }
+          }
+        }
       }
       final response = await _dio.post(
         endpoint,
-        data: formData,
+        data: files != null ? formData : body,
         queryParameters: queryParams,
         options: Options(headers: headers),
       );
@@ -239,4 +259,22 @@ class _BuildingInterceptor extends Interceptor {
 
     handler.next(options);
   }
+}
+
+abstract class FileUpload {
+  final String key;
+
+  FileUpload({required this.key});
+}
+
+class SingleFile extends FileUpload {
+  final File? file;
+
+  SingleFile({required super.key, this.file});
+}
+
+class MultipleFile extends FileUpload {
+  final List<File> files;
+
+  MultipleFile({required super.key, this.files = const []});
 }

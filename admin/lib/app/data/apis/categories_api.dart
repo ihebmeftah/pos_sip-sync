@@ -17,13 +17,9 @@ class CategoriesApi {
     required String name,
     String? description,
   }) {
-    return HttpHelper.multipart<Categorie>(
+    return HttpHelper.post<Categorie>(
       endpoint: '/categroy',
-      fields: {
-        'name': name,
-        if (description != null) 'description': description,
-      },
-      files: [],
+      body: {'name': name, if (description != null) 'description': description},
       fromJson: (data) {
         return Categorie.fromJson(data);
       },

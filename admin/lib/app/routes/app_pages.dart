@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
 
 import '../middleware/authenticated_middleware.dart';
+import '../modules/article/bindings/article_binding.dart';
 import '../modules/article/bindings/article_form_binding.dart';
 import '../modules/article/views/article_form_view.dart';
-import '../modules/article/bindings/article_binding.dart';
 import '../modules/article/views/article_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/buildings/bindings/buildings_binding.dart';
+import '../modules/buildings/bindings/building_add_binding.dart';
+import '../modules/buildings/views/building_add_view.dart';
 import '../modules/buildings/views/buildings_view.dart';
 import '../modules/categorie/bindings/categorie_binding.dart';
 import '../modules/categorie/bindings/categorie_form_binding.dart';
@@ -58,6 +60,13 @@ class AppPages {
       name: _Paths.BUILDINGS,
       page: () => const BuildingsView(),
       binding: BuildingsBinding(),
+      children: [
+        GetPage(
+          name: _Paths.BUILDING_ADD,
+          page: () => const BuildingAddView(),
+          binding: BuildingAddBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.INVENTORY,

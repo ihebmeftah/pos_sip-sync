@@ -7,7 +7,7 @@ part of 'building.dart';
 // **************************************************************************
 
 Building _$BuildingFromJson(Map<String, dynamic> json) => Building(
-  id: json['id'] as String,
+  id: json['id'] as String?,
   name: json['name'] as String,
   openingTime: json['openingTime'] as String,
   closingTime: json['closingTime'] as String,

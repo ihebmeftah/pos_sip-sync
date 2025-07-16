@@ -10,4 +10,14 @@ class BuildingsApi {
       },
     );
   }
+
+  Future<Building> createBuilding(Building b) async {
+    return await HttpHelper.post<Building>(
+      endpoint: '/building',
+      body: b.addtoJson(),
+      fromJson: (data) {
+        return Building.fromJson(data);
+      },
+    );
+  }
 }

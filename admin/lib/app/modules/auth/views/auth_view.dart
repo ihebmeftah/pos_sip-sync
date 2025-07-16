@@ -11,7 +11,7 @@ class AuthView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Theme(
-        data: ThemeData(
+        data: context.theme.copyWith(
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
             fillColor: Colors.grey.shade200,

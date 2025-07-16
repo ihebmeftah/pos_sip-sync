@@ -3,7 +3,7 @@ part 'building.g.dart';
 
 @JsonSerializable()
 class Building {
-  String id;
+  String? id;
   String name;
   String openingTime;
   String closingTime;
@@ -14,7 +14,7 @@ class Building {
   List<String>? photos;
 
   Building({
-    required this.id,
+    this.id,
     required this.name,
     required this.openingTime,
     required this.closingTime,
@@ -27,4 +27,15 @@ class Building {
   factory Building.fromJson(Map<String, dynamic> json) =>
       _$BuildingFromJson(json);
   Map<String, dynamic> toJson() => _$BuildingToJson(this);
+
+  Map<String, dynamic> addtoJson() => <String, dynamic>{
+    'name': name,
+    'openingTime': openingTime,
+    'closingTime': closingTime,
+    'location': location,
+    if (long != null) 'long': long,
+    if (lat != null) 'lat': lat,
+    'logo': logo,
+    'photos': photos,
+  };
 }

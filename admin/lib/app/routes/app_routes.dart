@@ -15,6 +15,7 @@ abstract class Routes {
   static const CATEGORIE_FORM = _Paths.CATEGORIE + _Paths.CATEGORIE_FORM;
   static const ARTICLE = _Paths.ARTICLE;
   static const ARTICLE_FORM = _Paths.ARTICLE + _Paths.ARTICLE_FORM;
+  static const BUILDING_ADD = _Paths.BUILDINGS + _Paths.BUILDING_ADD;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const CATEGORIE_FORM = '/categorie-form';
   static const ARTICLE = '/article';
   static const ARTICLE_FORM = '/article-form';
+  static const BUILDING_ADD = '/building-add';
 }

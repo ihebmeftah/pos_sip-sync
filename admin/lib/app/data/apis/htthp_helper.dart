@@ -50,40 +50,17 @@ abstract class HttpHelper {
     required String endpoint,
     Map<String, String>? headers,
     Object? body,
+    List<File> files = const [],
     Map<String, dynamic>? queryParams,
     required T Function(dynamic json) fromJson,
   }) async {
     try {
-      final response = await _dio.post(
-        endpoint,
-        data: body,
-        queryParameters: queryParams,
-        options: Options(headers: headers),
-      );
-      return fromJson(response.data);
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    }
-  }
+      FormData? formData;
 
-  // Multipart request method
-  static Future<T> multipart<T>({
-    required String endpoint,
-    Map<String, String>? headers,
-    Map<String, dynamic>? queryParams,
-    required Map<String, String> fields,
-    required List<File> files,
-    required T Function(dynamic json) fromJson,
-  }) async {
-    try {
-      final formData = FormData();
-
-      // Add fields
-      fields.forEach((key, value) {
-        formData.fields.add(MapEntry(key, value));
+      formData = FormData();
+      (body as Map<String, dynamic>).forEach((key, value) {
+        formData!.fields.add(MapEntry(key, value.toString()));
       });
-
-      // Add files
       for (final file in files) {
         final fileName = file.path.split('/').last;
         formData.files.add(
@@ -93,7 +70,6 @@ abstract class HttpHelper {
           ),
         );
       }
-
       final response = await _dio.post(
         endpoint,
         data: formData,

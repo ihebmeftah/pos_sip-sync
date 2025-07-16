@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 class BuildingsController extends GetxController
     with StateMixin<List<Building>> {
-  bool dispList = false;
   final buildings = <Building>[].obs;
   @override
   void onInit() async {
@@ -21,8 +20,5 @@ class BuildingsController extends GetxController
     }
   }
 
-  void toggleDisplay() {
-    dispList = !dispList;
-    update();
-  }
+
 }

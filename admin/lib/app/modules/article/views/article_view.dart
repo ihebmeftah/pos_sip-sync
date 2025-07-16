@@ -1,3 +1,6 @@
+import 'package:admin/app/routes/app_pages.dart';
+import 'package:admin/themes/apptheme.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -9,7 +12,19 @@ class ArticleView extends GetView<ArticleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Article')),
+      appBar: AppBar(
+        title: const Text('Article'),
+        actions: [
+          IconButton(
+            color: Colors.grey.shade300,
+            onPressed: () {
+              Get.toNamed(Routes.ARTICLE_FORM);
+            },
+            style: IconButton.styleFrom(backgroundColor: AppTheme().primary),
+            icon: const Icon(FluentIcons.add_12_filled),
+          ),
+        ],
+      ),
       body: controller.obx(
         (state) => ListView.builder(
           itemCount: controller.articles.length,
@@ -44,7 +59,6 @@ class ArticleView extends GetView<ArticleController> {
             ),
             title: Text(controller.articles[index].name),
             subtitle: Text(controller.articles[index].categorie.name),
-            
           ),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:admin/app/data/model/table/tables.dart';
 
 class TablesApi {
   Future<List<Table>> getTables({TableStatus? status}) async {
-    return HttpHelper.get<List<Table>>(
+    return await HttpHelper.get<List<Table>>(
       endpoint: '/tables',
       queryParams: {if (status != null) 'status': status.name},
       fromJson: (json) => (json as List)

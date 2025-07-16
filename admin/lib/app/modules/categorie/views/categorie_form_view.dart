@@ -1,3 +1,4 @@
+import 'package:admin/app/common/fileupload/views/fileupload_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class CategorieFormView extends GetView<CategorieFormController> {
           child: Column(
             spacing: 20,
             children: [
+              FileuploadView(uploadType: UploadType.image),
               AppFormField.label(
                 label: "Category Name",
                 hint: "Enter category name",

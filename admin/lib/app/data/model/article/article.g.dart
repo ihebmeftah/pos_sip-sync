@@ -11,7 +11,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
   name: json['name'] as String,
   description: json['description'] as String?,
   image: json['image'] as String?,
-  price: json['price'],
+  price: json['price'] as num,
   categorie: Categorie.fromJson(json['category'] as Map<String, dynamic>),
 );
 

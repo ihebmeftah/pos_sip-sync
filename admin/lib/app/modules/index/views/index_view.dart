@@ -2,6 +2,7 @@ import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/modules/inventory/views/inventory_view.dart';
 import 'package:admin/app/modules/tables/views/tables_view.dart';
 import 'package:admin/app/routes/app_pages.dart';
+import 'package:admin/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,6 +26,11 @@ class IndexView extends GetView<IndexController> {
               ),
               accountEmail: Text(LocalStorage().user!.email),
             ),
+            ListTile(
+              leading: Icon(Icons.place),
+              title: Text('Buildings'),
+              onTap: () => Get.offAllNamed(Routes.BUILDINGS),
+            ),
             Spacer(),
             SafeArea(
               child: ListTile(
@@ -42,7 +48,15 @@ class IndexView extends GetView<IndexController> {
         ),
       ),
 
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          CircleAvatar(
+            backgroundImage: LocalStorage().building?.logo != null
+                ? NetworkImage(url + LocalStorage().building!.logo!)
+                : null,
+          ),
+        ],
+      ),
       bottomNavigationBar: GetBuilder<IndexController>(
         id: "bottomNavigationBar",
         builder: (_) {

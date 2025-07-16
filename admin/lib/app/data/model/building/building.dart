@@ -35,7 +35,5 @@ class Building {
     'location': location,
     if (long != null) 'long': long,
     if (lat != null) 'lat': lat,
-    'logo': logo,
-    'photos': photos,
   };
 }

@@ -1,44 +1,43 @@
+import 'package:admin/app/common/appformfield.dart';
 import 'package:flutter/material.dart';
 
-class AppFormField extends StatelessWidget {
-  const AppFormField({
+class AppDropdown<T> extends StatelessWidget {
+  const AppDropdown({
     super.key,
+    this.selectedItem,
     this.label,
-    this.isNumeric = false,
-    this.readOnly = false,
     this.hint,
-    this.ctr,
     this.onTap,
     this.validator,
+    this.onChanged,
     this.isOutsideLabel = false,
     this.maxLines,
-    this.minLines = 1,
+    required this.items,
   });
-  const AppFormField.label({
+  const AppDropdown.label({
     super.key,
-    this.isNumeric = false,
+    this.selectedItem,
     this.label,
     this.onTap,
-    this.readOnly = false,
     this.hint,
-    this.ctr,
     this.validator,
+    this.onChanged,
     this.isOutsideLabel = true,
     this.maxLines,
-    this.minLines = 1,
+    required this.items,
   }) : assert(
          isOutsideLabel == true || label != null,
          "If isOutsideLabel is false, label must not be null",
        );
-  final bool isOutsideLabel, readOnly;
+  final bool isOutsideLabel;
   final String? label;
   final String? hint;
-  final TextEditingController? ctr;
-  final FormFieldValidator<String>? validator;
+  final FormFieldValidator<T>? validator;
+  final ValueChanged<T?>? onChanged;
   final int? maxLines;
-  final int minLines;
   final VoidCallback? onTap;
-  final bool isNumeric;
+  final List<DropdownMenuItem<T>> items;
+  final T? selectedItem;
 
   @override
   Widget build(BuildContext context) {
@@ -47,34 +46,19 @@ class AppFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isOutsideLabel && label != null) AppLabel(label: label),
-        TextFormField(
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          readOnly: readOnly,
+        DropdownButtonFormField<T>(
+          isExpanded: true,
+          value: selectedItem,
+          items: items,
+          onChanged: onChanged,
           onTap: onTap,
-          maxLines: maxLines ?? minLines,
-          minLines: minLines,
           decoration: InputDecoration(
             label: (label != null && !isOutsideLabel) ? Text(label!) : null,
             hintText: hint,
           ),
-          controller: ctr,
           validator: validator,
         ),
       ],
-    );
-  }
-}
-
-class AppLabel extends StatelessWidget {
-  const AppLabel({super.key, required this.label});
-
-  final String? label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
-      child: Text(label!, style: Theme.of(context).textTheme.labelLarge),
     );
   }
 }

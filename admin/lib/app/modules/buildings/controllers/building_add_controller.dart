@@ -11,8 +11,12 @@ class BuildingAddController extends GetxController {
 
   final name = TextEditingController(),
       location = TextEditingController(),
-      opening = TextEditingController(),
-      closing = TextEditingController();
+      opening = TextEditingController(
+        text: TimeOfDay(hour: 07, minute: 00).format(Get.context!),
+      ),
+      closing = TextEditingController(
+        text: TimeOfDay(hour: 23, minute: 00).format(Get.context!),
+      );
 
   Building get addDto => Building(
     name: name.text,
@@ -45,7 +49,7 @@ class BuildingAddController extends GetxController {
   void pickOpeningTime() async {
     final time = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay.now(),
+      initialTime: TimeOfDay(hour: 07, minute: 00),
     );
     if (time != null) {
       opening.text = time.format(Get.context!);
@@ -55,7 +59,7 @@ class BuildingAddController extends GetxController {
   void pickClosingTime() async {
     final time = await showTimePicker(
       context: Get.context!,
-      initialTime: TimeOfDay.now(),
+      initialTime: TimeOfDay(hour: 23, minute: 00),
     );
     if (time != null) {
       closing.text = time.format(Get.context!);

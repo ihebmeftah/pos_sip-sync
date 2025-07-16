@@ -1,3 +1,4 @@
+import 'package:admin/app/common/fileupload/controllers/fileupload_controller.dart';
 import 'package:admin/app/data/apis/buildings_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,11 @@ class BuildingAddController extends GetxController {
   Future<void> addBuilding() async {
     try {
       if (addFormkey.currentState!.validate()) {
-        await BuildingsApi().createBuilding(addDto);
+        await BuildingsApi().createBuilding(
+          addDto,
+          logo: Get.find<FileuploadController>().convertselectedFile,
+          photos: Get.find<FileuploadController>().convertselectedFiles,
+        );
         Get.find<BuildingsController>().onInit();
         Get.back();
       }

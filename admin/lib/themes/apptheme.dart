@@ -53,7 +53,7 @@ class AppTheme {
         backgroundColor: primary,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        fixedSize: Size(double.maxFinite, 50),
+        fixedSize: Size(320, 50),
       ),
     ),
     textTheme: TextTheme(

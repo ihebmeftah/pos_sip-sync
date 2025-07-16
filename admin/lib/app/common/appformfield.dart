@@ -43,11 +43,7 @@ class AppFormField extends StatelessWidget {
       spacing: 5,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isOutsideLabel && label != null)
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text(label!, style: Theme.of(context).textTheme.labelLarge),
-          ),
+        if (isOutsideLabel && label != null) AppLabel(label: label),
         TextFormField(
           readOnly: readOnly,
           onTap: onTap,
@@ -61,6 +57,20 @@ class AppFormField extends StatelessWidget {
           validator: validator,
         ),
       ],
+    );
+  }
+}
+
+class AppLabel extends StatelessWidget {
+  const AppLabel({super.key, required this.label});
+
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Text(label!, style: Theme.of(context).textTheme.labelLarge),
     );
   }
 }

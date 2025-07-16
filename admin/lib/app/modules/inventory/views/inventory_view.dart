@@ -13,7 +13,6 @@ class InventoryView extends GetView<InventoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Inventory')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

@@ -14,7 +14,6 @@ class TablesView extends GetView<TablesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tables')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: controller.obx(

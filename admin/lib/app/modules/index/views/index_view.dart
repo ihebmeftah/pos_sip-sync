@@ -1,5 +1,7 @@
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/modules/inventory/views/inventory_view.dart';
 import 'package:admin/app/modules/tables/views/tables_view.dart';
+import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -13,6 +15,34 @@ class IndexView extends GetView<IndexController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(),
+              accountName: Text(
+                '${LocalStorage().user!.firstname} ${LocalStorage().user!.lastname}',
+              ),
+              accountEmail: Text(LocalStorage().user!.email),
+            ),
+            Spacer(),
+            SafeArea(
+              child: ListTile(
+                textColor: Colors.red,
+                iconColor: Colors.red,
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () async {
+                  await LocalStorage().clear();
+                  Get.offAllNamed(Routes.AUTH);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      appBar: AppBar(),
       bottomNavigationBar: GetBuilder<IndexController>(
         id: "bottomNavigationBar",
         builder: (_) {
@@ -35,17 +65,20 @@ class IndexView extends GetView<IndexController> {
                 label: 'Dashboard',
               ),
               BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/svg/order.svg",
-                  colorFilter: ColorFilter.mode(
-                    controller.currBnb == 1
-                        ? Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.selectedItemColor!
-                        : Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.unselectedItemColor!,
-                    BlendMode.srcIn,
+                icon: Badge(
+                  label: Text("!", style: TextStyle(color: Colors.white)),
+                  child: SvgPicture.asset(
+                    "assets/images/svg/order.svg",
+                    colorFilter: ColorFilter.mode(
+                      controller.currBnb == 1
+                          ? Theme.of(
+                              context,
+                            ).bottomNavigationBarTheme.selectedItemColor!
+                          : Theme.of(
+                              context,
+                            ).bottomNavigationBarTheme.unselectedItemColor!,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 label: 'Orders',

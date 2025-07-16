@@ -1,3 +1,4 @@
+import { Transform } from "class-transformer";
 import { IsDecimal, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, IsUUID, Min } from "class-validator";
 import { UUID } from "crypto";
 
@@ -13,8 +14,8 @@ export class CreateArticleDto {
     @IsString()
     @IsOptional()
     image: string;
-    @IsNumber()
-    @Min(1)
+    @Transform(({ value }) => parseFloat(value))
+    @Min(0)
     price: number;
     @IsUUID()
     categoryId: UUID;

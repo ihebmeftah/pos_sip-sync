@@ -4,6 +4,8 @@ class AppFormField extends StatelessWidget {
   const AppFormField({
     super.key,
     this.label,
+    this.pIcon,
+    this.sIcon,
     this.isNumeric = false,
     this.readOnly = false,
     this.hint,
@@ -17,6 +19,8 @@ class AppFormField extends StatelessWidget {
   const AppFormField.label({
     super.key,
     this.isNumeric = false,
+    this.pIcon,
+    this.sIcon,
     this.label,
     this.onTap,
     this.readOnly = false,
@@ -39,6 +43,7 @@ class AppFormField extends StatelessWidget {
   final int minLines;
   final VoidCallback? onTap;
   final bool isNumeric;
+  final Widget? pIcon, sIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +59,8 @@ class AppFormField extends StatelessWidget {
           maxLines: maxLines ?? minLines,
           minLines: minLines,
           decoration: InputDecoration(
+            prefixIcon: pIcon,
+            suffixIcon: sIcon,
             label: (label != null && !isOutsideLabel) ? Text(label!) : null,
             hintText: hint,
           ),

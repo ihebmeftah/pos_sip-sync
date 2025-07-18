@@ -17,8 +17,6 @@ class TablesController extends GetxController with StateMixin {
     super.onInit();
   }
 
- 
-
   Future getTabels() async {
     try {
       tables(await TablesApi().getTables());

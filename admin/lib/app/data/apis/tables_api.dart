@@ -12,4 +12,17 @@ class TablesApi {
           .toList(),
     );
   }
+
+  Future<List<Table>> createTabels({
+    required int nbTables,
+    required int seatsMax,
+  }) async {
+    return await HttpHelper.post<List<Table>>(
+      endpoint: '/tables/',
+      body: {"nbTables": nbTables, "seatsMax": seatsMax},
+      fromJson: (json) => (json as List)
+          .map((e) => Table.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 }

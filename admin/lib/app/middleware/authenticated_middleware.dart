@@ -7,6 +7,9 @@ class AuthenticatedMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     if (LocalStorage().user == null) return null;
+    if (LocalStorage().building != null) {
+      return RouteSettings(name: Routes.INDEX);
+    }
     return RouteSettings(name: Routes.BUILDINGS);
   }
 }

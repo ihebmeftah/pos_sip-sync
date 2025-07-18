@@ -5,7 +5,7 @@ bottomSheet({
   required List<Widget> children,
   void Function()? onConfirm,
   String confirmeButtonText = "Confirm",
-  bool topCloseButton = true,
+  bool topCloseButton = false,
 }) => Get.bottomSheet(
   Container(
     width: double.infinity,
@@ -26,9 +26,16 @@ bottomSheet({
         ...children,
         if (onConfirm != null || !topCloseButton) Spacer(),
         if (onConfirm != null)
-          ElevatedButton(onPressed: onConfirm, child: Text(confirmeButtonText)),
+          Center(
+            child: ElevatedButton(
+              onPressed: onConfirm,
+              child: Text(confirmeButtonText),
+            ),
+          ),
         if (!topCloseButton)
-          TextButton(onPressed: Get.back, child: const Text("Close")),
+          Center(
+            child: TextButton(onPressed: Get.back, child: const Text("Close")),
+          ),
       ],
     ),
   ),

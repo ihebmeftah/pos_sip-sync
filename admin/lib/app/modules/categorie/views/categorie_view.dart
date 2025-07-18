@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../common/appemptyscreen.dart';
 import '../controllers/categorie_controller.dart';
 
 class CategorieView extends GetView<CategorieController> {
@@ -39,6 +40,7 @@ class CategorieView extends GetView<CategorieController> {
             );
           },
         ),
+        onEmpty: Appemptyscreen(),
       ),
     );
   }

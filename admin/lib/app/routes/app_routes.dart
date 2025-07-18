@@ -16,6 +16,7 @@ abstract class Routes {
   static const ARTICLE = _Paths.ARTICLE;
   static const ARTICLE_FORM = _Paths.ARTICLE + _Paths.ARTICLE_FORM;
   static const BUILDING_ADD = _Paths.BUILDINGS + _Paths.BUILDING_ADD;
+  static const TABLE_FORM = _Paths.TABLES + _Paths.TABLE_FORM;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const ARTICLE = '/article';
   static const ARTICLE_FORM = '/article-form';
   static const BUILDING_ADD = '/building-add';
+  static const TABLE_FORM = '/table-form';
 }

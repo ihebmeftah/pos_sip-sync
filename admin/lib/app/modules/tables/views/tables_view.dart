@@ -1,4 +1,6 @@
 import 'package:admin/app/common/appbottomsheet.dart';
+import 'package:admin/app/common/appemptyscreen.dart';
+import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -123,6 +125,7 @@ class TablesView extends GetView<TablesController> {
               ),
             ],
           ),
+          onEmpty: Appemptyscreen(route: Routes.TABLES),
         ),
       ),
     );

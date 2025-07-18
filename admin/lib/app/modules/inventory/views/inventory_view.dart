@@ -1,3 +1,4 @@
+import 'package:admin/app/common/appemptyscreen.dart';
 import 'package:admin/app/modules/article/controllers/article_controller.dart';
 import 'package:admin/app/modules/categorie/controllers/categorie_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
@@ -89,13 +90,7 @@ class InventoryView extends GetView<InventoryController> {
                 init: ArticleController(),
                 builder: (ctr) {
                   return ctr.articles.isEmpty
-                      ? TextButton.icon(
-                          onPressed: () => Get.toNamed(Routes.ARTICLE_FORM),
-                          icon: Icon(FluentIcons.add_12_filled),
-                          label: Text(
-                            "No Articles found, Press to add one now!",
-                          ),
-                        )
+                      ? Appemptyscreen(route: Routes.ARTICLE)
                       : ListView.builder(
                           itemCount: ctr.articles.length,
                           itemBuilder: (context, index) => ListTile(

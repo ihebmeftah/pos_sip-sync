@@ -7,8 +7,8 @@ import '../modules/article/views/article_form_view.dart';
 import '../modules/article/views/article_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
-import '../modules/buildings/bindings/buildings_binding.dart';
 import '../modules/buildings/bindings/building_add_binding.dart';
+import '../modules/buildings/bindings/buildings_binding.dart';
 import '../modules/buildings/views/building_add_view.dart';
 import '../modules/buildings/views/buildings_view.dart';
 import '../modules/categorie/bindings/categorie_binding.dart';
@@ -22,6 +22,8 @@ import '../modules/index/views/index_view.dart';
 import '../modules/inventory/bindings/inventory_binding.dart';
 import '../modules/inventory/views/inventory_view.dart';
 import '../modules/tables/bindings/tables_binding.dart';
+import '../modules/tables/bindings/table_form_binding.dart';
+import '../modules/tables/views/table_form_view.dart';
 import '../modules/tables/views/tables_view.dart';
 
 part 'app_routes.dart';
@@ -49,6 +51,13 @@ class AppPages {
       name: _Paths.TABLES,
       page: () => const TablesView(),
       binding: TablesBinding(),
+      children: [
+        GetPage(
+          name: _Paths.TABLE_FORM,
+          page: () => const TableFormView(),
+          binding: TableFormBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.AUTH,

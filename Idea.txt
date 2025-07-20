@@ -1,0 +1,6 @@
+- Building configuration:
+  A - config allow update order items of order when table already have order 
+    (if this config is off table )
+
+  B - config allow multiple order by table
+    without restircation (table able to have manny order while it's occupied)

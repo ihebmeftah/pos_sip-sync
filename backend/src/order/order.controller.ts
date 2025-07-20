@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req, ParseEnumPipe, Query } from '@nestjs/common';
 import { OrderService } from './order.service';
 
 import { BuildingIdGuard } from 'src/guards/building.guard';
@@ -11,6 +11,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from 'src/enums/user.roles';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
 import { CurrUser } from 'src/decorators/curr-user.decorator';
+import { OrderStatus } from 'src/enums/order_status';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
@@ -26,8 +27,11 @@ export class OrderController {
     @Get()
     async findOrderOfBuilding(
         @BuildingId() buildingId: UUID,
+        @Query(
+            'status',
+            new ParseEnumPipe(OrderStatus, { optional: true })) status?: OrderStatus,
     ) {
-        return await this.orderService.findOrderOfBuilding(buildingId);
+        return await this.orderService.findOrderOfBuilding(buildingId, status);
     }
 
     @Get(":id")
@@ -62,7 +66,7 @@ export class OrderController {
     @Patch("/:id/pay-items")
     @Roles(UserRole.Admin)
     async payAllItemsOfOrder(
-        @Param("id", ParseUUIDPipe) orderId: UUID,
+        @Param("id", ParseUUIDPipe) orderId: UUID
     ) {
         return await this.orderService.payAllitemsOfOrder(orderId);
     }

@@ -58,10 +58,11 @@ export class OrderService {
         return savedOrder;
     }
 
-    async findOrderOfBuilding(buildingId: UUID) {
+    async findOrderOfBuilding(buildingId: UUID, status?: OrderStatus) {
         return await this.orderRepo.find({
             where: {
-                table: { building: { id: buildingId } }
+                table: { building: { id: buildingId } },
+                ...(status && { status })
             },
             order: {
                 createdAt: "DESC",
@@ -149,6 +150,9 @@ export class OrderService {
         if (!order) {
             throw new NotFoundException(`Order with ID ${id} not found`);
         }
+        if (order.status === OrderStatus.PROGRESS) {
+            order.table.status = TableStatus.occupied;
+        }
         return order;
     }
 
@@ -159,62 +163,5 @@ export class OrderService {
             await manager.delete(Order, order.id);
         });
         return true;
-    }
-    async getSales(buildingId: UUID) {
-        const orders = await this.orderRepo.find({
-            where: {
-                table: {
-                    building: { id: buildingId }
-                },
-                status: OrderStatus.PAYED
-            },
-            relations: {
-                items: {
-                    article: true
-                }
-            }
-        });
-        let total = 0;
-        for (const order of orders) {
-            for (const item of order.items) {
-                total += Number(item.article.price);
-            }
-        }
-        // Return total rounded to two decimal places
-        return Number(total.toFixed(2));
-    }
-    async totalOrderNb(buildingId: UUID) {
-        return await this.orderRepo.count({ where: { table: { building: { id: buildingId } } } });
-    }
-    async mostSelledArticles(buildingId: UUID) {
-        const orders = await this.orderRepo.find({
-            where: {
-                table: {
-                    building: { id: buildingId }
-                }
-            },
-            relations: {
-                items: {
-                    article: true
-                }
-            }
-        });
-
-        const articleCount = new Map<string, { article: Article, count: number }>();
-
-        for (const order of orders) {
-            for (const item of order.items) {
-                const articleId = item.article.id;
-                if (!articleCount.has(articleId)) {
-                    articleCount.set(articleId, { article: item.article, count: 0 });
-                }
-                articleCount.get(articleId)!.count += 1;
-            }
-        }
-
-        // Sort by count descending and return top 5 with count
-        return Array.from(articleCount.values())
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 5);
     }
 }

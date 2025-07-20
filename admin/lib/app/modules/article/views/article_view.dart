@@ -1,4 +1,5 @@
 import 'package:admin/app/common/appemptyscreen.dart';
+import 'package:admin/app/modules/order/controllers/pass_order_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:admin/themes/apptheme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -16,14 +17,15 @@ class ArticleView extends GetView<ArticleController> {
       appBar: AppBar(
         title: const Text('Article'),
         actions: [
-          IconButton(
-            color: Colors.grey.shade300,
-            onPressed: () {
-              Get.toNamed(Routes.ARTICLE_FORM);
-            },
-            style: IconButton.styleFrom(backgroundColor: AppTheme().primary),
-            icon: const Icon(FluentIcons.add_12_filled),
-          ),
+          if (Get.previousRoute != Routes.PASS_ORDER)
+            IconButton(
+              color: Colors.grey.shade300,
+              onPressed: () {
+                Get.toNamed(Routes.ARTICLE_FORM);
+              },
+              style: IconButton.styleFrom(backgroundColor: AppTheme().primary),
+              icon: const Icon(FluentIcons.add_12_filled),
+            ),
         ],
       ),
       body: controller.obx(
@@ -32,18 +34,10 @@ class ArticleView extends GetView<ArticleController> {
           separatorBuilder: (context, index) => const SizedBox(height: 20),
           itemBuilder: (context, index) => Container(
             color: Colors.grey.shade50,
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
             child: Row(
               spacing: 15,
               children: [
-                Badge(
-                  label: Text("2", style: TextStyle(fontSize: 18)),
-                  child: IconButton(
-                    style: IconButton.styleFrom(iconSize: 18),
-                    onPressed: () {},
-                    icon: const Icon(FluentIcons.add_12_filled),
-                  ),
-                ),
                 Container(
                   width: 50,
                   height: 50,
@@ -83,7 +77,7 @@ class ArticleView extends GetView<ArticleController> {
                         style: context.theme.textTheme.titleMedium,
                       ),
                       Text(
-                        controller.articles[index].categorie.name,
+                        controller.articles[index].categorie!.name,
                         style: context.theme.textTheme.labelLarge!.copyWith(
                           color: Colors.black54,
                         ),
@@ -95,13 +89,41 @@ class ArticleView extends GetView<ArticleController> {
                   "${controller.articles[index].price} DT",
                   style: context.theme.textTheme.titleLarge,
                 ),
-                Switch(value: true, onChanged: (value) {}),
+                if (Get.previousRoute == Routes.PASS_ORDER)
+                  _addArticleWidget(index)
+                else
+                  Switch(value: true, onChanged: (value) {}),
               ],
             ),
           ),
         ),
         onEmpty: Appemptyscreen(),
       ),
+    );
+  }
+
+  Widget _addArticleWidget(int index) {
+    return GetBuilder<PassOrderController>(
+      id: controller.articles[index].id,
+      builder: (passOrderCtr) {
+        return Badge(
+          isLabelVisible: passOrderCtr.existeArticle(
+            controller.articles[index].id,
+          ),
+          label: Text(
+            passOrderCtr
+                .countArticleOcc(controller.articles[index].id)
+                .toString(),
+            style: TextStyle(fontSize: 18),
+          ),
+          child: IconButton(
+            style: IconButton.styleFrom(iconSize: 18),
+            onPressed: () =>
+                passOrderCtr.addArticle(controller.articles[index]),
+            icon: const Icon(FluentIcons.add_12_filled),
+          ),
+        );
+      },
     );
   }
 }

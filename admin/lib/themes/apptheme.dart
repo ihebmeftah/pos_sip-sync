@@ -56,6 +56,10 @@ class AppTheme {
         fixedSize: Size(320, 50),
       ),
     ),
+    cardTheme: CardThemeData(
+      shadowColor: Colors.black.withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
     textTheme: TextTheme(
       displayLarge: TextStyle(
         fontSize: 32,

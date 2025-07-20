@@ -10,7 +10,7 @@ class Article {
   String? image;
   num price;
   @JsonKey(name: 'category')
-  Categorie categorie;
+  Categorie? categorie;
 
   Article({
     required this.id,
@@ -18,7 +18,7 @@ class Article {
     this.description,
     this.image,
     required this.price,
-    required this.categorie,
+    this.categorie,
   });
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);
@@ -28,6 +28,6 @@ class Article {
     'name': name,
     if (description != null) 'description': description,
     'price': price,
-    'categoryId': categorie.id,
+    'categoryId': categorie!.id,
   };
 }

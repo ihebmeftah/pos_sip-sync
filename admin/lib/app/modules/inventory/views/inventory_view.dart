@@ -123,7 +123,7 @@ class InventoryView extends GetView<InventoryController> {
                                     ),
                             ),
                             title: Text(ctr.articles[index].name),
-                            subtitle: Text(ctr.articles[index].categorie.name),
+                            subtitle: Text(ctr.articles[index].categorie!.name),
                           ),
                         );
                 },

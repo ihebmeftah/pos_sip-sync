@@ -12,7 +12,9 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
   description: json['description'] as String?,
   image: json['image'] as String?,
   price: json['price'] as num,
-  categorie: Categorie.fromJson(json['category'] as Map<String, dynamic>),
+  categorie: json['category'] == null
+      ? null
+      : Categorie.fromJson(json['category'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{

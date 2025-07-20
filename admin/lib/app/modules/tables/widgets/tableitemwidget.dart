@@ -1,4 +1,6 @@
+import 'package:admin/app/modules/order/controllers/pass_order_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../data/model/enums/table_status.dart';
 import '../../../data/model/table/tables.dart' as t;
 
@@ -31,12 +33,21 @@ class TableItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 20,
               children: List.generate(seats.left, (index) {
-                return Container(
-                  width: 10,
-                  height: 10,
-                  color: table.status == TableStatus.occupied
-                      ? Colors.red
-                      : Colors.greenAccent,
+                return GetBuilder<PassOrderController>(
+                  id: "table",
+                  builder: (passOrderCtr) {
+                    return Container(
+                      width: 10,
+                      height: 10,
+                      color:
+                          passOrderCtr.table?.id != table.id &&
+                              passOrderCtr.table != null
+                          ? Colors.grey.shade400
+                          : table.status == TableStatus.occupied
+                          ? Colors.red
+                          : Colors.greenAccent,
+                    );
+                  },
                 );
               }),
             ),
@@ -48,53 +59,75 @@ class TableItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 10,
                   children: List.generate(seats.top, (index) {
-                    return Container(
-                      width: 10,
-                      height: 10,
-                      color: table.status == TableStatus.occupied
-                          ? Colors.red
-                          : Colors.greenAccent,
+                    return GetBuilder<PassOrderController>(
+                      id: "table",
+                      builder: (passOrderCtr) {
+                        return Container(
+                          width: 10,
+                          height: 10,
+                          color:
+                              passOrderCtr.table?.id != table.id &&
+                                  passOrderCtr.table != null
+                              ? Colors.grey.shade400
+                              : table.status == TableStatus.occupied
+                              ? Colors.red
+                              : Colors.greenAccent,
+                        );
+                      },
                     );
                   }),
                 ),
                 //* Main Table Container
                 Expanded(
-                  child: Container(
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: table.status == TableStatus.occupied
-                          ? Colors.red.shade700
-                          : Colors.greenAccent.shade700,
-                      border: Border.all(
-                        color: table.status == TableStatus.occupied
-                            ? Colors.red.shade400
-                            : Colors.greenAccent.shade400,
+                  child: GetBuilder<PassOrderController>(
+                    id: "table",
+                    builder: (passOrderCtr) {
+                      return Container(
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color:
+                              passOrderCtr.table?.id != table.id &&
+                                  passOrderCtr.table != null
+                              ? Colors.grey.shade400
+                              : table.status == TableStatus.occupied
+                              ? Colors.red.shade700
+                              : Colors.greenAccent.shade700,
+                          border: Border.all(
+                            color:
+                                passOrderCtr.table?.id != table.id &&
+                                    passOrderCtr.table != null
+                                ? Colors.blueGrey.shade100
+                                : table.status == TableStatus.occupied
+                                ? Colors.red.shade400
+                                : Colors.greenAccent.shade400,
 
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          table.name.split('.').first,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                            width: 2,
                           ),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        Text(
-                          "Max seats ${table.seatsMax}",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade50,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "№${table.numTable}",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "Max seats ${table.seatsMax}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade50,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
                 //* Bottom Seats
@@ -102,12 +135,21 @@ class TableItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 10,
                   children: List.generate(seats.bottom, (index) {
-                    return Container(
-                      width: 10,
-                      height: 10,
-                      color: table.status == TableStatus.occupied
-                          ? Colors.red
-                          : Colors.greenAccent,
+                    return GetBuilder<PassOrderController>(
+                      id: "table",
+                      builder: (passOrderCtr) {
+                        return Container(
+                          width: 10,
+                          height: 10,
+                          color:
+                              passOrderCtr.table?.id != table.id &&
+                                  passOrderCtr.table != null
+                              ? Colors.grey.shade400
+                              : table.status == TableStatus.occupied
+                              ? Colors.red
+                              : Colors.greenAccent,
+                        );
+                      },
                     );
                   }),
                 ),
@@ -118,14 +160,35 @@ class TableItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 20,
               children: List.generate(seats.right, (index) {
-                return Container(
-                  width: 10,
-                  height: 10,
-                  color: table.status == TableStatus.occupied
-                      ? Colors.red
-                      : Colors.greenAccent,
+                return GetBuilder<PassOrderController>(
+                  id: "table",
+                  builder: (passOrderCtr) {
+                    return Container(
+                      width: 10,
+                      height: 10,
+                      color:
+                          passOrderCtr.table?.id != table.id &&
+                              passOrderCtr.table != null
+                          ? Colors.grey.shade400
+                          : table.status == TableStatus.occupied
+                          ? Colors.red
+                          : Colors.greenAccent,
+                    );
+                  },
                 );
               }),
+            ),
+            GetBuilder<PassOrderController>(
+              id: "table",
+              builder: (passOrderCtr) {
+                return passOrderCtr.table?.id == table.id
+                    ? Icon(
+                        Icons.check_circle,
+                        color: Colors.greenAccent.shade700,
+                        size: 30,
+                      )
+                    : Container();
+              },
             ),
           ],
         ),

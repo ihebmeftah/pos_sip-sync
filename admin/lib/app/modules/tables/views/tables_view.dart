@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../data/model/enums/table_status.dart';
+import '../../order/controllers/pass_order_controller.dart';
 import '../controllers/tables_controller.dart';
 import '../widgets/tableitemwidget.dart';
 import '../widgets/tablestatuswidget.dart';
@@ -16,6 +17,9 @@ class TablesView extends GetView<TablesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Get.previousRoute == Routes.PASS_ORDER
+          ? AppBar(title: const Text('Tables'), centerTitle: true)
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: controller.obx(
@@ -44,82 +48,93 @@ class TablesView extends GetView<TablesController> {
                     crossAxisSpacing: 10,
                   ),
                   itemCount: controller.tables.length,
-                  itemBuilder: (context, index) => TableItemWidget(
-                    onTap: () {
-                      bottomSheet(
-                        onConfirm: () {},
-                        confirmeButtonText: "Pass Order",
-                        children: [
-                          Row(
-                            spacing: 20,
+                  itemBuilder: (context, index) => GetBuilder<TablesController>(
+                    id: controller.tables[index].id,
+                    builder: (_) {
+                      return TableItemWidget(
+                        onTap: () {
+                          final passOrderCtr = Get.find<PassOrderController>();
+                          if (Get.previousRoute == Routes.PASS_ORDER) {
+                            passOrderCtr.setTable(controller.tables[index]);
+                            return;
+                          }
+                          bottomSheet(
+                            onConfirm: () {
+                              Get.back();
+                              passOrderCtr.setTable(controller.tables[index]);
+                              Get.toNamed(Routes.PASS_ORDER);
+                            },
+                            confirmeButtonText: "Pass Order",
                             children: [
-                              SvgPicture.asset(
-                                'assets/images/svg/table.svg',
-                                width: 30,
-                                height: 30,
-                                colorFilter: ColorFilter.mode(
-                                  Colors.black,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
+                                spacing: 20,
                                 children: [
-                                  Text(
-                                    controller.tables[index].name
-                                        .split('.')
-                                        .first,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
+                                  SvgPicture.asset(
+                                    'assets/images/svg/table.svg',
+                                    width: 30,
+                                    height: 30,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black,
+                                      BlendMode.srcIn,
                                     ),
                                   ),
-                                  Text(
-                                    "Max seats ${controller.tables[index].seatsMax}",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade600,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Table №${controller.tables[index].numTable}",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Max seats ${controller.tables[index].seatsMax}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          controller.tables[index].status ==
+                                              TableStatus.occupied
+                                          ? Colors.red.shade700
+                                          : Colors.greenAccent.shade700,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "${controller.tables[index].status.name.capitalize}",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              Spacer(),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      controller.tables[index].status ==
-                                          TableStatus.occupied
-                                      ? Colors.red.shade700
-                                      : Colors.greenAccent.shade700,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${controller.tables[index].status.name.capitalize}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                              if (passOrderCtr.table ==
+                                  controller.tables[index])
+                                ListTile(
+                                  title: Text('Unselect Table'),
+                                  onTap: () => passOrderCtr.setTable(
+                                    controller.tables[index],
                                   ),
                                 ),
-                              ),
                             ],
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.music_note),
-                            title: Text('View & Edit'),
-                            onTap: () => {},
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.videocam),
-                            title: Text('Video'),
-                            onTap: () => {},
-                          ),
-                        ],
+                          );
+                        },
+                        table: controller.tables[index],
                       );
                     },
-                    table: controller.tables[index],
                   ),
                 ),
               ),

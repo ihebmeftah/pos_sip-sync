@@ -1,5 +1,7 @@
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/modules/inventory/views/inventory_view.dart';
+import 'package:admin/app/modules/order/controllers/pass_order_controller.dart';
+import 'package:admin/app/modules/order/views/order_view.dart';
 import 'package:admin/app/modules/tables/views/tables_view.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:admin/main.dart';
@@ -16,6 +18,31 @@ class IndexView extends GetView<IndexController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(Routes.PASS_ORDER),
+        child: GetBuilder<PassOrderController>(
+          id: "table",
+          builder: (passOrderCtr) {
+            return Badge(
+              isLabelVisible: passOrderCtr.table != null,
+              label: Text("!", style: TextStyle(color: Colors.white)),
+              child: SvgPicture.asset(
+                "assets/images/svg/order.svg",
+                colorFilter: ColorFilter.mode(
+                  controller.currBnb == 1
+                      ? Theme.of(
+                          context,
+                        ).bottomNavigationBarTheme.selectedItemColor!
+                      : Theme.of(
+                          context,
+                        ).bottomNavigationBarTheme.unselectedItemColor!,
+                  BlendMode.srcIn,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
       drawer: Drawer(
         child: Column(
           children: [
@@ -79,20 +106,17 @@ class IndexView extends GetView<IndexController> {
                 label: 'Dashboard',
               ),
               BottomNavigationBarItem(
-                icon: Badge(
-                  label: Text("!", style: TextStyle(color: Colors.white)),
-                  child: SvgPicture.asset(
-                    "assets/images/svg/order.svg",
-                    colorFilter: ColorFilter.mode(
-                      controller.currBnb == 1
-                          ? Theme.of(
-                              context,
-                            ).bottomNavigationBarTheme.selectedItemColor!
-                          : Theme.of(
-                              context,
-                            ).bottomNavigationBarTheme.unselectedItemColor!,
-                      BlendMode.srcIn,
-                    ),
+                icon: SvgPicture.asset(
+                  "assets/images/svg/order.svg",
+                  colorFilter: ColorFilter.mode(
+                    controller.currBnb == 1
+                        ? Theme.of(
+                            context,
+                          ).bottomNavigationBarTheme.selectedItemColor!
+                        : Theme.of(
+                            context,
+                          ).bottomNavigationBarTheme.unselectedItemColor!,
+                    BlendMode.srcIn,
                   ),
                 ),
                 label: 'Orders',
@@ -138,12 +162,7 @@ class IndexView extends GetView<IndexController> {
       body: PageView(
         onPageChanged: controller.changeBnbContent,
         controller: controller.pageVCtr,
-        children: [
-          HomeView(),
-          Center(child: Text('Orders View')),
-          InventoryView(),
-          TablesView(),
-        ],
+        children: [HomeView(), OrderView(), InventoryView(), TablesView()],
       ),
     );
   }

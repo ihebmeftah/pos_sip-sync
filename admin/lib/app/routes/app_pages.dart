@@ -21,8 +21,13 @@ import '../modules/index/bindings/index_binding.dart';
 import '../modules/index/views/index_view.dart';
 import '../modules/inventory/bindings/inventory_binding.dart';
 import '../modules/inventory/views/inventory_view.dart';
-import '../modules/tables/bindings/tables_binding.dart';
+import '../modules/order/bindings/order_binding.dart';
+import '../modules/order/bindings/order_details_binding.dart';
+import '../modules/order/views/order_details_view.dart';
+import '../modules/order/views/order_view.dart';
+import '../modules/order/views/pass_order_view.dart';
 import '../modules/tables/bindings/table_form_binding.dart';
+import '../modules/tables/bindings/tables_binding.dart';
 import '../modules/tables/views/table_form_view.dart';
 import '../modules/tables/views/tables_view.dart';
 
@@ -45,6 +50,7 @@ class AppPages {
         HomeBinding(),
         TablesBinding(),
         InventoryBinding(),
+        OrderBinding(),
       ],
     ),
     GetPage(
@@ -113,6 +119,19 @@ class AppPages {
           name: _Paths.ARTICLE_FORM,
           page: () => const ArticleFormView(),
           binding: ArticleFormBinding(),
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.ORDER,
+      page: () => const OrderView(),
+      binding: OrderBinding(),
+      children: [
+        GetPage(name: _Paths.PASS_ORDER, page: () => const PassOrderView()),
+        GetPage(
+          name: '${_Paths.ORDER_DETAILS}/:id',
+          page: () => const OrderDetailsView(),
+          binding: OrderDetailsBinding(),
         ),
       ],
     ),

@@ -17,6 +17,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order(
           .toList() ??
       const [],
   table: Table.fromJson(json['table'] as Map<String, dynamic>),
+  passedBy: User.fromJson(json['passedBy'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
@@ -24,6 +25,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
   'status': _$OrderStatusEnumMap[instance.status]!,
   'items': instance.items,
   'table': instance.table,
+  'passedBy': instance.passedBy,
 };
 
 const _$OrderStatusEnumMap = {

@@ -4,6 +4,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { OrderItem } from "./order_item.entity";
 import { OrderStatus } from "src/enums/order_status";
 import { Table } from "src/tables/entities/table.entity";
+import { User } from "src/users/entities/user.entity";
 
 @Entity()
 export class Order extends TimestampBaseEntity {
@@ -21,4 +22,6 @@ export class Order extends TimestampBaseEntity {
     items: OrderItem[];
     @ManyToOne(() => Table, { eager: true })
     table: Table;
+    @ManyToOne(() => User, { eager: true })
+    passedBy: User;
 }

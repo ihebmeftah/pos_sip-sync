@@ -2,7 +2,8 @@ import { UUID } from 'crypto';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Order } from './order.entity';
 import { Article } from 'src/article/entities/article.entity';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class OrderItem {
@@ -14,8 +15,7 @@ export class OrderItem {
     article: Article;
     @Column({ default: false })
     payed: boolean;
-    @Column()
-    passedBy: UserRole;
-    @Column('uuid')
-    passedById: UUID;
+    @ManyToOne(() => User, { eager: true })
+    passedBy: User;
+
 }

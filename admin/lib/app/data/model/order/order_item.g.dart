@@ -10,10 +10,12 @@ OrderItem _$OrderItemFromJson(Map<String, dynamic> json) => OrderItem(
   id: json['id'] as String?,
   article: Article.fromJson(json['article'] as Map<String, dynamic>),
   payed: json['payed'] as bool? ?? false,
+  passedBy: User.fromJson(json['passedBy'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$OrderItemToJson(OrderItem instance) => <String, dynamic>{
   'id': instance.id,
   'article': instance.article,
   'payed': instance.payed,
+  'passedBy': instance.passedBy,
 };

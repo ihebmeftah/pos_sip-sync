@@ -7,6 +7,7 @@ import { OrderItem } from './entities/order_item.entity';
 import { TablesModule } from 'src/tables/tables.module';
 import { BuildingModule } from 'src/building/building.module';
 import { ArticleModule } from 'src/article/article.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ArticleModule } from 'src/article/article.module';
     forwardRef(() => TablesModule),
     BuildingModule,
     ArticleModule,
+    UsersModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],

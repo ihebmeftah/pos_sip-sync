@@ -1,11 +1,19 @@
 import { Building } from "src/building/entities/building.entity";
-import { UserBase } from "src/database/base/user.base";
-import { Entity, ManyToOne, Column } from 'typeorm';
+import { Entity, ManyToOne, Column, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { User } from "./user.entity";
+import { UUID } from "crypto";
 
 @Entity()
-export class Employer extends UserBase {
+export class Employer {
+    @PrimaryColumn("uuid")
+    id: UUID;
     @Column({ nullable: true })
     lastLogin: Date
     @ManyToOne(() => Building, { nullable: false })
     building: Building
+    @OneToOne(() => User, { eager: true, onDelete: 'CASCADE', cascade: true, })
+    @JoinColumn()
+    user: User;
+    @Column({ nullable: true })
+    role: String;
 }

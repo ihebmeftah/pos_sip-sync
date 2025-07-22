@@ -9,15 +9,15 @@ class User {
   String email;
   String phone;
   String? photo;
-  UserRole role;
+  List<UserType> type;
 
   User({
     required this.firstname,
     required this.lastname,
     required this.email,
     required this.phone,
-     this.photo,
-    required this.role,
+    this.photo,
+    required this.type,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

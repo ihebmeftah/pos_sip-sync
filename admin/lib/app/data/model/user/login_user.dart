@@ -15,7 +15,7 @@ class LoginUser extends User {
     required super.email,
     required super.phone,
     required super.photo,
-    required super.role,
+    required super.type,
   });
 
   factory LoginUser.fromJson(Map<String, dynamic> json) =>

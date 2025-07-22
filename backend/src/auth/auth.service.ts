@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login_dto';
-import { UserRole } from 'src/enums/user.roles';
-import { UserBase } from 'src/database/base/user.base';
 import { RegisterDto } from './dto/register_dto';
 import { UsersService } from '../users/users.service';
 import { LoggedUser } from './strategy/loggeduser';
+import { User } from 'src/users/entities/user.entity';
+import { Employer } from 'src/users/entities/employer.entity';
+import { Admin } from 'src/users/entities/admin.entity';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
       const payload: LoggedUser = {
         id: user.id,
         email: user.email,
-        role: user.role,
+        type: user.type,
       };
       return {
         token: this.jwtService.sign(payload),
@@ -36,29 +37,28 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    let user: UserBase;
+    let registred: Admin | Employer;
     /*    if (registerDto.role.toLowerCase() == "client") {
          // user = await this.customerService.create(registerDto);
          role = UserRole.Client;
        } else  */
     if (registerDto.role.toLowerCase() == "owner") {
-      user = await this.UsersService.createAdmin(registerDto);
+      registred = await this.UsersService.createAdmin(registerDto);
     } else {
       throw new BadRequestException("Role not found");
     }
-    if (!user) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
-    if (!user.active) {
+    if (!registred) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
+    if (!registred.user.active) {
       throw new UnauthorizedException("User is not active");
     }
     const payload: LoggedUser = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
+      id: registred.id,
+      email: registred.user.email,
+      type: registred.user.type,
     };
     return {
       token: this.jwtService.sign(payload),
-      ...user,
+      ...registred.user,
     };
   }
-
 }

@@ -5,7 +5,7 @@ import { UpdateCategroyDto } from './dto/update-categroy.dto';
 import { UUID } from 'crypto';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { BuildingId } from 'src/decorators/building.decorator';
 import { BuildingIdGuard } from 'src/guards/building.guard';
@@ -17,7 +17,7 @@ export class CategroyController {
   constructor(private readonly categroyService: CategroyService) { }
 
   @Post()
-  @Roles(UserRole.Admin)
+  @Roles(UserType.Admin)
   @UseInterceptors(
     CustomFileUploadInterceptor([
       { name: 'image', maxCount: 1 },

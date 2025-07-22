@@ -1,8 +1,10 @@
 import { UUID } from "crypto";
-import { PrimaryGeneratedColumn, Column } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
 import { TimestampBaseEntity } from "src/database/base/timestampbase";
+import { UserType } from "src/enums/user.roles";
 
-export class UserBase extends TimestampBaseEntity {
+@Entity()
+export class User extends TimestampBaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: UUID;
     @Column()
@@ -17,5 +19,6 @@ export class UserBase extends TimestampBaseEntity {
     password: string;
     @Column({ nullable: true })
     photo: string;
-
+    @Column("enum", { enum: UserType, array: true })
+    type: UserType[];
 }

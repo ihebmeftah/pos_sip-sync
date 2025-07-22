@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { BuildingIdGuard } from 'src/guards/building.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
 
 @Controller('article')
@@ -16,7 +16,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) { }
 
   @Post()
-  @Roles(UserRole.Admin)
+  @Roles(UserType.Admin)
   @UseInterceptors(
     CustomFileUploadInterceptor([
       { name: 'image', maxCount: 1 },

@@ -4,14 +4,14 @@ import { CreateBuildingDto } from './dto/create-building.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
 import { UUID } from 'crypto';
 import { CurrUser } from 'src/decorators/curr-user.decorator';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
 
 @Controller('building')
-@Roles(UserRole.Admin)
+@Roles(UserType.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BuildingController {
   constructor(private readonly buildingService: BuildingService) { }
@@ -42,11 +42,11 @@ export class BuildingController {
   }
 
   @Get()
-  @Roles(UserRole.Admin, UserRole.Client)
+  @Roles(UserType.Admin, UserType.Client)
   findAll(
     @CurrUser() user: LoggedUser,
   ) {
-    if (user.role == UserRole.Admin) {
+    if (user.role == UserType.Admin) {
       return this.buildingService.findAllOfOwner(user.id);
     }
     return this.buildingService.findAll();

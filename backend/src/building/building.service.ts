@@ -28,7 +28,7 @@ export class BuildingService {
   findAllOfOwner(adminId: UUID): Promise<Building[]> {
     return this.buildingRepo.findBy(
       {
-        admin: { id: adminId },
+        admin: { user: { id: adminId } },
       },
     );
   }

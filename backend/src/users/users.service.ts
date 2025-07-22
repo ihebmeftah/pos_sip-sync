@@ -1,14 +1,13 @@
 import { ConflictException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
-import { UserBase } from 'src/database/base/user.base';
 import { Repository } from 'typeorm';
-import { CreateAdminDto } from './dto/create-admin.dto';
 import { Employer } from './entities/employer.entity';
 import { Admin } from './entities/admin.entity';
-import { CreateEmployerDto } from './dto/create-employer.dto';
 import { BuildingService } from 'src/building/building.service';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,50 +16,61 @@ export class UsersService {
         private readonly adminRepository: Repository<Admin>,
         @InjectRepository(Employer)
         private readonly employerRepository: Repository<Employer>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
         @Inject(forwardRef(() => BuildingService))
         private readonly buildingService: BuildingService,
     ) { }
 
     //* Start Admin functionnality
-    public async createAdmin(createAdminDto: CreateAdminDto) {
-        if (await this.existsAdminByEmail(createAdminDto.email))
+    public async createAdmin(createUser: CreateUserDto) {
+        if (await this.existsAdminByEmail(createUser.email))
             throw new ConflictException("Admin with this email already exists");
-        if (await this.existsAdminByPhone(createAdminDto.phone))
+        if (await this.existsAdminByPhone(createUser.phone))
             throw new ConflictException("Admin with this phone already exists");
-        const createdAdmin = await this.adminRepository.create(createAdminDto);
-        createdAdmin.role = UserRole.Admin;
+        const createdAdmin = await this.adminRepository.create({
+            user: {
+                ...createUser,
+                type: [UserType.Admin],
+            }
+        });
+        createdAdmin.id = createdAdmin.user.id;
         return await this.adminRepository.save(createdAdmin);
     }
     public async findAllAdmins() {
         return await this.adminRepository.find();
     }
     public async findOneAdmin(id: UUID) {
-        const admin = await this.adminRepository.findOneBy({ id });
+        const admin = await this.adminRepository.findOneBy({ user: { id } });
         if (!admin) throw new NotFoundException("Admin not found");
         return admin;
     }
 
     private async existsAdminByEmail(email: string) {
-        return await this.adminRepository.existsBy({ email });
+        return await this.adminRepository.existsBy({ user: { email } });
     }
 
     private async existsAdminByPhone(phone: string) {
-        return await this.adminRepository.existsBy({ phone });
+        return await this.adminRepository.existsBy({ user: { phone } });
     }
 
     // Start Employer functionnality
-    public async createEmployer(createEmployerDto: CreateEmployerDto, buildingId: UUID) {
+    public async createEmployer(createUser: CreateUserDto, buildingId: UUID) {
         const building = await this.buildingService.findOne(buildingId);
-        createEmployerDto.email = `${createEmployerDto.email.split('@')[0]}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
-        if (await this.existsEmployerByEmail(createEmployerDto.email)) {
+        createUser.email = `${createUser.email.split('@')[0]}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
+        if (await this.existsEmployerByEmail(createUser.email)) {
             const uniquePrefix = Math.random().toString(36).substring(2, 6);
-            createEmployerDto.email = `${createEmployerDto.email.split('@')[0]}${uniquePrefix}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
+            createUser.email = `${createUser.email.split('@')[0]}${uniquePrefix}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
         }
-        if (await this.existsEmployerByPhone(createEmployerDto.phone))
+        if (await this.existsEmployerByPhone(createUser.phone))
             throw new ConflictException("Employer with this phone already exists");
-        const createdEmployer = await this.employerRepository.create(createEmployerDto);
-        createdEmployer.building = building;
-        createdEmployer.role = UserRole.Employer;
+        const createdEmployer = await this.employerRepository.create({
+            user: {
+                ...createUser,
+                type: [UserType.Employer],
+            },
+            building: building,
+        });
         return await this.employerRepository.save(createdEmployer);
     }
     public async findAllEmployers(buildingId: UUID) {
@@ -73,27 +83,33 @@ export class UsersService {
         });
     }
     public async findOneEmployer(id: UUID) {
-        const employer = await this.employerRepository.findOneBy({ id });
+        const employer = await this.employerRepository.findOneBy({ user: { id } });
         if (!employer) throw new NotFoundException("Employer not found");
         return employer;
     }
 
 
     private async existsEmployerByEmail(email: string) {
-        return await this.employerRepository.existsBy({ email });
+        return await this.employerRepository.existsBy({ user: { email } });
     }
 
     private async existsEmployerByPhone(phone: string) {
-        return await this.employerRepository.existsBy({ phone });
+        return await this.employerRepository.existsBy({ user: { phone } });
     }
 
     //* Auth helper functions
-    public async findUserByEmail(email: string): Promise<UserBase> {
-        let user = await this.adminRepository.findOneBy({ email });
-        if (user) return { ...user, role: UserRole.Admin };
-        user = await this.employerRepository.findOneBy({ email });
-        if (user) return { ...user, role: UserRole.Employer };
+    public async findUserByEmail(email: string): Promise<User> {
+        const admin = await this.adminRepository.findOneBy({ user: { email } });
+        if (admin) return admin.user;
+        const employer = await this.employerRepository.findOneBy({ user: { email } });
+        if (employer) return employer.user;
         throw new UnauthorizedException();
     }
-
+    public async findUserById(id: UUID): Promise<User> {
+        const admin = await this.adminRepository.findOneBy({ user: { id } });
+        if (admin) return admin.user;
+        const employer = await this.employerRepository.findOneBy({ user: { id } });
+        if (employer) return employer.user;
+        throw new UnauthorizedException();
+    }
 }

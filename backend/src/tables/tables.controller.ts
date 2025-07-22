@@ -5,14 +5,14 @@ import { UUID } from 'crypto';
 import { TableStatus } from 'src/enums/table_status';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
-import { UserRole } from 'src/enums/user.roles';
+import { UserType } from 'src/enums/user.roles';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { BuildingId } from 'src/decorators/building.decorator';
 import { BuildingIdGuard } from 'src/guards/building.guard';
 
 @Controller('tables')
 @UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
-@Roles(UserRole.Admin)
+@Roles(UserType.Admin)
 export class TablesController {
   constructor(private readonly tablesService: TablesService) { }
 
@@ -25,7 +25,7 @@ export class TablesController {
   }
 
   @Get()
-  @Roles(UserRole.Employer, UserRole.Admin , UserRole.Client)
+  @Roles(UserType.Employer, UserType.Admin, UserType.Client)
   findTablesOfBuilding(
     @BuildingId() buildingId: UUID,
     @Query(
@@ -36,7 +36,7 @@ export class TablesController {
   }
 
   @Get(":id/scan")
-  @Roles(UserRole.Employer, UserRole.Client)
+  @Roles(UserType.Employer, UserType.Client)
   scanQrCodeTable(
     @Param('id', ParseUUIDPipe) id: UUID,
     @BuildingId() buildingId: UUID,
@@ -45,7 +45,7 @@ export class TablesController {
   }
 
   @Get(":id/order")
-  @Roles(UserRole.Employer, UserRole.Admin)
+  @Roles(UserType.Employer, UserType.Admin)
   getTableCurrentOrder(
     @Param('id', ParseUUIDPipe) id: UUID,
   ) {

@@ -12,7 +12,9 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
   email: json['email'] as String,
   phone: json['phone'] as String,
   photo: json['photo'] as String?,
-  role: $enumDecode(_$UserRoleEnumMap, json['role']),
+  type: (json['type'] as List<dynamic>)
+      .map((e) => $enumDecode(_$UserTypeEnumMap, e))
+      .toList(),
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -21,10 +23,10 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'email': instance.email,
   'phone': instance.phone,
   'photo': instance.photo,
-  'role': _$UserRoleEnumMap[instance.role]!,
+  'type': instance.type.map((e) => _$UserTypeEnumMap[e]!).toList(),
 };
 
-const _$UserRoleEnumMap = {
-  UserRole.admin: 'admin',
-  UserRole.employer: 'employer',
+const _$UserTypeEnumMap = {
+  UserType.admin: 'admin',
+  UserType.employer: 'employer',
 };

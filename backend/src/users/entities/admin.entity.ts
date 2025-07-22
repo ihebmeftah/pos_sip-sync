@@ -1,7 +1,12 @@
-import { UserBase } from "src/database/base/user.base";
-import { Entity } from 'typeorm';
+import { Entity, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from "./user.entity";
+import { UUID } from 'crypto';
 
 @Entity()
-export class Admin extends UserBase {
-
+export class Admin {
+     @PrimaryGeneratedColumn("uuid")
+        id: UUID;
+    @OneToOne(() => User, { eager: true, onDelete: 'CASCADE', cascade: true, })
+    @JoinColumn()
+    user: User;
 }

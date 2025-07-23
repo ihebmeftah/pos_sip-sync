@@ -8,17 +8,19 @@ class BuildingsController extends GetxController
   @override
   void onInit() async {
     await getBuilding();
-    change(buildings, status: RxStatus.success());
     super.onInit();
   }
 
   Future getBuilding() async {
     try {
       buildings(await BuildingsApi().getBuildings());
+      if (buildings.isEmpty) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(buildings, status: RxStatus.success());
+      }
     } catch (e) {
       change(null, status: RxStatus.error('Failed to load buildings'));
     }
   }
-
-
 }

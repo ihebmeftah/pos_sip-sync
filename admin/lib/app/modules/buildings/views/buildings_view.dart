@@ -1,4 +1,5 @@
 import 'package:admin/app/common/appbottomsheet.dart';
+import 'package:admin/app/common/appemptyscreen.dart';
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:admin/main.dart';
@@ -72,6 +73,7 @@ class BuildingsView extends GetView<BuildingsController> {
             );
           },
         ),
+        onEmpty: Appemptyscreen(),
       ),
     );
   }

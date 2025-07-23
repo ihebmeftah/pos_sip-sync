@@ -83,7 +83,7 @@ class TablesView extends GetView<TablesController> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Table №${controller.tables[index].numTable}",
+                                        "Table №${controller.tables[index].name}",
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w600,

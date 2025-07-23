@@ -23,7 +23,7 @@ class CategorieFormController extends GetxController with StateMixin {
         await CategoriesApi().createCategories(
           name: nameController.text,
           description: descController.text,
-          image: Get.find<FileuploadController>().convertselectedFile!,
+          image: Get.find<FileuploadController>().convertselectedFile,
         );
         Get.find<CategorieController>().getCategories();
         Get.back();

@@ -106,22 +106,33 @@ class ArticleView extends GetView<ArticleController> {
     return GetBuilder<PassOrderController>(
       id: controller.articles[index].id,
       builder: (passOrderCtr) {
-        return Badge(
-          isLabelVisible: passOrderCtr.existeArticle(
-            controller.articles[index].id,
-          ),
-          label: Text(
-            passOrderCtr
-                .countArticleOcc(controller.articles[index].id)
-                .toString(),
-            style: TextStyle(fontSize: 18),
-          ),
-          child: IconButton(
-            style: IconButton.styleFrom(iconSize: 18),
-            onPressed: () =>
-                passOrderCtr.addArticle(controller.articles[index]),
-            icon: const Icon(FluentIcons.add_12_filled),
-          ),
+        return Row(
+          children: [
+            if (passOrderCtr.existeArticle(controller.articles[index].id))
+              IconButton(
+                style: IconButton.styleFrom(iconSize: 18),
+                onPressed: () =>
+                    passOrderCtr.removeArticle(controller.articles[index]),
+                icon: const Icon(FluentIcons.subtract_12_filled),
+              ),
+            Badge(
+              isLabelVisible: passOrderCtr.existeArticle(
+                controller.articles[index].id,
+              ),
+              label: Text(
+                passOrderCtr
+                    .countArticleOcc(controller.articles[index].id)
+                    .toString(),
+                style: TextStyle(fontSize: 18),
+              ),
+              child: IconButton(
+                style: IconButton.styleFrom(iconSize: 18),
+                onPressed: () =>
+                    passOrderCtr.addArticle(controller.articles[index]),
+                icon: const Icon(FluentIcons.add_12_filled),
+              ),
+            ),
+          ],
         );
       },
     );

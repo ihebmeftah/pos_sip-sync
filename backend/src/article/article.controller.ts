@@ -26,7 +26,6 @@ export class ArticleController {
     @Body() createArticleDto: CreateArticleDto,
     @UploadedFiles() files: { image?: Express.Multer.File[] }
   ) {
-    console.log(createArticleDto);
     if (files.image && files.image.length > 0) {
       createArticleDto.image = files.image[0].path;
     }

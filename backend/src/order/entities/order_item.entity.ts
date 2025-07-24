@@ -2,7 +2,6 @@ import { UUID } from 'crypto';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Order } from './order.entity';
 import { Article } from 'src/article/entities/article.entity';
-import { UserType } from 'src/enums/user.roles';
 import { User } from 'src/users/entities/user.entity';
 
 @Entity()

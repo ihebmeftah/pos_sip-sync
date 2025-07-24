@@ -8,10 +8,12 @@ import { TablesModule } from 'src/tables/tables.module';
 import { BuildingModule } from 'src/building/building.module';
 import { ArticleModule } from 'src/article/article.module';
 import { UsersModule } from 'src/users/users.module';
+import { HistoryModule } from '../history/history.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem]),
+    HistoryModule,
     forwardRef(() => TablesModule),
     BuildingModule,
     ArticleModule,

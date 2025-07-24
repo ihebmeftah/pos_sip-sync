@@ -8,6 +8,7 @@ class AppTheme {
     scaffoldBackgroundColor: HexColor("F5F5F5"),
     appBarTheme: AppBarTheme(
       toolbarHeight: 80,
+
       iconTheme: IconThemeData(color: primary),
       actionsPadding: EdgeInsets.only(right: 16),
       titleTextStyle: TextStyle(
@@ -16,6 +17,7 @@ class AppTheme {
         color: Colors.black,
       ),
       backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

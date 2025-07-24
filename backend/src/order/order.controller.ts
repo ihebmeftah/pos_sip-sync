@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req, ParseEnumPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req, ParseEnumPipe, Query, UseInterceptors } from '@nestjs/common';
 import { OrderService } from './order.service';
 
 import { BuildingIdGuard } from 'src/guards/building.guard';
@@ -12,6 +12,7 @@ import { UserType } from 'src/enums/user.roles';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
 import { CurrUser } from 'src/decorators/curr-user.decorator';
 import { OrderStatus } from 'src/enums/order_status';
+import { HistoryInterceptor } from '../history/history.interceptor';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
@@ -34,8 +35,14 @@ export class OrderController {
     ) {
         return await this.orderService.getOrderById(id);
     }
-
+    @Get(":id/history")
+    async getOrderHistory(
+        @Param('id', ParseUUIDPipe) id: UUID,
+    ) {
+        return await this.orderService.getOrderHistory(id);
+    }
     @Delete(":id")
+    @UseInterceptors(HistoryInterceptor)
     async deleteOrder(
         @Param('id', ParseUUIDPipe) id: UUID,
     ) {
@@ -43,6 +50,7 @@ export class OrderController {
     }
 
     @Post()
+    @UseInterceptors(HistoryInterceptor)
     async passOrder(
         @Body() createOrderDto: CreateOrderDto,
         @CurrUser() user: LoggedUser,
@@ -52,6 +60,7 @@ export class OrderController {
 
     @Patch("/item/:id")
     @Roles(UserType.Admin)
+    @UseInterceptors(HistoryInterceptor)
     async payOrderItem(
         @Param("id", ParseUUIDPipe) orderItemId: UUID,
     ) {
@@ -60,6 +69,7 @@ export class OrderController {
 
     @Patch("/:id/pay-items")
     @Roles(UserType.Admin)
+    @UseInterceptors(HistoryInterceptor)
     async payAllItemsOfOrder(
         @Param("id", ParseUUIDPipe) orderId: UUID
     ) {

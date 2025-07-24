@@ -10,17 +10,18 @@ enum OrderStatus { progress, delivred, payed }
 @JsonSerializable()
 class Order {
   String? id;
+  String? ref;
   OrderStatus status;
   List<OrderItem> items;
   @JsonKey(name: 'table')
   Table table;
-  User passedBy;
+  User openedBy;
   Order({
     this.id,
     this.status = OrderStatus.progress,
     this.items = const [],
     required this.table,
-    required this.passedBy,
+    required this.openedBy,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

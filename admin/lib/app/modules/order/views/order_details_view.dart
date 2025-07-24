@@ -1,4 +1,5 @@
 import 'package:admin/app/common/appemptyscreen.dart';
+import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/modules/order/widgets/order_amount_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -49,10 +50,11 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                     color: Theme.of(context).colorScheme.primary,
                     size: 40,
                   ),
-                  Column(
+                  Row(
+                    spacing: 5,
                     children: [
                       Text(
-                        'Table: ${controller.order!.table.numTable}',
+                        controller.order!.table.name,
                         style: context.textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -61,18 +63,7 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                         id: 'table-status',
                         builder: (_) {
                           return Text(
-                            'Table status: ${controller.order!.table.status.name}',
-                            style: context.textTheme.displaySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        },
-                      ),
-                      GetBuilder<OrderDetailsController>(
-                        id: 'order-status',
-                        builder: (_) {
-                          return Text(
-                            'Order status: ${controller.order!.status.name}',
+                            controller.order!.table.status.name,
                             style: context.textTheme.displaySmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -155,6 +146,9 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                                             ),
                                       ),
                                       Text(
+                                        "Passed by: ${'${controller.order!.items[index].passedBy.firstname} ${controller.order!.items[index].passedBy.lastname}'}",
+                                      ),
+                                      Text(
                                         '${controller.order!.items[index].article.price.toStringAsFixed(2)} DT',
                                         style: context.textTheme.titleMedium
                                             ?.copyWith(
@@ -219,30 +213,8 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                                     ),
                                     if (!controller.order!.items[index].payed)
                                       ElevatedButton(
-                                        onPressed: () => Get.dialog(
-                                          AlertDialog(
-                                            title: const Text(
-                                              'Confirm Payment',
-                                            ),
-                                            content: Text(
-                                              'Pay for ${controller.order!.items[index].article.name}?\nAmount: ${controller.order!.items[index].article.price.toStringAsFixed(2)} DT',
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Get.back(),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () =>
-                                                   controller.payForItem(
-                                                    controller
-                                                        .order!
-                                                        .items[index],
-                                                  ),
-                                                child: const Text('Pay'),
-                                              ),
-                                            ],
-                                          ),
+                                        onPressed: () => controller.payForItem(
+                                          controller.order!.items[index],
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.green,
@@ -307,49 +279,91 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
               ),
 
               /// Action Buttons
-              Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => Get.dialog(
-                        AlertDialog(
-                          title: const Text('Pay All Items'),
-                          content: Text(
-                            'Pay for all unpaid items?\nTotal Amount: ${controller.totalPrice.toStringAsFixed(2)} DT',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Get.back(),
-                              child: const Text('Cancel'),
-                            ),
-                            ElevatedButton(
-                              onPressed: controller.payAllItems,
-                              child: const Text('Pay All'),
-                            ),
-                          ],
+              if (controller.order!.status != OrderStatus.payed)
+                Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: controller.payAllItems,
+                        icon: const Icon(Icons.payment),
+                        label: const Text('Pay All'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
                         ),
                       ),
-                      icon: const Icon(Icons.payment),
-                      label: const Text('Pay All'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
+                    ),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: controller.closeOrder,
+                        icon: const Icon(Icons.check_circle),
+                        label: Text('Close Order'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              TextButton(
+                onPressed: () => Get.bottomSheet(
+                  SizedBox(
+                    height: Get.height * 0.7,
+                    width: Get.width,
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.all(20),
+                      child: Column(
+                        children: [
+                          if (controller.order!.status == OrderStatus.payed)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Order started by: ${controller.order!.openedBy.firstname} ${controller.order!.openedBy.lastname}",
+                                  style: context.textTheme.titleMedium!
+                                      .copyWith(
+                                        backgroundColor: Colors.blue.shade500,
+                                      ),
+                                ),
+                                Text(
+                                  "Closed",
+                                  style: context.textTheme.titleMedium!
+                                      .copyWith(
+                                        backgroundColor: Colors.red.shade500,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          Expanded(
+                            child: controller.orderHistory.isEmpty
+                                ? Center(
+                                    child: Text(
+                                      'No history available for this order',
+                                      style: context.textTheme.titleMedium,
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemBuilder: (context, index) => ListTile(
+                                      title: Text(
+                                        "${controller.orderHistory.length - index}",
+                                      ),
+                                      subtitle: Text(
+                                        controller.orderHistory[index].message,
+                                      ),
+                                    ),
+                                    itemCount: controller.orderHistory.length,
+                                    shrinkWrap: true,
+                                  ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: controller.closeOrder,
-                      icon: const Icon(Icons.check_circle),
-                      label: Text('Close Order'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                  backgroundColor: Colors.white,
+                ),
+                child: const Text('Order History'),
               ),
             ],
           ),

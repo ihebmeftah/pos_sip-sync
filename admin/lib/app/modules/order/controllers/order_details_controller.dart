@@ -1,13 +1,20 @@
+import 'package:admin/app/data/apis/history_api.dart';
+import 'package:admin/app/data/model/history/history.dart';
 import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/data/model/order/order_item.dart';
+import 'package:admin/app/modules/order/controllers/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/apis/order_api.dart';
+import '../../../data/model/enums/table_status.dart';
+import '../../tables/controllers/tables_controller.dart';
 
 class OrderDetailsController extends GetxController with StateMixin {
   String get id => Get.parameters['id']!;
   Order? order;
+  final orderHistory = <History>[].obs;
+
   @override
   void onInit() {
     getOrderById();
@@ -24,6 +31,7 @@ class OrderDetailsController extends GetxController with StateMixin {
   Future<void> getOrderById() async {
     try {
       order = await OrderApi().getOrderById(id);
+      getOrderHistory();
       if (order == null) {
         change(null, status: RxStatus.empty());
       } else {
@@ -34,26 +42,38 @@ class OrderDetailsController extends GetxController with StateMixin {
     }
   }
 
+  Future<void> getOrderHistory() async {
+    try {
+      orderHistory.value = await HistoryApi().getOrderHistory(id);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load order history',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   Future<void> payForItem(OrderItem item) async {
     try {
-      final updatedOrder = await OrderApi().payOrderItem(itemId: item.id!);
-      order!.items.firstWhere((i) => i.id == item.id).payed = true;
+      final updatedItem = await OrderApi().payOrderItem(itemId: item.id!);
+      order!.items.firstWhere((i) => i.id == updatedItem.id).payed = true;
       update([item.id!, "pay"]);
-      if (updatedOrder.status != order!.status) {
-        order!.status = updatedOrder.status;
-        update(['order-status']);
+      if (order!.items.every((item) => item.payed)) {
+        order!.status = OrderStatus.payed;
+        order!.table.status = TableStatus.available;
+        Get.find<TablesController>().updateTable(order!.table);
+        update(['table-status', 'order-status']);
       }
-      if (updatedOrder.table.status != order!.table.status) {
-        order!.table.status = updatedOrder.table.status;
-        update(['table-status']);
-      }
-      Get.back();
+      Get.find<OrderController>().getOrders();
       Get.snackbar(
         'Payment Processed',
         'Payment for ${item.article.name} has been processed',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      getOrderHistory();
     } catch (e) {
       Get.snackbar(
         'Payment Error',
@@ -67,13 +87,15 @@ class OrderDetailsController extends GetxController with StateMixin {
   Future<void> payAllItems() async {
     try {
       order = await OrderApi().payOrderAllItems(orderId: order!.id!);
-      Get.back();
+      Get.find<OrderController>().getOrders();
+      Get.find<TablesController>().updateTable(order!.table);
       Get.snackbar(
         'Payment Processed',
         'All items have been paid',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      getOrderHistory();
       change(order, status: RxStatus.success());
     } catch (e) {
       Get.snackbar(
@@ -96,7 +118,6 @@ class OrderDetailsController extends GetxController with StateMixin {
 
   void closeOrder() {
     final hasUnpaidItems = order!.items.any((item) => !item.payed);
-
     Get.dialog(
       AlertDialog(
         title: Text(hasUnpaidItems ? 'Close Order' : 'Complete Order'),

@@ -17,8 +17,7 @@ export class RolesGuard implements CanActivate {
         if (!requiredRoles) return true;
         const request = context.switchToHttp().getRequest();
         const user = request.user as LoggedUser;
-        console.log('Current role :', user.type);
-        console.log('Required Roles:', requiredRoles);
+        console.log('Current role :', user.type, 'Required Roles: ', requiredRoles);
         const isAuthorized = requiredRoles.some((role) => user.type.includes(role));
         if (!isAuthorized) {
             throw new ForbiddenException(`Only ${requiredRoles} are authorized to access this route, current role is ${user.type}`);

@@ -41,7 +41,7 @@ class PassOrderView extends GetView<PassOrderController> {
                     ),
                   ),
                   Text(
-                    "Table №${controller.table!.numTable}".toUpperCase(),
+                    "Table №${controller.table!.name}".toUpperCase(),
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   IconButton(

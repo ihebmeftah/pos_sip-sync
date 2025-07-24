@@ -12,6 +12,7 @@ import { Article } from 'src/article/entities/article.entity';
 import { TableStatus } from 'src/enums/table_status';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
 import { UsersService } from 'src/users/users.service';
+import { HistoryService } from 'src/history/history.service';
 
 @Injectable()
 export class OrderService {
@@ -24,6 +25,7 @@ export class OrderService {
         private readonly tablesService: TablesService,
         private readonly articleService: ArticleService,
         private readonly usersService: UsersService,
+        private readonly historyService: HistoryService,
     ) { }
 
 
@@ -31,7 +33,7 @@ export class OrderService {
         createOrderDto: CreateOrderDto,
         user: LoggedUser,
     ) {
-        const passedBy = await this.usersService.findUserById(user.id);
+        const openedBy = await this.usersService.findUserById(user.id);
         const table = await this.tablesService.findOne(createOrderDto.tableId);
         const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId);
         if (orderTable) {
@@ -46,14 +48,18 @@ export class OrderService {
             const orderItem = new OrderItem();
             orderItem.article = article;
             orderItem.payed = false;
-            orderItem.passedBy = passedBy;
+            orderItem.passedBy = openedBy;
             return orderItem;
         }));
+        const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
+        const now = new Date();
+        const formattedDate = `${now.getDate()}J/${now.getMonth() + 1}M/${now.getFullYear()},${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
         const order = this.orderRepo.create({
             table,
+            ref: `REF-${uniqueNumber}/${formattedDate}`,
             items: orderItems,
             status: OrderStatus.PROGRESS,
-            passedBy: passedBy,
+            openedBy
         });
         const savedOrder = await this.orderRepo.save(order);
         savedOrder.table.status = TableStatus.occupied;
@@ -98,12 +104,17 @@ export class OrderService {
             order.table.status = TableStatus.available;
             order = await this.orderRepo.save(order);
         }
-        return order;
+        return orderItem;
     }
     private async getItemById(orderItemId: UUID) {
         const orderItem = await this.orderItemRepo.findOne({
             where: { id: orderItemId },
-            relations: { order: true, article: true }
+            relations: {
+                order: {
+                    table: true,
+                    items: true,
+                },
+            }
         });
         if (!orderItem) {
             throw new NotFoundException(`Order item with ID ${orderItemId} not found`);
@@ -114,12 +125,12 @@ export class OrderService {
     async payAllitemsOfOrder(orderId: UUID) {
         const order = await this.getOrderById(orderId);
         // Mark all order items as paid
-        for (const item of order.items) {
+        await order.items.map(async item => {
             if (!item.payed) {
                 item.payed = true;
                 await this.orderItemRepo.save(item);
             }
-        }
+        });
         // Update the order status to paid
         order.status = OrderStatus.PAYED;
         order.table.status = TableStatus.available;
@@ -132,13 +143,18 @@ export class OrderService {
             relations: {
                 items: true,
                 table: true,
+            },
+            order: {
+                items: {
+                    payed: "ASC",
+                },
             }
         });
         if (!order) {
             throw new NotFoundException(`Order with ID ${id} not found`);
         }
-        if (order.status === OrderStatus.PAYED) {
-            order.table.status = TableStatus.available;
+        if (order.status === OrderStatus.PROGRESS) {
+            order.table.status = TableStatus.occupied;
         }
         return order;
     }
@@ -150,5 +166,10 @@ export class OrderService {
             await manager.delete(Order, order.id);
         });
         return true;
+    }
+
+    async getOrderHistory(orderId: UUID) {
+        const order = await this.getOrderById(orderId);
+        return await this.historyService.getHistoryByOrderId(order.id);
     }
 }

@@ -1,5 +1,6 @@
 import 'package:admin/app/data/apis/htthp_helper.dart';
 import 'package:admin/app/data/model/order/order.dart';
+import 'package:admin/app/data/model/order/order_item.dart';
 
 class OrderApi {
   Future<List<Order>> getOrders([OrderStatus? orderStatus]) {
@@ -30,10 +31,10 @@ class OrderApi {
     );
   }
 
-  Future<Order> payOrderItem({required String itemId}) async {
-    return await HttpHelper.patch<Order>(
+  Future<OrderItem> payOrderItem({required String itemId}) async {
+    return await HttpHelper.patch<OrderItem>(
       endpoint: '/order/item/$itemId',
-      fromJson: (json) => Order.fromJson(json as Map<String, dynamic>),
+      fromJson: (json) => OrderItem.fromJson(json as Map<String, dynamic>),
     );
   }
 

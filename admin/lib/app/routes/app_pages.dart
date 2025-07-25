@@ -26,6 +26,12 @@ import '../modules/order/bindings/order_details_binding.dart';
 import '../modules/order/views/order_details_view.dart';
 import '../modules/order/views/order_view.dart';
 import '../modules/order/views/pass_order_view.dart';
+import '../modules/staff/bindings/staff_binding.dart';
+import '../modules/staff/bindings/staff_form_binding.dart';
+import '../modules/staff/bindings/staff_details_binding.dart';
+import '../modules/staff/views/staff_details_view.dart';
+import '../modules/staff/views/staff_form_view.dart';
+import '../modules/staff/views/staff_view.dart';
 import '../modules/tables/bindings/table_form_binding.dart';
 import '../modules/tables/bindings/tables_binding.dart';
 import '../modules/tables/views/table_form_view.dart';
@@ -132,6 +138,23 @@ class AppPages {
           name: '${_Paths.ORDER_DETAILS}/:id',
           page: () => const OrderDetailsView(),
           binding: OrderDetailsBinding(),
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.STAFF,
+      page: () => const StaffView(),
+      binding: StaffBinding(),
+      children: [
+        GetPage(
+          name: _Paths.STAFF_FORM,
+          page: () => const StaffFormView(),
+          binding: StaffFormBinding(),
+        ),
+        GetPage(
+          name: _Paths.STAFF_DETAILS,
+          page: () => const StaffDetailsView(),
+          binding: StaffDetailsBinding(),
         ),
       ],
     ),

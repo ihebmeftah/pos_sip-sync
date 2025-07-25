@@ -57,18 +57,17 @@ export class UsersService {
     // Start Employer functionnality
     public async createEmployer(createUser: CreateUserDto, buildingId: UUID) {
         const building = await this.buildingService.findOne(buildingId);
-        createUser.email = `${createUser.email.split('@')[0]}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
-        if (await this.existsEmployerByEmail(createUser.email)) {
-            const uniquePrefix = Math.random().toString(36).substring(2, 6);
-            createUser.email = `${createUser.email.split('@')[0]}${uniquePrefix}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
-        }
+        if (await this.existsEmployerByEmail(createUser.email))
+            throw new ConflictException("Employer with this email already exists");
         if (await this.existsEmployerByPhone(createUser.phone))
             throw new ConflictException("Employer with this phone already exists");
+        const uniquePrefix = Math.random().toString(36).substring(2, 6);
+        const buildingEmail = `${createUser.email.split('@')[0]}${uniquePrefix}@${building.name.replace(/\s+/g, '').toLowerCase()}.com`;
         const createdEmployer = await this.employerRepository.create({
             user: {
                 ...createUser,
                 type: [UserType.Employer],
-            },
+            }, buildingEmail,
             building: building,
         });
         return await this.employerRepository.save(createdEmployer);
@@ -83,7 +82,7 @@ export class UsersService {
         });
     }
     public async findOneEmployer(id: UUID) {
-        const employer = await this.employerRepository.findOneBy({ user: { id } });
+        const employer = await this.employerRepository.findOneBy([{ user: { id } }, { id }]);
         if (!employer) throw new NotFoundException("Employer not found");
         return employer;
     }
@@ -101,7 +100,10 @@ export class UsersService {
     public async findUserByEmail(email: string): Promise<User> {
         const admin = await this.adminRepository.findOneBy({ user: { email } });
         if (admin) return admin.user;
-        const employer = await this.employerRepository.findOneBy({ user: { email } });
+        const employer = await this.employerRepository.findOneBy([
+            { user: { email } },
+            { buildingEmail: email }
+        ]);
         if (employer) return employer.user;
         throw new UnauthorizedException();
     }

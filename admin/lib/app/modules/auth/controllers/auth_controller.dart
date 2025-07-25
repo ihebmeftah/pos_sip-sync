@@ -5,6 +5,9 @@ import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/model/enums/user_role.dart';
+import '../../staff/controllers/staff_details_controller.dart';
+
 class AuthController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -19,6 +22,11 @@ class AuthController extends GetxController {
           email: emailController.text,
           password: passwordController.text,
         );
+        if (user.type.contains(UserType.employer)) {
+          Get.put<StaffDetailsController>(
+            StaffDetailsController(),
+          ).getEmployerById(user.id);
+        }
         await LocalStorage().saveUser(user);
         Get.offAllNamed(Routes.BUILDINGS);
       }

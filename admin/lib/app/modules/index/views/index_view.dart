@@ -58,6 +58,11 @@ class IndexView extends GetView<IndexController> {
               title: Text('Buildings'),
               onTap: () => Get.offAllNamed(Routes.BUILDINGS),
             ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Staff'),
+              onTap: () => Get.toNamed(Routes.STAFF),
+            ),
             Spacer(),
             SafeArea(
               child: ListTile(

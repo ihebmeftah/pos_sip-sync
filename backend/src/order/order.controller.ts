@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req, ParseEnumPipe, Query, UseInterceptors } from '@nestjs/common';
 import { OrderService } from './order.service';
-
-import { BuildingIdGuard } from 'src/guards/building.guard';
+import { DbNameGuard } from 'src/guards/dbname.guard';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
-import { BuildingId } from 'src/decorators/building.decorator';
+import { DbName } from 'src/decorators/building.decorator';
 import { UUID } from 'crypto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -15,38 +14,43 @@ import { OrderStatus } from 'src/enums/order_status';
 import { HistoryInterceptor } from '../history/history.interceptor';
 
 @Controller('order')
-@UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, DbNameGuard)
 export class OrderController {
     constructor(private readonly orderService: OrderService) { }
 
     @Get()
     async findOrderOfBuilding(
-        @BuildingId() buildingId: UUID,
+        @DbName() dbName: string,
         @Query(
             'status',
             new ParseEnumPipe(OrderStatus, { optional: true })) status?: OrderStatus,
     ) {
-        return await this.orderService.findOrderOfBuilding(buildingId, status);
+        return await this.orderService.findOrderOfBuilding(dbName, status);
     }
 
     @Get(":id")
     async getOrderById(
         @Param('id', ParseUUIDPipe) id: UUID,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.getOrderById(id);
+        return await this.orderService.getOrderById(id, dbName);
     }
+
     @Get(":id/history")
     async getOrderHistory(
         @Param('id', ParseUUIDPipe) id: UUID,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.getOrderHistory(id);
+        return await this.orderService.getOrderHistory(id, dbName);
     }
+
     @Delete(":id")
     @UseInterceptors(HistoryInterceptor)
     async deleteOrder(
         @Param('id', ParseUUIDPipe) id: UUID,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.deleteOrder(id);
+        return await this.orderService.deleteOrder(id, dbName);
     }
 
     @Post()
@@ -54,8 +58,9 @@ export class OrderController {
     async passOrder(
         @Body() createOrderDto: CreateOrderDto,
         @CurrUser() user: LoggedUser,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.passOrder(createOrderDto, user);
+        return await this.orderService.passOrder(createOrderDto, user, dbName);
     }
 
     @Patch("/item/:id")
@@ -63,16 +68,18 @@ export class OrderController {
     @UseInterceptors(HistoryInterceptor)
     async payOrderItem(
         @Param("id", ParseUUIDPipe) orderItemId: UUID,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.payOrderItem(orderItemId);
+        return await this.orderService.payOrderItem(orderItemId, dbName);
     }
 
     @Patch("/:id/pay-items")
     @Roles(UserType.Admin)
     @UseInterceptors(HistoryInterceptor)
     async payAllItemsOfOrder(
-        @Param("id", ParseUUIDPipe) orderId: UUID
+        @Param("id", ParseUUIDPipe) orderId: UUID,
+        @DbName() dbName: string,
     ) {
-        return await this.orderService.payAllitemsOfOrder(orderId);
+        return await this.orderService.payAllitemsOfOrder(orderId, dbName);
     }
 }

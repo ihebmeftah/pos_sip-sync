@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, ParseUUIDPipe, UseGuards, UseInterc
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UUID } from 'crypto';
-import { BuildingId } from 'src/decorators/building.decorator';
+import { BuildingId, DbName } from 'src/decorators/building.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { BuildingIdGuard } from 'src/guards/building.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -24,25 +24,27 @@ export class ArticleController {
   )
   create(
     @Body() createArticleDto: CreateArticleDto,
-    @UploadedFiles() files: { image?: Express.Multer.File[] }
+    @UploadedFiles() files: { image?: Express.Multer.File[] },
+    @DbName() dbName: string
   ) {
     if (files.image && files.image.length > 0) {
       createArticleDto.image = files.image[0].path;
     }
-    return this.articleService.create(createArticleDto);
+    return this.articleService.create(createArticleDto, dbName);
   }
 
   @Get()
   findAll(
-    @BuildingId() buildingId: UUID
+    @DbName() dbName: string
   ) {
-    return this.articleService.findAll(buildingId);
+    return this.articleService.findAll(dbName);
   }
 
   @Get('category/:categoryId')
   findArticleByCategoryId(
-    @Param('categoryId', ParseUUIDPipe) categoryId: UUID
+    @Param('categoryId', ParseUUIDPipe) categoryId: UUID,
+    @DbName() dbName: string
   ) {
-    return this.articleService.findArticleByCategoryId(categoryId);
+    return this.articleService.findArticleByCategoryId(categoryId, dbName);
   }
 }

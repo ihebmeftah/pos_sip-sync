@@ -5,6 +5,7 @@ part 'building.g.dart';
 class Building {
   String? id;
   String name;
+  String dbName;
   String openingTime;
   String closingTime;
   String location;
@@ -16,6 +17,7 @@ class Building {
   Building({
     this.id,
     required this.name,
+    required this.dbName,
     required this.openingTime,
     required this.closingTime,
     required this.location,
@@ -30,6 +32,7 @@ class Building {
 
   Map<String, dynamic> addtoJson() => <String, dynamic>{
     'name': name,
+    'dbName': dbName,
     'openingTime': openingTime,
     'closingTime': closingTime,
     'location': location,

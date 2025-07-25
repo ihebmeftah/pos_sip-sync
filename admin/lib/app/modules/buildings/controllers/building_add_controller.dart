@@ -23,6 +23,7 @@ class BuildingAddController extends GetxController {
     location: location.text,
     openingTime: opening.text,
     closingTime: closing.text,
+    dbName: name.text.toLowerCase().replaceAll(' ', '_'),
   );
   Future<void> addBuilding() async {
     try {

@@ -10,6 +10,7 @@ import { ArticleModule } from './article/article.module';
 import { OrderModule } from './order/order.module';
 import { UsersModule } from './users/users.module';
 import { HistoryModule } from './history/history.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { HistoryModule } from './history/history.module';
     ConfigModule.forRoot({
       envFilePath: ['dev.env']
     }),
+    DatabaseModule,
     CategroyModule,
     TablesModule,
     BuildingModule,

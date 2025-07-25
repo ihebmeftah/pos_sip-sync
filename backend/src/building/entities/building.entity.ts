@@ -9,6 +9,8 @@ export class Building extends TimestampBaseEntity {
     id: UUID
     @Column()
     name: string
+    @Column({ unique: true })
+    dbName: string
     @Column()
     openingTime: string
     @Column()

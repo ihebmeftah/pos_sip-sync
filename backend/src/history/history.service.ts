@@ -1,22 +1,18 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { History, HistoryActionType } from './entities/history.entity';
 import { UUID } from 'crypto';
-import { OrderService } from 'src/order/order.service';
 import { UsersService } from 'src/users/users.service';
 import { Order } from 'src/order/entities/order.entity';
 import { User } from 'src/users/entities/user.entity';
+import { RepositoryFactory } from 'src/database/repository-factory.service';
 
 @Injectable()
 export class HistoryService {
     constructor(
-        @InjectRepository(History)
-        private readonly historyRepository: Repository<History>,
-
+        private readonly repositoryFactory: RepositoryFactory,
         @Inject(forwardRef(() => UsersService))
         private readonly userService: UsersService,
-
     ) { }
 
     async createHistory(params: {
@@ -24,16 +20,19 @@ export class HistoryService {
         userId: UUID;
         order: Order;
         orderItemId?: UUID;
+        dbName: string;
     }): Promise<History> {
+        const historyRepo = await this.repositoryFactory.getRepository(params.dbName, History);
         const user = await this.userService.findUserById(params.userId);
-        const history = this.historyRepository.create({
+
+        const history = historyRepo.create({
             action: params.action,
             user: user,
             order: params.order,
             orderItemId: params.orderItemId,
             message: this.generateMessage(params.action, params.order, user, params.orderItemId),
         });
-        return this.historyRepository.save(history);
+        return historyRepo.save(history);
     }
 
     private generateMessage(action: HistoryActionType,
@@ -53,8 +52,9 @@ export class HistoryService {
         }
     }
 
-    async getHistoryByOrderId(orderId: UUID) {
-        return this.historyRepository.find({
+    async getHistoryByOrderId(orderId: UUID, dbName: string) {
+        const historyRepo = await this.repositoryFactory.getRepository(dbName, History);
+        return historyRepo.find({
             where: { order: { id: orderId } },
             order: { createdAt: 'DESC' },
         });

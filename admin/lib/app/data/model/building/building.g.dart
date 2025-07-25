@@ -9,6 +9,7 @@ part of 'building.dart';
 Building _$BuildingFromJson(Map<String, dynamic> json) => Building(
   id: json['id'] as String?,
   name: json['name'] as String,
+  dbName: json['dbName'] as String,
   openingTime: json['openingTime'] as String,
   closingTime: json['closingTime'] as String,
   location: json['location'] as String,
@@ -21,6 +22,7 @@ Building _$BuildingFromJson(Map<String, dynamic> json) => Building(
 Map<String, dynamic> _$BuildingToJson(Building instance) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,
+  'dbName': instance.dbName,
   'openingTime': instance.openingTime,
   'closingTime': instance.closingTime,
   'location': instance.location,

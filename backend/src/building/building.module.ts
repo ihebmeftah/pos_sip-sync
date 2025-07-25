@@ -4,6 +4,7 @@ import { BuildingController } from './building.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Building } from './entities/building.entity';
 import { UsersModule } from 'src/users/users.module';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { UsersModule } from 'src/users/users.module';
       Building
     ]),
     UsersModule,
+    DatabaseModule,
   ],
   controllers: [BuildingController],
   providers: [BuildingService],

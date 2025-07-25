@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserType } from 'src/enums/user.roles';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { BuildingId } from 'src/decorators/building.decorator';
+import { BuildingId, DbName } from 'src/decorators/building.decorator';
 import { BuildingIdGuard } from 'src/guards/building.guard';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
 
@@ -36,13 +36,16 @@ export class CategroyController {
 
   @Get()
   findAll(
-    @BuildingId() buildingId: UUID
+    @DbName() dbName: string
   ) {
-    return this.categroyService.findAllByBuildingId(buildingId);
+    return this.categroyService.findAllByDbName(dbName);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: UUID) {
-    return this.categroyService.findOne(id);
+  findOne(
+    @Param('id', ParseUUIDPipe) id: UUID,
+    @DbName() dbName: string
+  ) {
+    return this.categroyService.findOne(id, dbName);
   }
 }

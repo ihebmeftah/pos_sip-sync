@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, BadRequestException } from '@nestjs/common';
 
 @Injectable()
-export class BuildingIdGuard implements CanActivate {
+export class DbNameGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
         const dbName = request.headers['dbname'] || request.headers['dbName'];

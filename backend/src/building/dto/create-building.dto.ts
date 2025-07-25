@@ -5,6 +5,10 @@ export class CreateBuildingDto {
     @IsString()
     name: string
 
+    @IsNotEmpty()
+    @IsString()
+    dbName: string
+
     /*  @Matches(/^(0[1-9]|1[0-2]):([0-5]\d)\s?(AM|PM)$/, {
           message: 'Time must be in the format HH:MM AM/PM (e.g., 08:00 AM, 11:59 PM)',
       })*/

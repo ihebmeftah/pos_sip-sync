@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { History } from './entities/history.entity';
 import { HistoryService } from './history.service';
-import { OrderModule } from 'src/order/order.module';
 import { UsersModule } from 'src/users/users.module';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([History]), UsersModule],
+    imports: [DatabaseModule, UsersModule],
     providers: [HistoryService],
     exports: [HistoryService],
 })

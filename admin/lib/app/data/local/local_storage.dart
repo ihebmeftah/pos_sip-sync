@@ -46,6 +46,8 @@ class LocalStorage {
   }
 
   String get buildingId => building!.id!;
+  String get dbName => building!.dbName;
+
   Future<bool> clear() async {
     await _storage.erase();
     return true;

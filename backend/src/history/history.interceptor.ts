@@ -18,6 +18,7 @@ export class HistoryInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const request = context.switchToHttp().getRequest();
         const user = request.user;
+        const dbName = request.headers['dbname'] || request.headers['dbName'];
         const handlerName = context.getHandler().name;
 
         return next.handle().pipe(
@@ -47,13 +48,13 @@ export class HistoryInterceptor implements NestInterceptor {
                         break;
                 }
 
-                if (action && user && order) {
+                if (action && user && order && dbName) {
                     await this.historyService.createHistory({
                         action,
                         userId: user.id,
                         order: order,
                         orderItemId,
-
+                        dbName,
                     });
                 }
             }),

@@ -64,7 +64,8 @@ class OrderDetailsController extends GetxController with StateMixin {
         order!.status = OrderStatus.payed;
         order!.table.status = TableStatus.available;
         Get.find<TablesController>().updateTable(order!.table);
-        update(['table-status', 'order-status']);
+        // update(['table-status', 'order-status']);
+        change(order, status: RxStatus.success());
       }
       Get.find<OrderController>().getOrders();
       Get.snackbar(

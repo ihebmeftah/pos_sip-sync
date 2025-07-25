@@ -147,6 +147,7 @@ export class OrderService {
             order: {
                 items: {
                     payed: "ASC",
+
                 },
             }
         });

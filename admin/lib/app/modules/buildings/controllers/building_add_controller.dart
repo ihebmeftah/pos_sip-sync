@@ -1,4 +1,5 @@
 import 'package:admin/app/common/fileupload/controllers/fileupload_controller.dart';
+import 'package:admin/app/data/apis/apis_exceptions.dart';
 import 'package:admin/app/data/apis/buildings_api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,6 +37,14 @@ class BuildingAddController extends GetxController {
         Get.find<BuildingsController>().onInit();
         Get.back();
       }
+    } on ConflictException {
+      Get.snackbar(
+        "Error",
+        "Building with this name already exists.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } catch (e) {
       Get.snackbar(
         "Error",

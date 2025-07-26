@@ -46,7 +46,7 @@ class ArticleFormView extends GetView<ArticleFormController> {
                           selectedItem: controller.selectedCategory,
                           onChanged: controller.selectCategorie,
                           label: "Category",
-                          hint: "Select article category",
+                          hint: "Select article Category",
                           items: catCtr.categories
                               .map(
                                 (e) => DropdownMenuItem<Categorie>(

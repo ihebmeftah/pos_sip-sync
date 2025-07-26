@@ -252,11 +252,9 @@ class _AuthInterceptor extends Interceptor {
 class _BuildingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Add database name header if building is selected
     if (LocalStorage().building != null) {
       options.headers['dbname'] = LocalStorage().dbName;
     }
-
     handler.next(options);
   }
 }

@@ -3,6 +3,8 @@ import { User } from '../../users/entities/user.entity';
 import { Order } from '../../order/entities/order.entity';
 import { OrderItem } from '../../order/entities/order_item.entity';
 import { UUID } from 'crypto';
+import { Employer } from 'src/users/entities/employer.entity';
+import { Staff } from 'src/users/entities/staff.entity';
 
 export enum HistoryActionType {
     PASS_ORDER = 'PASS_ORDER',
@@ -19,8 +21,8 @@ export class History {
     @Column({ type: 'enum', enum: HistoryActionType })
     action: HistoryActionType;
 
-    @ManyToOne(() => User, { eager: true })
-    user: User;
+    @ManyToOne(() => Staff, { eager: true })
+    user: Staff;
 
     @ManyToOne(() => Order, { eager: true })
     order: Order;

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CategroyModule } from './categroy/categroy.module';
 import { TablesModule } from './tables/tables.module';
 import { BuildingModule } from './building/building.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +9,7 @@ import { ArticleModule } from './article/article.module';
 import { OrderModule } from './order/order.module';
 import { UsersModule } from './users/users.module';
 import { HistoryModule } from './history/history.module';
-import { DatabaseModule } from './database/database.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -18,8 +17,7 @@ import { DatabaseModule } from './database/database.module';
     ConfigModule.forRoot({
       envFilePath: ['dev.env']
     }),
-    DatabaseModule,
-    CategroyModule,
+    CategoryModule,
     TablesModule,
     BuildingModule,
     AuthModule,

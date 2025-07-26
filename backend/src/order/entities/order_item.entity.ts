@@ -2,7 +2,7 @@ import { UUID } from 'crypto';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Order } from './order.entity';
 import { Article } from 'src/article/entities/article.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Staff } from 'src/users/entities/staff.entity';
 
 @Entity()
 export class OrderItem {
@@ -14,7 +14,7 @@ export class OrderItem {
     article: Article;
     @Column({ default: false })
     payed: boolean;
-    @ManyToOne(() => User, { eager: true })
-    passedBy: User;
+    @ManyToOne(() => Staff, { eager: true })
+    passedBy: Staff;
 
 }

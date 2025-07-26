@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, Inject, forwardRef } from '@nestjs/common';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { Repository } from 'typeorm';
 import { Building } from './entities/building.entity';
@@ -12,6 +12,7 @@ export class BuildingService {
   constructor(
     @InjectRepository(Building)
     private readonly buildingRepo: Repository<Building>,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
     private readonly databaseConnectionService: DatabaseConnectionService,
   ) { }
@@ -19,14 +20,16 @@ export class BuildingService {
   async create(ownerId: UUID,
     createBuildingDto: CreateBuildingDto,
   ): Promise<Building> {
-    const admin = await this.userService.findOneAdmin(ownerId);
+    const admin = await this.userService.findAdminById(ownerId);
 
     // Check if dbName already exists
     const existingBuilding = await this.buildingRepo.findOne({
-      where: { dbName: createBuildingDto.dbName }
+      where: [
+        { name: createBuildingDto.name },
+        { dbName: createBuildingDto.dbName }]
     });
     if (existingBuilding) {
-      throw new ConflictException(`Database name ${createBuildingDto.dbName} already exists`);
+      throw new ConflictException(`Building with name ${createBuildingDto.name} already exists`);
     }
 
     // Create the database for this building
@@ -44,7 +47,7 @@ export class BuildingService {
   findAllOfOwner(adminId: UUID): Promise<Building[]> {
     return this.buildingRepo.findBy(
       {
-        admin: { user: { id: adminId } },
+        admin: { id: adminId },
       },
     );
   }

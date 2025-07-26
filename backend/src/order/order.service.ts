@@ -32,8 +32,7 @@ export class OrderService {
     ) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
-
-        const openedBy = await this.usersService.findUserById(user.id);
+        const openedBy = await this.usersService.findStaffById(user.id, dbName);
         const table = await this.tablesService.findOne(createOrderDto.tableId, dbName);
         const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId, dbName);
 
@@ -56,12 +55,9 @@ export class OrderService {
         }));
 
         const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
-        const now = new Date();
-        const formattedDate = `${now.getDate()}J/${now.getMonth() + 1}M/${now.getFullYear()},${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-
         const order = orderRepo.create({
             table,
-            ref: `REF-${uniqueNumber}/${formattedDate}`,
+            ref: `REF-${uniqueNumber}`,
             items: orderItems,
             status: OrderStatus.PROGRESS,
             openedBy

@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsOptional, IsString, IsUrl, IsUUID } from "class-validator";
 import { UUID } from "crypto";
 
-export class CreateCategroyDto {
+export class CreateCategoryDto {
     @IsString()
     @IsNotEmpty()
     name: string;

@@ -45,7 +45,6 @@ class LocalStorage {
     return Building.fromJson(_storage.read<Map<String, dynamic>>('building')!);
   }
 
-  String get buildingId => building!.id!;
   String get dbName => building!.dbName;
 
   Future<bool> clear() async {

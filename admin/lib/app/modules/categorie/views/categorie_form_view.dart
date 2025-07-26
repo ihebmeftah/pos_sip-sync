@@ -22,7 +22,7 @@ class CategorieFormView extends GetView<CategorieFormController> {
               FileuploadView(uploadType: UploadType.image),
               AppFormField.label(
                 label: "Category Name",
-                hint: "Enter category name",
+                hint: "Enter Category name",
                 ctr: controller.nameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -33,7 +33,7 @@ class CategorieFormView extends GetView<CategorieFormController> {
               ),
               AppFormField.label(
                 label: "Description",
-                hint: "Enter category description",
+                hint: "Enter Category description",
                 minLines: 3,
                 ctr: controller.descController,
               ),

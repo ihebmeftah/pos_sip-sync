@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { Article } from './entities/article.entity';
-import { Repository } from 'typeorm';
-import { CategroyService } from 'src/categroy/categroy.service';
+import { CategoryService } from 'src/category/category.service';
 import { UUID } from 'crypto';
 import { RepositoryFactory } from 'src/database/repository-factory.service';
 
@@ -10,12 +9,12 @@ import { RepositoryFactory } from 'src/database/repository-factory.service';
 export class ArticleService {
   constructor(
     private readonly repositoryFactory: RepositoryFactory,
-    private readonly categroyService: CategroyService,
+    private readonly categoryService: CategoryService,
   ) { }
 
   async create(createArticleDto: CreateArticleDto, dbName: string) {
     const articleRepo = await this.repositoryFactory.getRepository(dbName, Article);
-    const category = await this.categroyService.findOne(createArticleDto.categoryId, dbName);
+    const category = await this.categoryService.findOne(createArticleDto.categoryId, dbName);
     const create = await articleRepo.create(createArticleDto);
     create.category = category;
     return await articleRepo.save(create);
@@ -30,11 +29,11 @@ export class ArticleService {
     });
   }
 
-  async findArticleByCategoryId(categoryId: UUID, dbName: string) {
+  async findArticleByCategoryId(CategoryId: UUID, dbName: string) {
     const articleRepo = await this.repositoryFactory.getRepository(dbName, Article);
     return await articleRepo.find({
       where: {
-        category: { id: categoryId }
+        category: { id: CategoryId }
       },
       relations: {
         category: true

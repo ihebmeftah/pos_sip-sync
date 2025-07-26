@@ -22,9 +22,8 @@ class StaffView extends GetView<StaffController> {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(
-                '${controller.employers[index].user.firstname} ${controller.employers[index].user.lastname}',
+                '${controller.employers[index].firstname} ${controller.employers[index].lastname}',
               ),
-              subtitle: Text(controller.employers[index].buildingEmail),
             );
           },
         ),

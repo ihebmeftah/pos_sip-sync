@@ -4,9 +4,8 @@ import { LoginDto } from './dto/login_dto';
 import { RegisterDto } from './dto/register_dto';
 import { UsersService } from '../users/users.service';
 import { LoggedUser } from './strategy/loggeduser';
-import { User } from 'src/users/entities/user.entity';
 import { Employer } from 'src/users/entities/employer.entity';
-import { Admin } from 'src/users/entities/admin.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +25,7 @@ export class AuthService {
       const payload: LoggedUser = {
         id: user.id,
         email: user.email,
-        type: user.type,
+        type: [user.type],
       };
       return {
         token: this.jwtService.sign(payload),
@@ -37,28 +36,19 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    let registred: Admin | Employer;
-    /*    if (registerDto.role.toLowerCase() == "client") {
-         // user = await this.customerService.create(registerDto);
-         role = UserRole.Client;
-       } else  */
-    if (registerDto.role.toLowerCase() == "owner") {
-      registred = await this.UsersService.createAdmin(registerDto);
-    } else {
-      throw new BadRequestException("Role not found");
-    }
+    const registred = await this.UsersService.createAdmin(registerDto)
     if (!registred) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
-    if (!registred.user.active) {
+    if (!registred.active) {
       throw new UnauthorizedException("User is not active");
     }
     const payload: LoggedUser = {
       id: registred.id,
-      email: registred.user.email,
-      type: registred.user.type,
+      email: registred.email,
+      type: [registred.type],
     };
     return {
       token: this.jwtService.sign(payload),
-      ...registred.user,
+      ...registred,
     };
   }
 }

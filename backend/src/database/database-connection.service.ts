@@ -1,7 +1,14 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import * as path from 'path';
+import { Order } from 'src/order/entities/order.entity';
+import { Article } from 'src/article/entities/article.entity';
+import { Table } from 'src/tables/entities/table.entity';
+import { History } from 'src/history/entities/history.entity';
+import { OrderItem } from 'src/order/entities/order_item.entity';
+import { Employer } from 'src/users/entities/employer.entity';
+import { Category } from 'src/category/entities/category.entity';
+import { Staff } from 'src/users/entities/staff.entity';
 
 @Injectable()
 export class DatabaseConnectionService {
@@ -26,7 +33,9 @@ export class DatabaseConnectionService {
             database: dbName,
             password: this.configService.get<string>('DB_PASSWORD'),
             synchronize: true, // In production, use migrations instead
-            entities: [path.resolve(__dirname, '../**/*.entity{.js,.ts}')],
+            entities: [
+                Order, OrderItem, Category, Article, Table, History, Staff,
+            ],
             logging: false,
         });
 

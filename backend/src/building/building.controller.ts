@@ -46,7 +46,7 @@ export class BuildingController {
   findAll(
     @CurrUser() user: LoggedUser,
   ) {
-    if (user.role == UserType.Admin) {
+    if (user.type.includes(UserType.Admin)) {
       return this.buildingService.findAllOfOwner(user.id);
     }
     return this.buildingService.findAll();

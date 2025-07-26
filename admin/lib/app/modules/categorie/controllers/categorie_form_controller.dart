@@ -29,7 +29,7 @@ class CategorieFormController extends GetxController with StateMixin {
         Get.back();
       }
     } catch (e) {
-      change(null, status: RxStatus.error("Failed to create category"));
+      change(null, status: RxStatus.error("Failed to create Category"));
     }
   }
 }

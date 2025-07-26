@@ -2,6 +2,10 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import * as path from "path";
+import { Admin } from "src/users/entities/admin.entity";
+import { User } from "src/users/entities/user.entity";
+import { Building } from "src/building/entities/building.entity";
+import { Employer } from "src/users/entities/employer.entity";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -17,7 +21,12 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             database: configService.get<string>("DB_NAME"),
             password: configService.get<string>("DB_PASSWORD"),
             synchronize: true,
-            entities: [path.resolve(__dirname, '../**/*.entity{.js,.ts}')],
+            entities: [
+                Admin,
+                User,
+                Building,
+                Employer,
+            ],
             migrations: [path.resolve(__dirname, '../../migrations/*{.js,.ts}')],
         };
     },

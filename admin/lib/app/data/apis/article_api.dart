@@ -15,7 +15,6 @@ class ArticleApi {
     );
   }
 
-
   Future<List<Article>> getArticleByCategoryId(String categoryId) async {
     return await HttpHelper.get<List<Article>>(
       endpoint: '/article/category/$categoryId',

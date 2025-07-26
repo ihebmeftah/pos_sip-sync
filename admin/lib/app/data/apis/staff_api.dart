@@ -21,7 +21,7 @@ class StaffApi {
     );
   }
 
-  Future<Employer> addStaff(User user, File photo) async {
+  Future<Employer> addStaff(User user, File? photo) async {
     return HttpHelper.post<Employer>(
       endpoint: '/users/employers/create',
       files: [SingleFile(key: 'photo', file: photo)],

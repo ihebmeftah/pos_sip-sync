@@ -1,24 +1,28 @@
 import 'package:admin/app/data/model/building/building.dart';
-import 'package:admin/app/data/model/user/user.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../enums/user_role.dart';
+import '../user/user.dart';
+
 part 'employer.g.dart';
 
 @JsonSerializable()
-class Employer {
-  String id;
-  String buildingEmail;
+class Employer extends User {
   Building? building;
-  User user;
-
   Employer({
-    required this.id,
-    required this.buildingEmail,
     this.building,
-    required this.user,
+    String? id,
+    required super.firstname,
+    required super.lastname,
+    required super.email,
+    required super.phone,
+    required super.photo,
+    required super.type,
   });
 
   factory Employer.fromJson(Map<String, dynamic> json) =>
       _$EmployerFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$EmployerToJson(this);
 }

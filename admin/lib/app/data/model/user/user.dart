@@ -11,7 +11,7 @@ class User {
   String? password;
   String phone;
   String? photo;
-  List<UserType> type;
+  UserType type;
 
   User({
     this.id,

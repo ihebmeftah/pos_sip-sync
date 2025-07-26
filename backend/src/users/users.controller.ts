@@ -1,34 +1,34 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserType } from 'src/enums/user.roles';
-import { BuildingIdGuard } from 'src/guards/building.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { BuildingId } from 'src/decorators/building.decorator';
 import { UUID } from 'crypto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
+import { DbNameGuard } from 'src/guards/dbname.guard';
+import { DbName } from 'src/decorators/building.decorator';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, DbNameGuard)
 @Roles(UserType.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get('employers')
-  getAllEmployers(
-    @BuildingId() buildingId: UUID,
+  findAllStaff(
+    @DbName() dbName: string
   ) {
-    return this.usersService.findAllEmployers(buildingId);
+    return this.usersService.findAllStaff(dbName);
   }
   @Get('employers/:id')
   @Roles(UserType.Employer)
-  getOneEmployer(
-    @Param('id', ParseUUIDPipe) id: UUID
+  findStaffById(
+    @Param('id', ParseUUIDPipe) id: UUID,
+    @DbName() dbName: string
   ) {
-    return this.usersService.findOneEmployer(id);
+    return this.usersService.findStaffById(id, dbName);
   }
   @Post('employers/create')
   @UseInterceptors(
@@ -37,7 +37,7 @@ export class UsersController {
     ], './uploads/employers')
   )
   createEmployer(
-    @BuildingId() buildingId: UUID,
+    @DbName() dbName: UUID,
     @Body() createEmployerDto: CreateUserDto,
     @UploadedFiles() files: {
       photo?: Express.Multer.File
@@ -46,6 +46,6 @@ export class UsersController {
     if (files.photo) {
       createEmployerDto.photo = files.photo.path;
     }
-    return this.usersService.createEmployer(createEmployerDto, buildingId);
+    return this.usersService.createEmployer(createEmployerDto, dbName);
   }
 }

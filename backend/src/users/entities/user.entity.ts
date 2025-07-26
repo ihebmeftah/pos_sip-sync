@@ -3,7 +3,6 @@ import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
 import { TimestampBaseEntity } from "src/database/base/timestampbase";
 import { UserType } from "src/enums/user.roles";
 
-@Entity()
 export class User extends TimestampBaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: UUID;
@@ -19,6 +18,6 @@ export class User extends TimestampBaseEntity {
     password: string;
     @Column({ nullable: true })
     photo: string;
-    @Column("enum", { enum: UserType, array: true })
-    type: UserType[];
+    @Column({ type: "enum", enum: UserType })
+    type: UserType;
 }

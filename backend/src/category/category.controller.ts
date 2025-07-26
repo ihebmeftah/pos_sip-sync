@@ -1,44 +1,43 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { CategroyService } from './categroy.service';
-import { CreateCategroyDto } from './dto/create-categroy.dto';
-import { UpdateCategroyDto } from './dto/update-categroy.dto';
 import { UUID } from 'crypto';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserType } from 'src/enums/user.roles';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { BuildingId, DbName } from 'src/decorators/building.decorator';
-import { BuildingIdGuard } from 'src/guards/building.guard';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
+import { DbNameGuard } from 'src/guards/dbname.guard';
+import { DbName } from 'src/decorators/building.decorator';
+import { CategoryService } from './category.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
-@Controller('categroy')
-@UseGuards(JwtAuthGuard, RolesGuard, BuildingIdGuard)
-export class CategroyController {
-  constructor(private readonly categroyService: CategroyService) { }
+@Controller('Category')
+@UseGuards(JwtAuthGuard, RolesGuard, DbNameGuard)
+export class CategoryController {
+  constructor(private readonly CategoryService: CategoryService) { }
 
   @Post()
   @Roles(UserType.Admin)
   @UseInterceptors(
     CustomFileUploadInterceptor([
       { name: 'image', maxCount: 1 },
-    ], './uploads/categroy')
+    ], './uploadscategory')
   )
   create(
-    @Body() createCategroyDto: CreateCategroyDto,
-    @BuildingId() buildingId: UUID,
+    @Body() createCategoryDto: CreateCategoryDto,
+    @DbName() dbName: string,
     @UploadedFiles() files: { image?: Express.Multer.File[] }
   ) {
     if (files.image && files.image.length > 0) {
-      createCategroyDto.image = files.image[0].path;
+      createCategoryDto.image = files.image[0].path;
     }
-    return this.categroyService.create(createCategroyDto, buildingId);
+    return this.CategoryService.create(createCategoryDto, dbName);
   }
 
   @Get()
   findAll(
     @DbName() dbName: string
   ) {
-    return this.categroyService.findAllByDbName(dbName);
+    return this.CategoryService.findAllByDbName(dbName);
   }
 
   @Get(':id')
@@ -46,6 +45,6 @@ export class CategroyController {
     @Param('id', ParseUUIDPipe) id: UUID,
     @DbName() dbName: string
   ) {
-    return this.categroyService.findOne(id, dbName);
+    return this.CategoryService.findOne(id, dbName);
   }
 }

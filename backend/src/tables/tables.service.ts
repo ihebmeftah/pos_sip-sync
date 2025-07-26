@@ -11,26 +11,21 @@ import { RepositoryFactory } from 'src/database/repository-factory.service';
 @Injectable()
 export class TablesService {
   constructor(
-    private readonly buildingService: BuildingService,
     private readonly repositoryFactory: RepositoryFactory,
     @Inject(forwardRef(() => OrderService))
     private readonly orderService: OrderService
   ) { }
 
   async create(createTableDto: CreateTableDto, dbName: string) {
-    const building = await this.buildingService.findByDbName(dbName);
     const tableRepo = await this.repositoryFactory.getRepository(dbName, Table);
-
-    const nbTablesOld = await tableRepo.count({ where: { building: { id: building.id } } });
+    const nbTablesOld = await tableRepo.count();
     const createdNewTables: Table[] = [];
-
     for (let i = nbTablesOld; i < createTableDto.nbTables + nbTablesOld; i++) {
-      const newtable = new Table(`Table-${i + 1}.${building.id}`, createTableDto.seatsMax, building);
+      const newtable = new Table(`Table-${i + 1}`, createTableDto.seatsMax);
       const created = tableRepo.create(newtable);
       const saved = await tableRepo.save(created);
       createdNewTables.push(saved);
     }
-
     return createdNewTables.map((table) => {
       return {
         ...table,
@@ -41,28 +36,18 @@ export class TablesService {
 
   async scanQrCodeTable(tableId: UUID, dbName: string) {
     const table = await this.findOne(tableId, dbName);
-    const building = await this.buildingService.findByDbName(dbName);
-    const tableBuildingId = table.name.split('.')[1];
-
-    if (tableBuildingId != building.id) {
-      throw new UnauthorizedException(`Building not match`);
-    }
-
     if (table.status == TableStatus.occupied) {
       throw new ConflictException(`table with this id ${tableId} is occupied`);
     }
-
     return table;
   }
 
   async findOne(id: UUID, dbName: string): Promise<Table> {
     const tableRepo = await this.repositoryFactory.getRepository(dbName, Table);
     const table = await tableRepo.findOneBy({ id });
-
     if (!table) {
       throw new NotFoundException(`table with this id ${id} not found`);
     }
-
     const order = await this.orderService.checkTableHaveOrder(table.id, dbName);
     if (order) {
       table.status = TableStatus.occupied;
@@ -73,28 +58,20 @@ export class TablesService {
 
   async findTablesOfBuilding(dbName: string, status?: TableStatus) {
     const tableRepo = await this.repositoryFactory.getRepository(dbName, Table);
-    const building = await this.buildingService.findByDbName(dbName);
-
     let tables = await tableRepo.find({
-      where: {
-        building: { id: building.id },
-      },
       order: {
         createdAt: 'ASC',
       },
     });
-
     for (const table of tables) {
       const order = await this.orderService.checkTableHaveOrder(table.id, dbName);
       if (order) {
         table.status = TableStatus.occupied;
       }
     }
-
     if (status) {
       tables = tables.filter((t) => t.status == status)
     }
-
     return tables
   }
 

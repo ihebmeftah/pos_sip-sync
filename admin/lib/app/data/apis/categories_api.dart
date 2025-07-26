@@ -6,7 +6,7 @@ import 'package:admin/app/data/model/categorie/categorie.dart';
 class CategoriesApi {
   Future<List<Categorie>> getCategories() {
     return HttpHelper.get(
-      endpoint: '/categroy',
+      endpoint: '/category',
       fromJson: (data) {
         return (data as List)
             .map((e) => Categorie.fromJson(e as Map<String, dynamic>))
@@ -21,7 +21,7 @@ class CategoriesApi {
     required File? image,
   }) {
     return HttpHelper.post<Categorie>(
-      endpoint: '/categroy',
+      endpoint: '/category',
       body: {'name': name, if (description != null) 'description': description},
       files: [SingleFile(key: 'image', file: image)],
       fromJson: (data) {

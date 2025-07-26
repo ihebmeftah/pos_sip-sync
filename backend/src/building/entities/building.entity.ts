@@ -1,6 +1,7 @@
 import { UUID } from 'crypto';
 import { TimestampBaseEntity } from 'src/database/base/timestampbase';
 import { Admin } from 'src/users/entities/admin.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

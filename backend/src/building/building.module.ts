@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { BuildingController } from './building.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,7 +11,7 @@ import { DatabaseModule } from 'src/database/database.module';
     TypeOrmModule.forFeature([
       Building
     ]),
-    UsersModule,
+    forwardRef(() => UsersModule), // Importing UsersModule to resolve circular dependency
     DatabaseModule,
   ],
   controllers: [BuildingController],

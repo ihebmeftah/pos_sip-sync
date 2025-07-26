@@ -2,7 +2,6 @@ import { forwardRef, Module } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
 import { TablesModule } from 'src/tables/tables.module';
-import { BuildingModule } from 'src/building/building.module';
 import { ArticleModule } from 'src/article/article.module';
 import { UsersModule } from 'src/users/users.module';
 import { HistoryModule } from '../history/history.module';
@@ -13,7 +12,6 @@ import { DatabaseModule } from 'src/database/database.module';
     DatabaseModule,
     HistoryModule,
     forwardRef(() => TablesModule),
-    BuildingModule,
     ArticleModule,
     UsersModule,
   ],

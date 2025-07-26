@@ -20,7 +20,7 @@ export class CategoryController {
   @UseInterceptors(
     CustomFileUploadInterceptor([
       { name: 'image', maxCount: 1 },
-    ], './uploadscategory')
+    ], './uploads/category')
   )
   create(
     @Body() createCategoryDto: CreateCategoryDto,

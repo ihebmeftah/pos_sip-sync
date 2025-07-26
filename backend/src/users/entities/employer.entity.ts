@@ -5,7 +5,6 @@ import { User } from "./user.entity";
 
 @Entity()
 export class Employer extends User {
-    @OneToOne(() => Building, { eager: true, nullable: true })
-    @JoinColumn()
+    @ManyToOne(() => Building, { eager: true })
     building: Building;
 }

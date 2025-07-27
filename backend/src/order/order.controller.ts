@@ -20,11 +20,15 @@ export class OrderController {
 
     @Get()
     async findOrderOfBuilding(
+        @CurrUser() user: LoggedUser,
         @DbName() dbName: string,
         @Query(
             'status',
             new ParseEnumPipe(OrderStatus, { optional: true })) status?: OrderStatus,
     ) {
+        if (user.type.includes(UserType.Employer)) {
+            return await this.orderService.findOrderOfInclCurrUser(dbName, user, status);
+        }
         return await this.orderService.findOrderOfBuilding(dbName, status);
     }
 

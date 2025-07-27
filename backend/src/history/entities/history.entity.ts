@@ -28,7 +28,7 @@ export class History {
     @ManyToOne(() => Order, { eager: true })
     order: Order;
 
-    @Column({ nullable: true })
+    @Column("uuid", { array: true, nullable: true })
     orderItemIds: UUID[];
 
     @Column()

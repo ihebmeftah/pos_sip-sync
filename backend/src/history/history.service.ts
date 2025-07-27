@@ -41,7 +41,9 @@ export class HistoryService {
     ) {
         switch (action) {
             case HistoryActionType.ADD_ORDER_ITEM:
-                return `${user.firstname} ${user.lastname} has added new items to the order ${order.ref} in ${order.table.name}`;
+                return `${user.firstname} ${user.lastname} has added new items (${orderItemIds?.map(id => order.items.find(item => item.id === id)?.article.name).join(', ')}) to the order ${order.ref} in ${order.table.name}`;
+            case HistoryActionType.PAY_ORDER_ITEM:
+                return `${user.firstname} ${user.lastname} has paid the order item ${order.items.find(item => item.id === orderItemIds?.[0])?.article.name} in the order ${order.ref} in ${order.table.name}`;
             case HistoryActionType.PAY_ALL_ITEMS:
                 return `${user.firstname} ${user.lastname} has paid the order ${order.ref} in ${order.table.name}`;
             case HistoryActionType.DELETE_ORDER:

@@ -79,10 +79,14 @@ class PassOrderController extends GetxController with StateMixin {
   void passOrder() async {
     try {
       if (currOrder == null && table!.status == TableStatus.available) {
+        //? Create new order when tabe available
         final passedOrder = await OrderApi().passOrder(
           tableId: table!.id,
           articlesIds: selectedArticles.map((a) => a.id).toList(),
         );
+
+        Get.find<TablesController>().updateTable(passedOrder.table);
+        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
         Get.snackbar(
           "Success",
           "Order passed successfully",
@@ -90,13 +94,23 @@ class PassOrderController extends GetxController with StateMixin {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        reset();
-        Get.find<OrderController>().onInit();
-        Get.find<TablesController>().updateTable(passedOrder.table);
-        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
       } else {
-        await addItemsToOrder();
+        //? Create add new item when tabe occupied and have order
+        await OrderApi().addItemsToOrder(
+          orderId: currOrder!.id!,
+          articlesIds: selectedArticles.map((a) => a.id).toList(),
+        );
+        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${currOrder!.id!}");
+        Get.snackbar(
+          "Success",
+          "Order passed successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
       }
+      Get.find<OrderController>().onInit();
+      reset();
     } on ConflictException {
       Get.snackbar(
         "Conflict",
@@ -113,27 +127,6 @@ class PassOrderController extends GetxController with StateMixin {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
-    }
-  }
-
-  Future<void> addItemsToOrder() async {
-    try {
-      await OrderApi().addItemsToOrder(
-        orderId: currOrder!.id!,
-        articlesIds: selectedArticles.map((a) => a.id).toList(),
-      );
-      Get.snackbar(
-        "Success",
-        "Order passed successfully",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-      reset();
-      Get.find<OrderController>().onInit();
-      Get.offAndToNamed("${Routes.ORDER_DETAILS}/${currOrder!.id!}");
-    } catch (e) {
-      log("Error adding items to order: $e");
     }
   }
 

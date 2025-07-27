@@ -106,6 +106,34 @@ export class OrderService {
             }
         });
     }
+    async findOrderOfInclCurrUser(dbName: string, user: LoggedUser, status?: OrderStatus,) {
+        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
+        return await orderRepo.find({
+            where: [
+                {
+                    ...(status && { status }),
+                    openedBy: { id: user.id }
+                },
+                {
+                    ...(status && { status }),
+                    closedBy: { id: user.id }
+                },
+                {
+                    ...(status && { status }),
+                    items: { passedBy: { id: user.id } }
+                }
+            ],
+            order: {
+                createdAt: "DESC",
+                items: {
+                    payed: "ASC",
+                    article: {
+                        name: "ASC"
+                    },
+                }
+            }
+        });
+    }
 
     async checkTableHaveOrder(tableId: UUID, dbName: string) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);

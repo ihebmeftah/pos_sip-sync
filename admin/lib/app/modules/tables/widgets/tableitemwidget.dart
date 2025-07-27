@@ -109,7 +109,7 @@ class TableItemWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "№${table.name}",
+                              table.name,
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,

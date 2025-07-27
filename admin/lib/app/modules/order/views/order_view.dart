@@ -124,7 +124,7 @@ class OrderView extends GetView<OrderController> {
                                               color: Colors.grey[600],
                                             ),
                                             Text(
-                                              'Table ${order.table.name}',
+                                              order.table.name,
                                               style: context
                                                   .textTheme
                                                   .bodyMedium

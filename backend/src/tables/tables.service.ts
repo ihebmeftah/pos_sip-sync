@@ -21,7 +21,7 @@ export class TablesService {
     const nbTablesOld = await tableRepo.count();
     const createdNewTables: Table[] = [];
     for (let i = nbTablesOld; i < createTableDto.nbTables + nbTablesOld; i++) {
-      const newtable = new Table(`Table-${i + 1}`, createTableDto.seatsMax);
+      const newtable = new Table(`Table №${i + 1}`, createTableDto.seatsMax);
       const created = tableRepo.create(newtable);
       const saved = await tableRepo.save(created);
       createdNewTables.push(saved);

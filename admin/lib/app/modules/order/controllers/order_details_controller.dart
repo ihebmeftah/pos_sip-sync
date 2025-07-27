@@ -1,4 +1,5 @@
 import 'package:admin/app/data/apis/history_api.dart';
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/history/history.dart';
 import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/data/model/order/order_item.dart';
@@ -63,6 +64,7 @@ class OrderDetailsController extends GetxController with StateMixin {
       if (order!.items.every((item) => item.payed)) {
         order!.status = OrderStatus.payed;
         order!.table.status = TableStatus.available;
+        order!.closedBy = LocalStorage().user;
         Get.find<TablesController>().updateTable(order!.table);
         // update(['table-status', 'order-status']);
         change(order, status: RxStatus.success());

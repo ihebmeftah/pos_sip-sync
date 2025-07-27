@@ -8,7 +8,7 @@ import { Staff } from 'src/users/entities/staff.entity';
 export class OrderItem {
     @PrimaryGeneratedColumn("uuid")
     id: UUID;
-    @ManyToOne(() => Order, (order) => order.items, { eager: false })
+    @ManyToOne(() => Order, (order) => order.items, { eager: false, })
     order: Order;
     @ManyToOne(() => Article, { eager: true })
     article: Article;

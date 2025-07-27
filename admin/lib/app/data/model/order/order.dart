@@ -16,12 +16,14 @@ class Order {
   @JsonKey(name: 'table')
   Table table;
   User openedBy;
+  User? closedBy;
   Order({
     this.id,
     this.status = OrderStatus.progress,
     this.items = const [],
     required this.table,
     required this.openedBy,
+    this.closedBy,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

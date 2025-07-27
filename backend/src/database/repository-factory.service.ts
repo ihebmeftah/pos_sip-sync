@@ -10,7 +10,6 @@ export class RepositoryFactory {
         dbName: string,
         entity: EntityTarget<Entity>
     ): Promise<Repository<Entity>> {
-        console.log(`***** Getting repository for entity: ${entity.toString()} in database: ${dbName}`);
         const connection = await this.databaseConnectionService.getConnection(dbName);
         return connection.getRepository(entity);
     }

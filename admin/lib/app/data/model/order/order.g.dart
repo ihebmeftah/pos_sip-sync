@@ -18,6 +18,9 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order(
       const [],
   table: Table.fromJson(json['table'] as Map<String, dynamic>),
   openedBy: User.fromJson(json['openedBy'] as Map<String, dynamic>),
+  closedBy: json['closedBy'] == null
+      ? null
+      : User.fromJson(json['closedBy'] as Map<String, dynamic>),
 )..ref = json['ref'] as String?;
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
@@ -27,6 +30,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
   'items': instance.items,
   'table': instance.table,
   'openedBy': instance.openedBy,
+  'closedBy': instance.closedBy,
 };
 
 const _$OrderStatusEnumMap = {

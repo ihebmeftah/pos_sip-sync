@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:admin/app/data/apis/apis_exceptions.dart';
 import 'package:admin/app/data/model/article/article.dart';
 import 'package:admin/app/data/model/table/tables.dart';
@@ -8,9 +10,12 @@ import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
 
 import '../../../data/apis/order_api.dart';
+import '../../../data/model/enums/table_status.dart';
+import '../../../data/model/order/order.dart';
 
 class PassOrderController extends GetxController with StateMixin {
   Table? table;
+  Order? currOrder;
   List<Article> selectedArticles = <Article>[];
   @override
   void onInit() {
@@ -18,9 +23,10 @@ class PassOrderController extends GetxController with StateMixin {
     super.onInit();
   }
 
-  void setTable([Table? t]) {
+  void setTable([Table? t]) async {
     if (t == table || t == null) {
       table = null;
+      if (currOrder != null) currOrder = null;
       selectedArticles.clear();
       update(['table', 'selectedArticles']);
       change(null, status: RxStatus.empty());
@@ -29,9 +35,18 @@ class PassOrderController extends GetxController with StateMixin {
       }
       return;
     }
+    if (t.status == TableStatus.occupied) await getCurrOrderOfTable(t.id);
     table = t;
     update(['table']);
     change(null, status: RxStatus.success());
+  }
+
+  Future<void> getCurrOrderOfTable(String tableid) async {
+    try {
+      currOrder = await OrderApi().getCurrOrderOfTable(tableid);
+    } catch (e) {
+      log("Error fetching current order for table $tableid: $e");
+    }
   }
 
   void addArticle(Article article) {
@@ -55,6 +70,7 @@ class PassOrderController extends GetxController with StateMixin {
 
   void reset() {
     table = null;
+    currOrder = null;
     selectedArticles.clear();
     change(null, status: RxStatus.empty());
     update(['table', 'selectedArticles']);
@@ -62,21 +78,25 @@ class PassOrderController extends GetxController with StateMixin {
 
   void passOrder() async {
     try {
-      final passedOrder = await OrderApi().passOrder(
-        tableId: table!.id,
-        articlesIds: selectedArticles.map((a) => a.id).toList(),
-      );
-      Get.snackbar(
-        "Success",
-        "Order passed successfully",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-      reset();
-      Get.find<OrderController>().onInit();
-      Get.find<TablesController>().updateTable(passedOrder.table);
-      Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
+      if (currOrder == null && table!.status == TableStatus.available) {
+        final passedOrder = await OrderApi().passOrder(
+          tableId: table!.id,
+          articlesIds: selectedArticles.map((a) => a.id).toList(),
+        );
+        Get.snackbar(
+          "Success",
+          "Order passed successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        reset();
+        Get.find<OrderController>().onInit();
+        Get.find<TablesController>().updateTable(passedOrder.table);
+        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
+      } else {
+        await addItemsToOrder();
+      }
     } on ConflictException {
       Get.snackbar(
         "Conflict",
@@ -93,6 +113,27 @@ class PassOrderController extends GetxController with StateMixin {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    }
+  }
+
+  Future<void> addItemsToOrder() async {
+    try {
+      await OrderApi().addItemsToOrder(
+        orderId: currOrder!.id!,
+        articlesIds: selectedArticles.map((a) => a.id).toList(),
+      );
+      Get.snackbar(
+        "Success",
+        "Order passed successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      reset();
+      Get.find<OrderController>().onInit();
+      Get.offAndToNamed("${Routes.ORDER_DETAILS}/${currOrder!.id!}");
+    } catch (e) {
+      log("Error adding items to order: $e");
     }
   }
 

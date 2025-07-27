@@ -19,7 +19,7 @@ export class HistoryService {
         action: HistoryActionType;
         userId: UUID;
         order: Order;
-        orderItemId?: UUID;
+        orderItemIds?: UUID[];
         dbName: string;
     }): Promise<History> {
         const historyRepo = await this.repositoryFactory.getRepository(params.dbName, History);
@@ -28,8 +28,8 @@ export class HistoryService {
             action: params.action,
             user: user,
             order: params.order,
-            orderItemId: params.orderItemId,
-            message: this.generateMessage(params.action, params.order, user, params.orderItemId),
+            orderItemIds: params.orderItemIds,
+            message: this.generateMessage(params.action, params.order, user, params.orderItemIds),
         });
         return historyRepo.save(history);
     }
@@ -37,17 +37,17 @@ export class HistoryService {
     private generateMessage(action: HistoryActionType,
         order: Order,
         user: Staff,
-        orderItemId?: UUID,
+        orderItemIds?: UUID[],
     ) {
         switch (action) {
-            case HistoryActionType.PAY_ORDER_ITEM:
-                return `The user ${user.firstname} ${user.lastname} has paid the item ${order.items.find(item => item.id === orderItemId)?.article.name} of the order ${order.ref} in the table ${order.table.name}`;
+            case HistoryActionType.ADD_ORDER_ITEM:
+                return `${user.firstname} ${user.lastname} has added new items to the order ${order.ref} in ${order.table.name}`;
             case HistoryActionType.PAY_ALL_ITEMS:
-                return `The user ${user.firstname} ${user.lastname} has paid the order ${order.ref} in the table ${order.table.name}`;
+                return `${user.firstname} ${user.lastname} has paid the order ${order.ref} in ${order.table.name}`;
             case HistoryActionType.DELETE_ORDER:
-                return `The user ${user.firstname} ${user.lastname} has deleted the order ${order.ref} in the table ${order.table.name}`;
+                return `${user.firstname} ${user.lastname} has deleted the order ${order.ref} in ${order.table.name}`;
             case HistoryActionType.PASS_ORDER:
-                return `The user ${user.firstname} ${user.lastname} has passed the order ${order.ref} in the table ${order.table.name}`;
+                return `${user.firstname} ${user.lastname} has passed the order ${order.ref} in ${order.table.name}`;
         }
     }
 

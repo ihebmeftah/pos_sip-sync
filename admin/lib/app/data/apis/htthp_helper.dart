@@ -170,12 +170,14 @@ abstract class HttpHelper {
       case 400:
         return BadRequestException('Bad Request: $responseData');
       case 401:
+        if (getx.Get.currentRoute == Routes.AUTH) return AuthException();
         LocalStorage().clear();
         getx.Get.offAllNamed(Routes.AUTH);
         return UnauthorizedException('Unauthorized: $responseData');
       case 403:
         return ForrbidenException('Forbidden: $responseData');
       case 404:
+        if (getx.Get.currentRoute == Routes.AUTH) return AuthException();
         return NotFoundException('Not Found: $responseData');
       case 409:
         return ConflictException('Conflict: $responseData');

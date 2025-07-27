@@ -1,11 +1,11 @@
 import 'package:admin/app/common/appemptyscreen.dart';
-import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/modules/order/widgets/order_amount_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 import '../controllers/order_details_controller.dart';
+import '../widgets/table_info_widget.dart';
 
 class OrderDetailsView extends GetView<OrderDetailsController> {
   const OrderDetailsView({super.key});
@@ -38,42 +38,9 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
         (state) => Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            spacing: 20,
+            spacing: 10,
             children: [
-              /// Table Information
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 5,
-                children: [
-                  Icon(
-                    Icons.table_bar,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 40,
-                  ),
-                  Row(
-                    spacing: 5,
-                    children: [
-                      Text(
-                        controller.order!.table.name,
-                        style: context.textTheme.displaySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      GetBuilder<OrderDetailsController>(
-                        id: 'table-status',
-                        builder: (_) {
-                          return Text(
-                            controller.order!.table.status.name,
-                            style: context.textTheme.displaySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              TableInfoWidget(table: controller.order!.table),
 
               /// Order items details
               Row(
@@ -91,6 +58,18 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                     ),
                   ),
                 ],
+              ),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  fixedSize: Size(Get.width, 50),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.brown),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {},
+                label: Text("Add Item"),
+                icon: Icon(Icons.add),
               ),
 
               /// Order items list
@@ -244,126 +223,9 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                 ),
               ),
 
-              ///  Total Amount, Paid Amount & Remaining Amount
-              GetBuilder<OrderDetailsController>(
-                id: "pay",
-                builder: (_) {
-                  return Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.brown[50],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      spacing: 5,
-                      children: [
-                        OrderAmountWidget(
-                          label: 'Total Amount',
-                          amount: controller.totalPrice,
-                          color: Colors.black87,
-                        ),
-                        OrderAmountWidget(
-                          label: 'Paid Amount',
-                          amount: controller.paidAmount,
-                          color: Colors.green,
-                        ),
-                        OrderAmountWidget(
-                          label: 'Remaining',
-                          amount: controller.unpaidAmount,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              /// Action Buttons
-              if (controller.order!.status != OrderStatus.payed)
-                Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: controller.payAllItems,
-                        icon: const Icon(Icons.payment),
-                        label: const Text('Pay All'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: controller.closeOrder,
-                        icon: const Icon(Icons.check_circle),
-                        label: Text('Close Order'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              TextButton(
-                onPressed: () => Get.bottomSheet(
-                  SizedBox(
-                    height: Get.height * 0.7,
-                    width: Get.width,
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.all(20),
-                      child: Column(
-                        children: [
-                          if (controller.order!.status == OrderStatus.payed)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Order started by: ${controller.order!.openedBy.firstname} ${controller.order!.openedBy.lastname}",
-                                  style: context.textTheme.titleMedium!
-                                      .copyWith(
-                                        backgroundColor: Colors.blue.shade500,
-                                      ),
-                                ),
-                                Text(
-                                  "Closed",
-                                  style: context.textTheme.titleMedium!
-                                      .copyWith(
-                                        backgroundColor: Colors.red.shade500,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          Expanded(
-                            child: controller.orderHistory.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      'No history available for this order',
-                                      style: context.textTheme.titleMedium,
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    itemBuilder: (context, index) => ListTile(
-                                      title: Text(
-                                        "${controller.orderHistory.length - index}",
-                                      ),
-                                      subtitle: Text(
-                                        controller.orderHistory[index].message,
-                                      ),
-                                    ),
-                                    itemCount: controller.orderHistory.length,
-                                    shrinkWrap: true,
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                child: const Text('Order History'),
+              OrderBottomWidget(
+                order: controller.order!,
+                history: controller.orderHistory,
               ),
             ],
           ),

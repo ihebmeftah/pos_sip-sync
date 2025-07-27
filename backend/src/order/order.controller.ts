@@ -64,22 +64,36 @@ export class OrderController {
     }
 
     @Patch("/item/:id")
-    @Roles(UserType.Admin)
+    @Roles(UserType.Admin, UserType.Employer)
     @UseInterceptors(HistoryInterceptor)
     async payOrderItem(
         @Param("id", ParseUUIDPipe) orderItemId: UUID,
         @DbName() dbName: string,
+        @CurrUser() user: LoggedUser,
     ) {
-        return await this.orderService.payOrderItem(orderItemId, dbName);
+        return await this.orderService.payOrderItem(orderItemId, dbName, user);
     }
 
     @Patch("/:id/pay-items")
-    @Roles(UserType.Admin)
+    @Roles(UserType.Admin, UserType.Employer)
     @UseInterceptors(HistoryInterceptor)
     async payAllItemsOfOrder(
         @Param("id", ParseUUIDPipe) orderId: UUID,
         @DbName() dbName: string,
+        @CurrUser() user: LoggedUser,
     ) {
-        return await this.orderService.payAllitemsOfOrder(orderId, dbName);
+        return await this.orderService.payAllitemsOfOrder(orderId, dbName, user);
+    }
+
+    @Patch("/:id/add-items")
+    @Roles(UserType.Admin, UserType.Employer)
+    @UseInterceptors(HistoryInterceptor)
+    async addItemsToOrder(
+        @Param("id", ParseUUIDPipe) orderId: UUID,
+        @Body('articlesIds') articlesIds: UUID[],
+        @DbName() dbName: string,
+        @CurrUser() user: LoggedUser,
+    ) {
+        return await this.orderService.addItemsToOrder(orderId, articlesIds, dbName, user);
     }
 }

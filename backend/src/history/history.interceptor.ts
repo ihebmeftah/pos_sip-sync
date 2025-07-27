@@ -25,7 +25,7 @@ export class HistoryInterceptor implements NestInterceptor {
             tap(async (result) => {
                 let action: HistoryActionType | undefined;
                 let order: Order | undefined;
-                let orderItemId: UUID | undefined;
+                let orderItemIds: UUID[] | undefined;
 
                 // Map handler names to actions
                 switch (handlerName) {
@@ -33,10 +33,15 @@ export class HistoryInterceptor implements NestInterceptor {
                         action = HistoryActionType.PASS_ORDER;
                         order = result;
                         break;
+                    case 'addItemsToOrder':
+                        action = HistoryActionType.ADD_ORDER_ITEM;
+                        order = result[0].order as Order;
+                        orderItemIds = result.map(item => item.id);
+                        break;
                     case 'payOrderItem':
                         action = HistoryActionType.PAY_ORDER_ITEM;
                         order = result?.order as Order;
-                        orderItemId = result?.id as UUID;
+                        orderItemIds = [result?.id as UUID];
                         break;
                     case 'payAllItemsOfOrder':
                         action = HistoryActionType.PAY_ALL_ITEMS;
@@ -53,7 +58,7 @@ export class HistoryInterceptor implements NestInterceptor {
                         action,
                         userId: user.id,
                         order: order,
-                        orderItemId,
+                        orderItemIds,
                         dbName,
                     });
                 }

@@ -28,7 +28,7 @@ class AuthController extends GetxController {
           Get.offAllNamed(Routes.BUILDINGS);
         }
       }
-    } on UnauthorizedException {
+    } on AuthException {
       Get.snackbar(
         'Error',
         'May be email or password is incorrect ',

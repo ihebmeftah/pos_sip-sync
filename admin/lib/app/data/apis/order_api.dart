@@ -31,6 +31,19 @@ class OrderApi {
     );
   }
 
+  Future<List<OrderItem>> addItemsToOrder({
+    required String orderId,
+    required List<String> articlesIds,
+  }) async {
+    return await HttpHelper.patch<List<OrderItem>>(
+      endpoint: '/order/$orderId/add-items',
+      body: {"articlesIds": articlesIds},
+      fromJson: (json) => (json as List)
+          .map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
   Future<OrderItem> payOrderItem({required String itemId}) async {
     return await HttpHelper.patch<OrderItem>(
       endpoint: '/order/item/$itemId',
@@ -42,6 +55,14 @@ class OrderApi {
     return await HttpHelper.patch<Order>(
       endpoint: '/order/$orderId/pay-items',
       fromJson: (json) => Order.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  Future<Order?> getCurrOrderOfTable(String tableid) async {
+    return await HttpHelper.get<Order?>(
+      endpoint: '/tables/$tableid/order',
+      fromJson: (json) =>
+          json != null ? Order.fromJson(json as Map<String, dynamic>) : null,
     );
   }
 }

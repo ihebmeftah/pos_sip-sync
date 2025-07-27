@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 
+import '../../../data/model/enums/user_role.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/index_controller.dart';
 
@@ -53,16 +54,18 @@ class IndexView extends GetView<IndexController> {
               ),
               accountEmail: Text(LocalStorage().user!.email),
             ),
-            ListTile(
-              leading: Icon(Icons.place),
-              title: Text('Buildings'),
-              onTap: () => Get.offAllNamed(Routes.BUILDINGS),
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Staff'),
-              onTap: () => Get.toNamed(Routes.STAFF),
-            ),
+            if ((LocalStorage().user!.type != UserType.employer))
+              ListTile(
+                leading: Icon(Icons.place),
+                title: Text('Buildings'),
+                onTap: () => Get.offAllNamed(Routes.BUILDINGS),
+              ),
+            if ((LocalStorage().user!.type != UserType.employer))
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Staff'),
+                onTap: () => Get.toNamed(Routes.STAFF),
+              ),
             Spacer(),
             SafeArea(
               child: ListTile(
@@ -93,72 +96,107 @@ class IndexView extends GetView<IndexController> {
         id: "bottomNavigationBar",
         builder: (_) {
           return BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/svg/dashboard.svg",
-                  colorFilter: ColorFilter.mode(
-                    controller.currBnb == 0
-                        ? Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.selectedItemColor!
-                        : Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.unselectedItemColor!,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Dashboard',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/svg/order.svg",
-                  colorFilter: ColorFilter.mode(
-                    controller.currBnb == 1
-                        ? Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.selectedItemColor!
-                        : Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.unselectedItemColor!,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Orders',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/svg/inventory.svg",
-                  colorFilter: ColorFilter.mode(
-                    controller.currBnb == 2
-                        ? Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.selectedItemColor!
-                        : Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.unselectedItemColor!,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Inventory',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/svg/table.svg",
-                  colorFilter: ColorFilter.mode(
-                    controller.currBnb == 3
-                        ? Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.selectedItemColor!
-                        : Theme.of(
-                            context,
-                          ).bottomNavigationBarTheme.unselectedItemColor!,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Tables',
-              ),
-            ],
+            items: (LocalStorage().user!.type == UserType.employer)
+                ? [
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/order.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 0
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Orders',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/table.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 1
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Tables',
+                    ),
+                  ]
+                : [
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/dashboard.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 0
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Dashboard',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/order.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 1
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Orders',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/inventory.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 2
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Inventory',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        "assets/images/svg/table.svg",
+                        colorFilter: ColorFilter.mode(
+                          controller.currBnb == 3
+                              ? Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.selectedItemColor!
+                              : Theme.of(
+                                  context,
+                                ).bottomNavigationBarTheme.unselectedItemColor!,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Tables',
+                    ),
+                  ],
             currentIndex: controller.currBnb,
             onTap: controller.changeBnbContent,
           );
@@ -167,7 +205,9 @@ class IndexView extends GetView<IndexController> {
       body: PageView(
         onPageChanged: controller.changeBnbContent,
         controller: controller.pageVCtr,
-        children: [HomeView(), OrderView(), InventoryView(), TablesView()],
+        children: (LocalStorage().user!.type == UserType.employer)
+            ? [OrderView(), TablesView()]
+            : [HomeView(), OrderView(), InventoryView(), TablesView()],
       ),
     );
   }

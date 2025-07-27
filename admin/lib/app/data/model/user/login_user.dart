@@ -1,13 +1,14 @@
-import 'package:admin/app/data/model/employer/employer.dart';
+import 'package:admin/app/data/model/building/building.dart';
+import 'package:admin/app/data/model/user/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../building/building.dart';
 import '../enums/user_role.dart';
 part 'login_user.g.dart';
 
 @JsonSerializable()
-class LoginUser extends Employer {
+class LoginUser extends User {
   String token;
+  Building? building;
 
   LoginUser({
     required this.token,
@@ -17,7 +18,9 @@ class LoginUser extends Employer {
     required super.phone,
     required super.photo,
     required super.type,
-    required super.building
+    this.building,
+    String? id,
+    String? password,
   });
 
   factory LoginUser.fromJson(Map<String, dynamic> json) =>

@@ -67,10 +67,30 @@ export class OrderService {
         savedOrder.table.status = TableStatus.occupied;
         return savedOrder;
     }
-
+    async addItemsToOrder(orderId: UUID, articleIds: UUID[], dbName: string, user: LoggedUser) {
+        const order = await this.getOrderById(orderId, dbName);
+        if (order.status === OrderStatus.PAYED) {
+            throw new ConflictException(`Order with ID ${orderId} is already paid and cannot be modified.`);
+        }
+        const articles: Article[] = [];
+        for (const articleId of articleIds) {
+            const article = await this.articleService.findOne(articleId, dbName);
+            articles.push(article);
+        }
+        const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
+        const orderItems = await Promise.all(articles.map(async (article) => {
+            const orderItem = orderItemRepo.create({
+                article,
+                order,
+                payed: false,
+                passedBy: await this.usersService.findStaffById(user.id, dbName)
+            });
+            return await orderItemRepo.save(orderItem);
+        }));
+        return orderItems;
+    }
     async findOrderOfBuilding(dbName: string, status?: OrderStatus) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
-
         return await orderRepo.find({
             where: {
                 ...(status && { status })
@@ -89,7 +109,6 @@ export class OrderService {
 
     async checkTableHaveOrder(tableId: UUID, dbName: string) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
-
         const order = await orderRepo.findOne({
             where: {
                 table: { id: tableId },
@@ -99,7 +118,7 @@ export class OrderService {
         return order;
     }
 
-    async payOrderItem(orderItemId: UUID, dbName: string) {
+    async payOrderItem(orderItemId: UUID, dbName: string, user: LoggedUser) {
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
 
@@ -111,6 +130,7 @@ export class OrderService {
         if (order.items.every(item => item.payed)) {
             order.status = OrderStatus.PAYED;
             order.table.status = TableStatus.available;
+            order.closedBy = await this.usersService.findStaffById(user.id, dbName);
             order = await orderRepo.save(order);
         }
         return orderItem;
@@ -118,7 +138,6 @@ export class OrderService {
 
     private async getItemById(orderItemId: UUID, dbName: string) {
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
-
         const orderItem = await orderItemRepo.findOne({
             where: { id: orderItemId },
             relations: {
@@ -128,14 +147,13 @@ export class OrderService {
                 },
             }
         });
-
         if (!orderItem) {
             throw new NotFoundException(`Order item with ID ${orderItemId} not found`);
         }
         return orderItem;
     }
 
-    async payAllitemsOfOrder(orderId: UUID, dbName: string) {
+    async payAllitemsOfOrder(orderId: UUID, dbName: string, user: LoggedUser) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
 
@@ -152,6 +170,7 @@ export class OrderService {
         // Update the order status to paid
         order.status = OrderStatus.PAYED;
         order.table.status = TableStatus.available;
+        order.closedBy = await this.usersService.findStaffById(user.id, dbName);
         await orderRepo.save(order);
         return order;
     }

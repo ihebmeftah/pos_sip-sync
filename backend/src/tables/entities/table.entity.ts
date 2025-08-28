@@ -3,7 +3,7 @@ import { TimestampBaseEntity } from "src/database/base/timestampbase";
 import { TableStatus } from "src/enums/table_status";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("building_table")
+@Entity("building_tables")
 export class Table extends TimestampBaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: UUID;

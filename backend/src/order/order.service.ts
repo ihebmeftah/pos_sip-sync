@@ -1,6 +1,5 @@
 import { ConflictException, Injectable, Inject, forwardRef, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderItem } from './entities/order_item.entity';
 import { TablesService } from 'src/tables/tables.service';

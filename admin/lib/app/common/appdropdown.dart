@@ -48,7 +48,7 @@ class AppDropdown<T> extends StatelessWidget {
         if (isOutsideLabel && label != null) AppLabel(label: label),
         DropdownButtonFormField<T>(
           isExpanded: true,
-          value: selectedItem,
+          initialValue: selectedItem,
           items: items,
           onChanged: onChanged,
           onTap: onTap,

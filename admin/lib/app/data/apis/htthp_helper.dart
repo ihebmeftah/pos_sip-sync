@@ -203,25 +203,13 @@ abstract class HttpHelper {
 
 class _LoggingInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    log("""
-    ----- 🔘 HTTP REQUEST 🔘 -----
-    🟡 ${options.method.toUpperCase()} 
-    URL : ${options.uri}
-    HEADERS : ${options.headers}
-    DATA : ${options.data}
-    """);
-    handler.next(options);
-  }
-
-  @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     log("""
     ----- 🔘 HTTP RESPONSE � -----
     � ${response.statusCode} STATUS CODE : ${response.statusCode}
     METHOD : ${response.requestOptions.method}
     URL : ${response.requestOptions.uri}
-    DATA : ${response.data}
+    Response : ${response.data}
     """);
     handler.next(response);
   }

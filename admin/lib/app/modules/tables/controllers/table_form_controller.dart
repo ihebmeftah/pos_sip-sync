@@ -30,14 +30,12 @@ class TableFormController extends GetxController with StateMixin {
     try {
       if (tables.isEmpty) return;
       change(tables, status: RxStatus.loading());
-      await Future.forEach(tables, (t) async {
-        if (t.tableformKey.currentState!.validate()) {
-          await TablesApi().createTabels(
-            nbTables: int.parse(t.nb.text),
-            seatsMax: int.parse(t.nbSeat.text),
-          );
-        }
-      });
+      for (CreateTableViewModel t in tables) {
+        await TablesApi().createTabels(
+          nbTables: int.parse(t.nb.text),
+          seatsMax: int.parse(t.nbSeat.text),
+        );
+      }
       Get.back();
       Get.find<TablesController>().getTabels();
     } catch (e) {

@@ -6,7 +6,6 @@ import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
 import { History } from 'src/history/entities/history.entity';
 import { OrderItem } from 'src/order/entities/order_item.entity';
-import { Employer } from 'src/users/entities/employer.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Staff } from 'src/users/entities/staff.entity';
 
@@ -32,11 +31,12 @@ export class DatabaseConnectionService {
             username: this.configService.get<string>('DB_USER'),
             database: dbName,
             password: this.configService.get<string>('DB_PASSWORD'),
-            synchronize: true, // In production, use migrations instead
+            synchronize: false, // Changed to false
             entities: [
                 Order, OrderItem, Category, Article, Table, History, Staff,
             ],
             logging: false,
+            migrations: [__dirname + '/../../migrations/tenant/*{.js,.ts}'],
         });
 
         await dataSource.initialize();

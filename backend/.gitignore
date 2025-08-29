@@ -54,3 +54,4 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 /uploads
+/migrations

@@ -1,12 +1,16 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
-import * as path from "path";
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 import { Admin } from "src/users/entities/admin.entity";
 import { User } from "src/users/entities/user.entity";
 import { Building } from "src/building/entities/building.entity";
-import { Employer } from "src/users/entities/employer.entity";
+import { Employer } from 'src/users/entities/employer.entity';
 
+
+// Load environment variables
+dotenv.config();
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
     inject: [ConfigService],
@@ -20,7 +24,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>("DB_USER"),
             database: configService.get<string>("DB_NAME"),
             password: configService.get<string>("DB_PASSWORD"),
-            synchronize: true,
+            synchronize: false, // Changed to false
             entities: [
                 Admin,
                 User,
@@ -28,6 +32,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
                 Employer,
             ],
             migrations: [path.resolve(__dirname, '../../migrations/*{.js,.ts}')],
+            migrationsRun: true, // Add this to run migrations automatically
         };
     },
     dataSourceFactory: async (options) => {
@@ -36,12 +41,22 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         return data;
     },
 };
-export const datasource = new DataSource({
+
+// Main data source for migrations
+export const mainDataSource = new DataSource({
     type: "postgres",
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT!),
-    username: process.env.USERNAME,
+    username: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    synchronize: true,
+    synchronize: false,
+    entities: [
+        Admin,
+        User,
+        Building,
+        Employer,
+    ],
+    migrations: [path.resolve(__dirname, '../../migrations/*{.js,.ts}')],
 });
+

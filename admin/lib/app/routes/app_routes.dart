@@ -23,6 +23,7 @@ abstract class Routes {
   static const STAFF = _Paths.STAFF;
   static const STAFF_FORM = _Paths.STAFF + _Paths.STAFF_FORM;
   static const STAFF_DETAILS = _Paths.STAFF + _Paths.STAFF_DETAILS;
+  static const REGISTER = _Paths.AUTH + _Paths.REGISTER;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const STAFF = '/staff';
   static const STAFF_FORM = '/staff-form';
   static const STAFF_DETAILS = '/staff-details';
+  static const REGISTER = '/register';
 }

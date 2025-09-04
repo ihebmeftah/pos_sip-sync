@@ -15,7 +15,7 @@ import { CategoryModule } from './category/category.module';
   imports: [
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     ConfigModule.forRoot({
-      envFilePath: ['dev.env']
+      envFilePath: ['env']
     }),
     CategoryModule,
     TablesModule,

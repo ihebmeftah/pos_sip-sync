@@ -79,7 +79,7 @@ export class OrderController {
     }
 
     @Patch("/:id/pay-items")
-    @Roles(UserType.Admin, UserType.Employer)
+    @Roles(UserType.Employer)
     @UseInterceptors(HistoryInterceptor)
     async payAllItemsOfOrder(
         @Param("id", ParseUUIDPipe) orderId: UUID,
@@ -90,7 +90,7 @@ export class OrderController {
     }
 
     @Patch("/:id/add-items")
-    @Roles(UserType.Admin, UserType.Employer)
+    @Roles(UserType.Employer)
     @UseInterceptors(HistoryInterceptor)
     async addItemsToOrder(
         @Param("id", ParseUUIDPipe) orderId: UUID,

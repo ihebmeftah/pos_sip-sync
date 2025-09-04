@@ -1,3 +1,4 @@
+import 'package:admin/app/routes/app_pages.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -62,16 +63,13 @@ class AuthView extends GetView<AuthController> {
                     TextFormField(
                       controller: controller.emailController,
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'Email/Username',
                         prefixIcon: const Icon(FluentIcons.mail_20_regular),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!value.contains('@')) {
-                          return 'Please enter a valid email';
+                          return 'Please enter your email/username';
                         }
                         return null;
                       },
@@ -163,7 +161,7 @@ class AuthView extends GetView<AuthController> {
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                               ),
-                              onPressed: () {},
+                              onPressed: () => Get.toNamed(Routes.REGISTER),
                               child: const Text(
                                 'Sign Up',
                                 style: TextStyle(fontWeight: FontWeight.bold),

@@ -17,12 +17,11 @@ class AuthController extends GetxController {
     try {
       if (formKey.currentState!.validate()) {
         final user = await AuthApi().login(
-          email: emailController.text,
+          identifier: emailController.text,
           password: passwordController.text,
         );
         await LocalStorage().saveUser(user);
         if (user.type == UserType.employer) {
-          await LocalStorage().saveBuilding(user.building!);
           Get.offAllNamed(Routes.INDEX);
         } else {
           Get.offAllNamed(Routes.BUILDINGS);

@@ -8,19 +8,23 @@ part 'login_user.g.dart';
 @JsonSerializable()
 class LoginUser extends User {
   String token;
+  String? username;
+  String? employerId;
+  @JsonKey(includeIfNull: false)
   Building? building;
-
   LoginUser({
     required this.token,
+    this.username,
+    this.employerId,
     required super.firstname,
     required super.lastname,
     required super.email,
     required super.phone,
     required super.photo,
     required super.type,
+    super.id,
+    super.password,
     this.building,
-    String? id,
-    String? password,
   });
 
   factory LoginUser.fromJson(Map<String, dynamic> json) =>

@@ -15,7 +15,7 @@ export class AuthService {
   ) { }
 
   async login(loginDto: LoginDto) {
-    const user = await this.UsersService.findUserByEmail(loginDto.email);
+    const user = await this.UsersService.findUserByEmailOrUsername(loginDto.identifier);
     if (!user.active) {
       throw new UnauthorizedException("User is not active");
     }

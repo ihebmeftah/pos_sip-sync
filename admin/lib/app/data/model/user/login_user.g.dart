@@ -8,17 +8,19 @@ part of 'login_user.dart';
 
 LoginUser _$LoginUserFromJson(Map<String, dynamic> json) => LoginUser(
   token: json['token'] as String,
+  username: json['username'] as String?,
+  employerId: json['employerId'] as String?,
   firstname: json['firstname'] as String,
   lastname: json['lastname'] as String,
   email: json['email'] as String,
   phone: json['phone'] as String,
   photo: json['photo'] as String?,
   type: $enumDecode(_$UserTypeEnumMap, json['type']),
+  id: json['id'] as String?,
+  password: json['password'] as String?,
   building: json['building'] == null
       ? null
       : Building.fromJson(json['building'] as Map<String, dynamic>),
-  id: json['id'] as String?,
-  password: json['password'] as String?,
 );
 
 Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
@@ -31,7 +33,9 @@ Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
   'photo': instance.photo,
   'type': _$UserTypeEnumMap[instance.type]!,
   'token': instance.token,
-  'building': instance.building,
+  'username': instance.username,
+  'employerId': instance.employerId,
+  'building': ?instance.building,
 };
 
 const _$UserTypeEnumMap = {

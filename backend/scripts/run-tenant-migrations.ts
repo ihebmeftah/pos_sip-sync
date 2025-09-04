@@ -5,12 +5,14 @@ import { MigrationService } from 'src/database/migration.service';
 
 
 async function runTenantMigrations() {
+    console.log("$$$$$$" + process.argv);
+
     const app = await NestFactory.create(AppModule);
     const migrationService = app.get(MigrationService);
-    const buildingsService = app.get(BuildingService);
-    const buildings = await buildingsService.findAll();
-    const dbNames = buildings.map(building => building.dbName);
     if (process.argv[2] == "all") {
+        const buildingsService = app.get(BuildingService);
+        const buildings = await buildingsService.findAll();
+        const dbNames = buildings.map(building => building.dbName);
         console.info('Running migrations for all tenant databases...');
         await migrationService.runAllTenantMigrations(dbNames);
         console.info('All tenant migrations completed!');

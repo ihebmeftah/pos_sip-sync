@@ -6,6 +6,8 @@ import '../modules/article/bindings/article_form_binding.dart';
 import '../modules/article/views/article_form_view.dart';
 import '../modules/article/views/article_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
+import '../modules/auth/bindings/register_binding.dart';
+import '../modules/auth/views/register_view.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/buildings/bindings/building_add_binding.dart';
 import '../modules/buildings/bindings/buildings_binding.dart';
@@ -27,8 +29,8 @@ import '../modules/order/views/order_details_view.dart';
 import '../modules/order/views/order_view.dart';
 import '../modules/order/views/pass_order_view.dart';
 import '../modules/staff/bindings/staff_binding.dart';
-import '../modules/staff/bindings/staff_form_binding.dart';
 import '../modules/staff/bindings/staff_details_binding.dart';
+import '../modules/staff/bindings/staff_form_binding.dart';
 import '../modules/staff/views/staff_details_view.dart';
 import '../modules/staff/views/staff_form_view.dart';
 import '../modules/staff/views/staff_view.dart';
@@ -76,6 +78,13 @@ class AppPages {
       page: () => const AuthView(),
       binding: AuthBinding(),
       middlewares: [AuthenticatedMiddleware()],
+      children: [
+        GetPage(
+          name: _Paths.REGISTER,
+          page: () => const RegisterView(),
+          binding: RegisterBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.BUILDINGS,

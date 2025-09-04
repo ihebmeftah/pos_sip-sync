@@ -9,8 +9,11 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text('HomeView is working', style: TextStyle(fontSize: 20)),
+      body: Center(
+        child: Text(
+          "${controller.loggedUser.email} / ${controller.loggedUser.phone} / ${controller.loggedUser.username ?? "--"}",
+          style: TextStyle(fontSize: 20),
+        ),
       ),
     );
   }

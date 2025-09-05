@@ -5,8 +5,6 @@ import { MigrationService } from 'src/database/migration.service';
 
 
 async function runTenantMigrations() {
-    console.log("$$$$$$" + process.argv);
-
     const app = await NestFactory.create(AppModule);
     const migrationService = app.get(MigrationService);
     if (process.argv[2] == "all") {

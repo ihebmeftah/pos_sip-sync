@@ -13,6 +13,8 @@ Building _$BuildingFromJson(Map<String, dynamic> json) => Building(
   openingTime: json['openingTime'] as String,
   closingTime: json['closingTime'] as String,
   location: json['location'] as String,
+  tableMultiOrder: json['tableMultiOrder'] as bool,
+  allowAppendItemOrder: json['allowAppendItemOrder'] as bool,
   long: (json['long'] as num?)?.toDouble(),
   lat: (json['lat'] as num?)?.toDouble(),
   logo: json['logo'] as String?,
@@ -30,4 +32,6 @@ Map<String, dynamic> _$BuildingToJson(Building instance) => <String, dynamic>{
   'lat': instance.lat,
   'logo': instance.logo,
   'photos': instance.photos,
+  'tableMultiOrder': instance.tableMultiOrder,
+  'allowAppendItemOrder': instance.allowAppendItemOrder,
 };

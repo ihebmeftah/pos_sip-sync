@@ -13,6 +13,8 @@ class Building {
   double? lat;
   String? logo;
   List<String>? photos;
+  bool tableMultiOrder;
+  bool allowAppendItemOrder;
 
   Building({
     this.id,
@@ -21,6 +23,8 @@ class Building {
     required this.openingTime,
     required this.closingTime,
     required this.location,
+    required this.tableMultiOrder,
+    required this.allowAppendItemOrder,
     this.long,
     this.lat,
     this.logo,

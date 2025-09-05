@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:admin/app/data/apis/apis_exceptions.dart';
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/article/article.dart';
 import 'package:admin/app/data/model/table/tables.dart';
 import 'package:admin/app/modules/order/controllers/order_controller.dart';
@@ -79,35 +80,13 @@ class PassOrderController extends GetxController with StateMixin {
   void passOrder() async {
     try {
       if (currOrder == null && table!.status == TableStatus.available) {
-        //? Create new order when tabe available
-        final passedOrder = await OrderApi().passOrder(
-          tableId: table!.id,
-          articlesIds: selectedArticles.map((a) => a.id).toList(),
-        );
-
-        Get.find<TablesController>().updateTable(passedOrder.table);
-        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
-        Get.snackbar(
-          "Success",
-          "Order passed successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        await createOrder();
       } else {
-        //? Create add new item when tabe occupied and have order
-        await OrderApi().addItemsToOrder(
-          orderId: currOrder!.id!,
-          articlesIds: selectedArticles.map((a) => a.id).toList(),
-        );
-        Get.offAndToNamed("${Routes.ORDER_DETAILS}/${currOrder!.id!}");
-        Get.snackbar(
-          "Success",
-          "Order passed successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        if (LocalStorage().building!.tableMultiOrder == true) {
+          await createOrder();
+        } else {
+          await appendItemToOrder();
+        }
       }
       Get.find<OrderController>().onInit();
       reset();
@@ -127,6 +106,47 @@ class PassOrderController extends GetxController with StateMixin {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    }
+  }
+
+  Future<void> createOrder() async {
+    try {
+      //? Create new order when tabe available
+      final passedOrder = await OrderApi().passOrder(
+        tableId: table!.id,
+        articlesIds: selectedArticles.map((a) => a.id).toList(),
+      );
+      Get.find<TablesController>().updateTable(passedOrder.table);
+      Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
+      Get.snackbar(
+        "Success",
+        "Order passed successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> appendItemToOrder() async {
+    try {
+      //? Create add new item when tabe occupied and have order
+      await OrderApi().addItemsToOrder(
+        orderId: currOrder!.id!,
+        articlesIds: selectedArticles.map((a) => a.id).toList(),
+      );
+      Get.offAndToNamed("${Routes.ORDER_DETAILS}/${currOrder!.id!}");
+      Get.snackbar(
+        "Success",
+        "New items added to order successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      rethrow;
     }
   }
 

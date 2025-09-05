@@ -33,12 +33,12 @@ export class OrderService {
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
         const openedBy = await this.usersService.findStaffById(user.id, dbName);
         const table = await this.tablesService.findOne(createOrderDto.tableId, dbName);
-        const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId, dbName);
-
-        if (orderTable) {
-            throw new ConflictException(`this table ${table.name.split('.')[0]} already have an order`);
+        if (openedBy.building.tableMultiOrder == false) {
+            const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId, dbName);
+            if (orderTable) {
+                throw new ConflictException(`this table ${table.name} already have an order`);
+            }
         }
-
         const articles: Article[] = [];
         for (const articleId of createOrderDto.articlesIds) {
             const article = await this.articleService.findOne(articleId, dbName);

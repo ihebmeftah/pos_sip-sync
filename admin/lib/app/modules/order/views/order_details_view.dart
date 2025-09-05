@@ -1,4 +1,6 @@
 import 'package:admin/app/common/appemptyscreen.dart';
+import 'package:admin/app/data/local/local_storage.dart';
+import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/modules/order/widgets/order_amount_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -14,18 +16,24 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          spacing: 5,
-          children: [
-            Icon(
-              Icons.receipt_long,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const Text(
-              'Order Details',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ],
+        title: GetBuilder<OrderDetailsController>(
+          builder: (ctr) {
+            return ctr.status.isSuccess
+                ? TableInfoWidget(table: controller.order!.table)
+                : Row(
+                    spacing: 5,
+                    children: [
+                      Icon(
+                        Icons.receipt_long,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const Text(
+                        'Order Details',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  );
+          },
         ),
         actions: [
           IconButton(
@@ -40,8 +48,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
           child: Column(
             spacing: 10,
             children: [
-              TableInfoWidget(table: controller.order!.table),
-
               /// Order items details
               Row(
                 spacing: 5,
@@ -58,18 +64,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                     ),
                   ),
                 ],
-              ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  fixedSize: Size(Get.width, 50),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.brown),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {},
-                label: Text("Add Item"),
-                icon: Icon(Icons.add),
               ),
 
               /// Order items list
@@ -223,6 +217,21 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                 ),
               ),
 
+              /// append items
+              if (LocalStorage().building!.allowAppendItemOrder &&
+                  controller.order!.status == OrderStatus.progress)
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    fixedSize: Size(Get.width, 50),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.brown),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {},
+                  label: Text("Append new items"),
+                  icon: Icon(Icons.add),
+                ),
               OrderBottomWidget(
                 order: controller.order!,
                 history: controller.orderHistory,

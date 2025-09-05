@@ -27,7 +27,7 @@ class OrderDetailsController extends GetxController with StateMixin {
   num get paidAmount => order!.items
       .where((item) => item.payed)
       .fold<num>(0.0, (sum, item) => sum + item.article.price);
-  num get unpaidAmount => totalPrice - paidAmount;
+  num get unpaidAmount => (totalPrice - paidAmount);
 
   Future<void> getOrderById() async {
     try {

@@ -5,44 +5,6 @@ import 'package:get/get.dart';
 
 import '../controllers/order_details_controller.dart';
 
-class OrderAmountWidget extends StatelessWidget {
-  final String label;
-  final num amount;
-  final Color color;
-
-  const OrderAmountWidget({
-    super.key,
-    required this.label,
-    required this.amount,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(
-          '${amount.toStringAsFixed(2)} DT',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class OrderBottomWidget extends StatelessWidget {
   const OrderBottomWidget({
     super.key,
@@ -68,26 +30,50 @@ class OrderBottomWidget extends StatelessWidget {
               child: Column(
                 spacing: 5,
                 children: [
-                  OrderAmountWidget(
-                    label: 'Total Amount',
-                    amount: ctr.totalPrice,
-                    color: Colors.black87,
-                  ),
-                  OrderAmountWidget(
-                    label: 'Paid Amount',
-                    amount: ctr.paidAmount,
-                    color: Colors.green,
-                  ),
-                  OrderAmountWidget(
-                    label: 'Remaining',
-                    amount: ctr.unpaidAmount,
-                    color: Colors.red,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Paid Amount',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                      Text(
+                        '${ctr.paidAmount.toStringAsFixed(2)} DT',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                      Text('|', style: TextStyle(color: Colors.black)),
+                      Text(
+                        'Remaining',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Text(
+                        '${ctr.unpaidAmount.toStringAsFixed(2)} DT',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             );
           },
         ),
+        SizedBox(height: 10),
 
         /// Action Buttons
         if (order.status != OrderStatus.payed)
@@ -98,7 +84,14 @@ class OrderBottomWidget extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: Get.find<OrderDetailsController>().payAllItems,
                   icon: const Icon(Icons.payment),
-                  label: const Text('Pay All'),
+                  label: GetBuilder<OrderDetailsController>(
+                    id: "pay",
+                    builder: (_) {
+                      return Text(
+                        'Pay \n(${Get.find<OrderDetailsController>().unpaidAmount.toStringAsFixed(2)} DT)',
+                      );
+                    },
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,

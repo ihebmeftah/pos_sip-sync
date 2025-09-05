@@ -1,4 +1,5 @@
 import 'package:admin/app/data/apis/tables_api.dart';
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +23,9 @@ class TablesController extends GetxController with StateMixin {
     try {
       tables(
         await TablesApi().getTables(
-          status: Get.previousRoute == Routes.PASS_ORDER
+          status:
+              Get.previousRoute == Routes.PASS_ORDER ||
+                  LocalStorage().building!.tableMultiOrder == false
               ? TableStatus.available
               : null,
         ),

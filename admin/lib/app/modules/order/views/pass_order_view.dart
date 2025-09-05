@@ -1,5 +1,6 @@
 import 'package:admin/app/common/appemptyscreen.dart';
 import 'package:admin/app/common/appformfield.dart';
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/enums/table_status.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -165,7 +166,8 @@ class PassOrderView extends GetView<PassOrderController> {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (controller.table!.status == TableStatus.occupied)
+                  if (controller.table!.status == TableStatus.occupied &&
+                      LocalStorage().building!.tableMultiOrder == false)
                     ListTile(
                       leading: const Icon(FluentIcons.info_12_filled),
                       title: Text("This table is currently occupied."),

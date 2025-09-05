@@ -11,6 +11,15 @@ export class Building extends TimestampBaseEntity {
     name: string
     @Column({ unique: true })
     dbName: string
+
+    /// Config to allow multiple orders on same table (e.g table 1 has order 1, order 2, order 3 in prog in the same time.)
+    @Column({ default: false })
+    tableMultiOrder: boolean
+
+    /// Config to allow append items to an order (e.g add item(a,b,c..) to an order in prog)
+    @Column({ default: false })
+    allowAppendItemOrder: boolean
+
     @Column()
     openingTime: string
     @Column()

@@ -50,6 +50,7 @@ export class OrderController {
 
     @Delete(":id")
     @UseInterceptors(HistoryInterceptor)
+    @Roles(UserType.Employer)
     async deleteOrder(
         @Param('id', ParseUUIDPipe) id: UUID,
         @DbName() dbName: string,
@@ -59,6 +60,7 @@ export class OrderController {
 
     @Post()
     @UseInterceptors(HistoryInterceptor)
+    @Roles(UserType.Employer)
     async passOrder(
         @Body() createOrderDto: CreateOrderDto,
         @CurrUser() user: LoggedUser,
@@ -68,7 +70,7 @@ export class OrderController {
     }
 
     @Patch("/item/:id")
-    @Roles(UserType.Admin, UserType.Employer)
+    @Roles(UserType.Employer)
     @UseInterceptors(HistoryInterceptor)
     async payOrderItem(
         @Param("id", ParseUUIDPipe) orderItemId: UUID,

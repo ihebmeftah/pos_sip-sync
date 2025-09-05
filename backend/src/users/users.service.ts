@@ -1,7 +1,7 @@
 import { ConflictException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Employer } from './entities/employer.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -67,7 +67,10 @@ export class UsersService {
     public async findAllStaff(dbName: string) {
         const staffRepository = await this.repositoryFactory.getRepository(dbName, Staff);
         const staff = await staffRepository.find();
-        return staff;
+        const employers = await this.employerRepository.findBy({
+            id: In(staff.map(s => s.employerId))
+        });
+        return staff.map(s => ({ ...s, ...employers.find(e => e.id === s.employerId) }));
     }
     public async findStaffById(id: UUID, dbName: string) {
         const staffRepository = await this.repositoryFactory.getRepository(dbName, Staff);

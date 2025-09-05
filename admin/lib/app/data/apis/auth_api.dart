@@ -5,14 +5,14 @@ import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:admin/app/data/model/user/user.dart';
 
 class AuthApi {
-  Future<LoginUser> login({
+  Future<Map<String, dynamic>> login({
     required String identifier,
     required String password,
   }) async {
-    return await HttpHelper.post<LoginUser>(
+    return await HttpHelper.post<Map<String, dynamic>>(
       endpoint: "/auth/login",
       fromJson: (data) {
-        return LoginUser.fromJson(data);
+        return data as Map<String, dynamic>;
       },
       body: {"identifier": identifier, "password": password},
     );

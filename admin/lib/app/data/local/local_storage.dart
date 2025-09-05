@@ -2,7 +2,6 @@ import 'package:admin/app/data/model/building/building.dart';
 import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../model/enums/user_role.dart';
 
 class LocalStorage {
   // Private constructor
@@ -25,9 +24,6 @@ class LocalStorage {
 
   Future<bool> saveUser(LoginUser v) async {
     await _storage.write('user', v.toJson());
-    if (v.type == UserType.employer) {
-      saveBuilding(v.building!);
-    }
     return true;
   }
 
@@ -46,7 +42,6 @@ class LocalStorage {
   }
 
   Building? get building {
-    if (user?.type == UserType.employer) return user?.building;
     if (!_storage.hasData('building')) return null;
     return Building.fromJson(_storage.read('building'));
   }

@@ -18,9 +18,6 @@ LoginUser _$LoginUserFromJson(Map<String, dynamic> json) => LoginUser(
   type: $enumDecode(_$UserTypeEnumMap, json['type']),
   id: json['id'] as String?,
   password: json['password'] as String?,
-  building: json['building'] == null
-      ? null
-      : Building.fromJson(json['building'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
@@ -35,7 +32,6 @@ Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
   'token': instance.token,
   'username': instance.username,
   'employerId': instance.employerId,
-  'building': ?instance.building,
 };
 
 const _$UserTypeEnumMap = {

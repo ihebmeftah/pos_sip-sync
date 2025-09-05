@@ -1,7 +1,9 @@
 import 'package:admin/app/data/apis/apis_exceptions.dart';
 import 'package:admin/app/data/apis/auth_api.dart';
 import 'package:admin/app/data/local/local_storage.dart';
+import 'package:admin/app/data/model/building/building.dart';
 import 'package:admin/app/data/model/enums/user_role.dart';
+import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,8 +22,11 @@ class AuthController extends GetxController {
           identifier: emailController.text,
           password: passwordController.text,
         );
-        await LocalStorage().saveUser(user);
-        if (user.type == UserType.employer) {
+        final LoginUser loginuser = LoginUser.fromJson(user);
+        await LocalStorage().saveUser(loginuser);
+        if (loginuser.type == UserType.employer) {
+          final Building building = Building.fromJson(user['building']);
+          await LocalStorage().saveBuilding(building);
           Get.offAllNamed(Routes.INDEX);
         } else {
           Get.offAllNamed(Routes.BUILDINGS);

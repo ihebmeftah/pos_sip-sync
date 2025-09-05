@@ -1,4 +1,3 @@
-import 'package:admin/app/data/model/building/building.dart';
 import 'package:admin/app/data/model/user/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -10,8 +9,7 @@ class LoginUser extends User {
   String token;
   String? username;
   String? employerId;
-  @JsonKey(includeIfNull: false)
-  Building? building;
+
   LoginUser({
     required this.token,
     this.username,
@@ -24,7 +22,6 @@ class LoginUser extends User {
     required super.type,
     super.id,
     super.password,
-    this.building,
   });
 
   factory LoginUser.fromJson(Map<String, dynamic> json) =>

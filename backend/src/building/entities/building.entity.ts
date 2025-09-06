@@ -16,10 +16,6 @@ export class Building extends TimestampBaseEntity {
     @Column({ default: false })
     tableMultiOrder: boolean
 
-    /// Config to allow append items to an order (e.g add item(a,b,c..) to an order in prog)
-    @Column({ default: false })
-    allowAppendItemOrder: boolean
-
     @Column()
     openingTime: string
     @Column()

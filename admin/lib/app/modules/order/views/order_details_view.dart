@@ -1,6 +1,4 @@
 import 'package:admin/app/common/appemptyscreen.dart';
-import 'package:admin/app/data/local/local_storage.dart';
-import 'package:admin/app/data/model/order/order.dart';
 import 'package:admin/app/modules/order/widgets/order_amount_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -216,22 +214,18 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                   },
                 ),
               ),
-
-              /// append items
-              if (LocalStorage().building!.allowAppendItemOrder &&
-                  controller.order!.status == OrderStatus.progress)
-                OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    fixedSize: Size(Get.width, 50),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.brown),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  fixedSize: Size(Get.width, 50),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.brown),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  onPressed: () {},
-                  label: Text("Append new items"),
-                  icon: Icon(Icons.add),
                 ),
+                onPressed: () {},
+                label: Text("Append new items"),
+                icon: Icon(Icons.add),
+              ),
               OrderBottomWidget(
                 order: controller.order!,
                 history: controller.orderHistory,

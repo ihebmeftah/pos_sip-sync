@@ -26,7 +26,6 @@ class BuildingAddController extends GetxController {
     closingTime: closing.text,
     dbName: name.text.toLowerCase().replaceAll(' ', '_'),
     tableMultiOrder: false,
-    allowAppendItemOrder: false,
   );
   Future<void> addBuilding() async {
     try {

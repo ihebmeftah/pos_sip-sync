@@ -9,16 +9,20 @@ import 'package:get/get.dart';
 
 import '../../../data/apis/order_api.dart';
 import '../../../data/model/enums/table_status.dart';
-import '../../tables/controllers/tables_controller.dart';
 
 class OrderDetailsController extends GetxController with StateMixin {
   String get id => Get.parameters['id']!;
+  String? get from => Get.parameters['from'];
   Order? order;
   final orderHistory = <History>[].obs;
 
   @override
   void onInit() {
-    getOrderById();
+    if (from == 'tables') {
+      getCurrOrderOfTable();
+    } else {
+      getOrderById();
+    }
     super.onInit();
   }
 
@@ -43,9 +47,23 @@ class OrderDetailsController extends GetxController with StateMixin {
     }
   }
 
-  Future<void> getOrderHistory() async {
+  Future<void> getCurrOrderOfTable() async {
     try {
-      orderHistory.value = await HistoryApi().getOrderHistory(id);
+      order = await OrderApi().getCurrOrderOfTable(id);
+      getOrderHistory(order!.id);
+      if (order == null) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(order, status: RxStatus.success());
+      }
+    } catch (e) {
+      change(null, status: RxStatus.error('Failed to load order'));
+    }
+  }
+
+  Future<void> getOrderHistory([String? orderId]) async {
+    try {
+      orderHistory.value = await HistoryApi().getOrderHistory(orderId ?? id);
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -65,7 +83,7 @@ class OrderDetailsController extends GetxController with StateMixin {
         order!.status = OrderStatus.payed;
         order!.table.status = TableStatus.available;
         order!.closedBy = LocalStorage().user;
-        Get.find<TablesController>().updateTable(order!.table);
+        //  Get.find<TablesController>().updateTable(order!.table);
         // update(['table-status', 'order-status']);
         change(order, status: RxStatus.success());
       }
@@ -91,7 +109,7 @@ class OrderDetailsController extends GetxController with StateMixin {
     try {
       order = await OrderApi().payOrderAllItems(orderId: order!.id!);
       Get.find<OrderController>().getOrders();
-      Get.find<TablesController>().updateTable(order!.table);
+      //   Get.find<TablesController>().updateTable(order!.table);
       Get.snackbar(
         'Payment Processed',
         'All items have been paid',

@@ -1,5 +1,6 @@
 import 'package:admin/app/common/appbottomsheet.dart';
 import 'package:admin/app/common/appemptyscreen.dart';
+import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -127,6 +128,22 @@ class TablesView extends GetView<TablesController> {
                                   title: Text('Unselect Table'),
                                   onTap: () => passOrderCtr.setTable(
                                     controller.tables[index],
+                                  ),
+                                ),
+
+                              if (LocalStorage().building!.tableMultiOrder)
+                                ListTile(
+                                  title: Text('Consult table orders'),
+                                  onTap: () => Get.toNamed(
+                                    "${Routes.ORDERS_TABLES}/${controller.tables[index].id}",
+                                  ),
+                                )
+                              else
+                                ListTile(
+                                  title: Text('Consult table current order'),
+                                  onTap: () => Get.toNamed(
+                                    "${Routes.ORDER_DETAILS}/${controller.tables[index].id}",
+                                    parameters: {'from': 'tables'},
                                   ),
                                 ),
                             ],

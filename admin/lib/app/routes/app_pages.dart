@@ -148,6 +148,11 @@ class AppPages {
           page: () => const OrderDetailsView(),
           binding: OrderDetailsBinding(),
         ),
+        GetPage(
+          name: '${_Paths.TABLES}/:tableId',
+          page: () => const OrderView(),
+          binding: OrderBinding(),
+        ),
       ],
     ),
     GetPage(

@@ -31,7 +31,16 @@ export class OrderController {
         }
         return await this.orderService.findOrderOfBuilding(dbName, status);
     }
-
+    @Get("table/:id")
+    async findOrderOfTable(
+        @DbName() dbName: string,
+        @Param('id', ParseUUIDPipe) tableId: UUID,
+        @Query(
+            'status',
+            new ParseEnumPipe(OrderStatus, { optional: true })) status?: OrderStatus,
+    ) {
+        return await this.orderService.findOrderOfTable(dbName, tableId, status);
+    }
     @Get(":id")
     async getOrderById(
         @Param('id', ParseUUIDPipe) id: UUID,

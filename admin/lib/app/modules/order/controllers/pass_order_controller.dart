@@ -5,7 +5,6 @@ import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/article/article.dart';
 import 'package:admin/app/data/model/table/tables.dart';
 import 'package:admin/app/modules/order/controllers/order_controller.dart';
-import 'package:admin/app/modules/tables/controllers/tables_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart' hide Table;
 import 'package:get/get.dart';
@@ -116,7 +115,7 @@ class PassOrderController extends GetxController with StateMixin {
         tableId: table!.id,
         articlesIds: selectedArticles.map((a) => a.id).toList(),
       );
-      Get.find<TablesController>().updateTable(passedOrder.table);
+      //   Get.find<TablesController>().updateTable(passedOrder.table);
       Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
       Get.snackbar(
         "Success",

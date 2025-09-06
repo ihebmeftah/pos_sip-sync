@@ -5,6 +5,7 @@ import '../../../data/model/order/order.dart';
 
 class OrderController extends GetxController with StateMixin {
   final RxList<Order> orders = <Order>[].obs;
+  final tableId = Get.parameters['tableId'];
   @override
   void onInit() async {
     await getOrders();
@@ -18,7 +19,14 @@ class OrderController extends GetxController with StateMixin {
           : currentTabIndex == 1
           ? OrderStatus.progress
           : OrderStatus.payed;
-      orders(await OrderApi().getOrders(orderStatus));
+      if (tableId != null) {
+        orders.value = await OrderApi().getOrdersOftables(
+          tableId!,
+          orderStatus,
+        );
+      } else {
+        orders.value = await OrderApi().getOrders(orderStatus);
+      }
       change(orders, status: RxStatus.success());
     } catch (e) {
       change(null, status: RxStatus.error('Failed to load orders'));

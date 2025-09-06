@@ -13,6 +13,19 @@ class OrderApi {
     );
   }
 
+  Future<List<Order>> getOrdersOftables(
+    String tableId, [
+    OrderStatus? orderStatus,
+  ]) {
+    return HttpHelper.get<List<Order>>(
+      endpoint: '/order/table/$tableId',
+      queryParams: orderStatus != null ? {'status': orderStatus.name} : null,
+      fromJson: (json) => (json as List)
+          .map((e) => Order.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
   Future<Order> getOrderById(String id) async {
     return await HttpHelper.get<Order>(
       endpoint: '/order/$id',

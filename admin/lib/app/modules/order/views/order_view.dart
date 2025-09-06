@@ -1,3 +1,6 @@
+import 'package:admin/app/data/local/local_storage.dart';
+import 'package:admin/app/data/model/enums/user_role.dart';
+import 'package:admin/app/modules/index/controllers/index_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +17,13 @@ class OrderView extends GetView<OrderController> {
       length: 3,
       initialIndex: controller.currentTabIndex,
       child: Scaffold(
+        appBar:
+            (Get.find<IndexController>().currBnb != 3 &&
+                    LocalStorage().user!.type == UserType.admin) ||
+                (Get.find<IndexController>().currBnb != 1 &&
+                    LocalStorage().user!.type == UserType.employer)
+            ? null
+            : AppBar(title: const Text('Orders'), centerTitle: true),
         body: controller.obx(
           (state) => RefreshIndicator(
             onRefresh: controller.getOrders,

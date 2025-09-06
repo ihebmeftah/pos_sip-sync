@@ -20,6 +20,7 @@ abstract class Routes {
   static const ORDER = _Paths.ORDER;
   static const PASS_ORDER = _Paths.ORDER + _Paths.PASS_ORDER;
   static const ORDER_DETAILS = _Paths.ORDER + _Paths.ORDER_DETAILS;
+  static const ORDERS_TABLES = _Paths.ORDER + _Paths.TABLES;
   static const STAFF = _Paths.STAFF;
   static const STAFF_FORM = _Paths.STAFF + _Paths.STAFF_FORM;
   static const STAFF_DETAILS = _Paths.STAFF + _Paths.STAFF_DETAILS;

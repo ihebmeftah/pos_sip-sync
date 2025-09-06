@@ -24,7 +24,7 @@ class TablesController extends GetxController with StateMixin {
       tables(
         await TablesApi().getTables(
           status:
-              Get.previousRoute == Routes.PASS_ORDER ||
+              Get.previousRoute == Routes.PASS_ORDER &&
                   LocalStorage().building!.tableMultiOrder == false
               ? TableStatus.available
               : null,

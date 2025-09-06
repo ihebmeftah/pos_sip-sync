@@ -203,6 +203,7 @@ class IndexView extends GetView<IndexController> {
         },
       ),
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         onPageChanged: controller.changeBnbContent,
         controller: controller.pageVCtr,
         children: (LocalStorage().user!.type == UserType.employer)

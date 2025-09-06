@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import '../../../data/apis/order_api.dart';
 import '../../../data/model/enums/table_status.dart';
 import '../../../data/model/order/order.dart';
+import '../../tables/controllers/tables_controller.dart';
 
 class PassOrderController extends GetxController with StateMixin {
   Table? table;
@@ -87,7 +88,9 @@ class PassOrderController extends GetxController with StateMixin {
           await appendItemToOrder();
         }
       }
-      Get.find<OrderController>().onInit();
+      if (Get.isRegistered<OrderController>()) {
+        Get.find<OrderController>().onInit();
+      }
       reset();
     } on ConflictException {
       Get.snackbar(
@@ -115,7 +118,9 @@ class PassOrderController extends GetxController with StateMixin {
         tableId: table!.id,
         articlesIds: selectedArticles.map((a) => a.id).toList(),
       );
-      //   Get.find<TablesController>().updateTable(passedOrder.table);
+      if (Get.isRegistered<TablesController>()) {
+        Get.find<TablesController>().updateTable(passedOrder.table);
+      }
       Get.offAndToNamed("${Routes.ORDER_DETAILS}/${passedOrder.id!}");
       Get.snackbar(
         "Success",

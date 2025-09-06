@@ -43,8 +43,10 @@ class TablesView extends GetView<TablesController> {
               ),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: GetPlatform.isWeb && !GetPlatform.isMobile
+                        ? 4
+                        : 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                   ),
@@ -131,14 +133,18 @@ class TablesView extends GetView<TablesController> {
                                   ),
                                 ),
 
-                              if (LocalStorage().building!.tableMultiOrder)
+                              if (LocalStorage().building!.tableMultiOrder &&
+                                  controller.tables[index].status ==
+                                      TableStatus.occupied)
                                 ListTile(
                                   title: Text('Consult table orders'),
                                   onTap: () => Get.toNamed(
                                     "${Routes.ORDERS_TABLES}/${controller.tables[index].id}",
                                   ),
-                                )
-                              else
+                                ),
+                              if (!LocalStorage().building!.tableMultiOrder &&
+                                  controller.tables[index].status ==
+                                      TableStatus.occupied)
                                 ListTile(
                                   title: Text('Consult table current order'),
                                   onTap: () => Get.toNamed(

@@ -12,7 +12,8 @@ class User {
   String phone;
   String? photo;
   UserType type;
-
+  String? username;
+  String? employerId;
   User({
     this.id,
     required this.firstname,
@@ -22,6 +23,8 @@ class User {
     this.photo,
     this.password,
     required this.type,
+    this.username,
+    this.employerId,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

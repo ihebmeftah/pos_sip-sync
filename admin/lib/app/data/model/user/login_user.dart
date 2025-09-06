@@ -7,13 +7,10 @@ part 'login_user.g.dart';
 @JsonSerializable()
 class LoginUser extends User {
   String token;
-  String? username;
-  String? employerId;
+
 
   LoginUser({
     required this.token,
-    this.username,
-    this.employerId,
     required super.firstname,
     required super.lastname,
     required super.email,

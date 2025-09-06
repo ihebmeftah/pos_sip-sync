@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../data/apis/order_api.dart';
 import '../../../data/model/enums/table_status.dart';
+import '../../tables/controllers/tables_controller.dart';
 
 class OrderDetailsController extends GetxController with StateMixin {
   String get id => Get.parameters['id']!;
@@ -18,11 +19,8 @@ class OrderDetailsController extends GetxController with StateMixin {
 
   @override
   void onInit() {
-    if (from == 'tables') {
-      getCurrOrderOfTable();
-    } else {
-      getOrderById();
-    }
+    getOrderById();
+
     super.onInit();
   }
 
@@ -35,7 +33,11 @@ class OrderDetailsController extends GetxController with StateMixin {
 
   Future<void> getOrderById() async {
     try {
-      order = await OrderApi().getOrderById(id);
+      if (from == 'tables') {
+        order = await OrderApi().getCurrOrderOfTable(id);
+      } else {
+        order = await OrderApi().getOrderById(id);
+      }
       getOrderHistory();
       if (order == null) {
         change(null, status: RxStatus.empty());
@@ -47,23 +49,9 @@ class OrderDetailsController extends GetxController with StateMixin {
     }
   }
 
-  Future<void> getCurrOrderOfTable() async {
+  Future<void> getOrderHistory() async {
     try {
-      order = await OrderApi().getCurrOrderOfTable(id);
-      getOrderHistory(order!.id);
-      if (order == null) {
-        change(null, status: RxStatus.empty());
-      } else {
-        change(order, status: RxStatus.success());
-      }
-    } catch (e) {
-      change(null, status: RxStatus.error('Failed to load order'));
-    }
-  }
-
-  Future<void> getOrderHistory([String? orderId]) async {
-    try {
-      orderHistory.value = await HistoryApi().getOrderHistory(orderId ?? id);
+      orderHistory.value = await HistoryApi().getOrderHistory(order?.id ?? id);
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -83,11 +71,16 @@ class OrderDetailsController extends GetxController with StateMixin {
         order!.status = OrderStatus.payed;
         order!.table.status = TableStatus.available;
         order!.closedBy = LocalStorage().user;
-        //  Get.find<TablesController>().updateTable(order!.table);
+        if (Get.isRegistered<TablesController>()) {
+          Get.find<TablesController>().updateTable(order!.table);
+        }
+
         // update(['table-status', 'order-status']);
         change(order, status: RxStatus.success());
       }
-      Get.find<OrderController>().getOrders();
+      if (Get.isRegistered<OrderController>()) {
+        Get.find<OrderController>().onInit();
+      }
       Get.snackbar(
         'Payment Processed',
         'Payment for ${item.article.name} has been processed',
@@ -108,8 +101,12 @@ class OrderDetailsController extends GetxController with StateMixin {
   Future<void> payAllItems() async {
     try {
       order = await OrderApi().payOrderAllItems(orderId: order!.id!);
-      Get.find<OrderController>().getOrders();
-      //   Get.find<TablesController>().updateTable(order!.table);
+      if (Get.isRegistered<OrderController>()) {
+        Get.find<OrderController>().onInit();
+      }
+      if (Get.isRegistered<TablesController>()) {
+        Get.find<TablesController>().updateTable(order!.table);
+      }
       Get.snackbar(
         'Payment Processed',
         'All items have been paid',

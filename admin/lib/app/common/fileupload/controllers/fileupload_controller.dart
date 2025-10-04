@@ -38,7 +38,7 @@ class FileuploadController extends GetxController {
     }
   }
 
-  pickBottomSheet({required bool multipe}) => Get.bottomSheet(
+  void pickBottomSheet({required bool multipe}) => Get.bottomSheet(
     Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -73,7 +73,7 @@ class FileuploadController extends GetxController {
       ? []
       : selectedFiles.map((file) => File(file.path!)).toList();
 
-  removePickedFile(UploadType type, PlatformFile file) {
+  void removePickedFile(UploadType type, PlatformFile file) {
     if (type == UploadType.image) {
       selectedFile = null;
     } else {

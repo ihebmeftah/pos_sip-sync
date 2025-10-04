@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-bottomSheet({
+void bottomSheet({
   required List<Widget> children,
   void Function()? onConfirm,
   String confirmeButtonText = "Confirm",

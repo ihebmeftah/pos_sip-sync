@@ -13,7 +13,7 @@ class StaffController extends GetxController with StateMixin<List<Employer>> {
     getEmployers();
   }
 
-  getEmployers() async {
+  void getEmployers() async {
     try {
       employers(await StaffApi().getEmployers());
       if (employers.isNotEmpty) {

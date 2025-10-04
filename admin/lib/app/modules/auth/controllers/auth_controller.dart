@@ -41,12 +41,12 @@ class AuthController extends GetxController {
     }
   }
 
-  toggleObscurePwd() {
+  void toggleObscurePwd() {
     obscurePassword = !obscurePassword;
     update(['obscurePassword']);
   }
 
-  toggleRemebreMe() {
+  void toggleRemebreMe() {
     rememberMe = !rememberMe;
     update(['rememberMe']);
   }

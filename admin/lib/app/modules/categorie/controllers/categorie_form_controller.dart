@@ -16,7 +16,7 @@ class CategorieFormController extends GetxController with StateMixin {
     super.onInit();
   }
 
-  craeteCategory() async {
+  void craeteCategory() async {
     try {
       if (catFormKey.currentState!.validate()) {
         change(null, status: RxStatus.loading());

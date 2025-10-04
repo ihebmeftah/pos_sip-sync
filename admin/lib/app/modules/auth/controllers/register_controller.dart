@@ -17,7 +17,7 @@ class RegisterController extends GetxController {
   final TextEditingController password = TextEditingController();
   final TextEditingController cpassword = TextEditingController();
   bool obscurePassword = true;
-  toggleObscurePwd() {
+  void toggleObscurePwd() {
     obscurePassword = !obscurePassword;
     update(['obscurePassword']);
   }

@@ -35,7 +35,7 @@ class OrderController extends GetxController with StateMixin {
   }
 
   int currentTabIndex = 1;
-  changeTab(int index) {
+  void changeTab(int index) {
     currentTabIndex = index;
     getOrders();
   }

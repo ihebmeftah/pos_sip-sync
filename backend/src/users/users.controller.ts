@@ -17,18 +17,17 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get('employers')
-  findAllStaff(
+  findEmployers(
     @DbName() dbName: string
   ) {
-    return this.usersService.findAllStaff(dbName);
+    return this.usersService.findEmployers(dbName);
   }
   @Get('employers/:id')
   @Roles(UserType.Employer)
-  findStaffById(
+  findEmployerById(
     @Param('id', ParseUUIDPipe) id: UUID,
-    @DbName() dbName: string
   ) {
-    return this.usersService.findStaffById(id, dbName);
+    return this.usersService.findEmployerById(id);
   }
   @Post('employers/create')
   @UseInterceptors(

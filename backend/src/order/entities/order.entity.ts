@@ -5,7 +5,6 @@ import { OrderItem } from "./order_item.entity";
 import { OrderStatus } from "src/enums/order_status";
 import { Table } from "src/tables/entities/table.entity";
 import { Employer } from "src/users/entities/employer.entity";
-import { Staff } from "src/users/entities/staff.entity";
 @Entity()
 export class Order extends TimestampBaseEntity {
 
@@ -25,9 +24,13 @@ export class Order extends TimestampBaseEntity {
     items: OrderItem[];
     @ManyToOne(() => Table, { eager: true })
     table: Table;
-    @ManyToOne(() => Staff, { eager: true })
-    openedBy: Staff;
-    @ManyToOne(() => Staff, { eager: true, nullable: true })
-    closedBy: Staff;
+    @Column({
+        type: "jsonb", nullable: false
+    })
+    openedBy: Employer;
+    @Column({
+        type: "jsonb", nullable: true
+    })
+    closedBy: Employer;
 }
 

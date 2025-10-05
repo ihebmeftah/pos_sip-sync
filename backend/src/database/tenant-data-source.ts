@@ -2,10 +2,8 @@ import { DataSource } from "typeorm";
 import { Order } from 'src/order/entities/order.entity';
 import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
-import { History } from 'src/history/entities/history.entity';
 import { OrderItem } from 'src/order/entities/order_item.entity';
 import { Category } from 'src/category/entities/category.entity';
-import { Staff } from 'src/users/entities/staff.entity';
 import * as dotenv from 'dotenv';
 dotenv.config();
 export let tenantdata: Map<string, any> = new Map();
@@ -17,7 +15,7 @@ tenantdata.set("database", process.argv[7]);
 tenantdata.set("password", process.env.DB_PASSWORD);
 tenantdata.set("synchronize", false);
 tenantdata.set("entities", [
-    Order, OrderItem, Category, Article, Table, History, Staff,
+    Order, OrderItem, Category, Article, Table
 ]);
 tenantdata.set("migrations", [__dirname + '/../../migrations/tenant/*{.js,.ts}']);
 

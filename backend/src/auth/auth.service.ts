@@ -1,11 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login_dto';
 import { RegisterDto } from './dto/register_dto';
 import { UsersService } from '../users/users.service';
 import { LoggedUser } from './strategy/loggeduser';
-import { Employer } from 'src/users/entities/employer.entity';
-import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {

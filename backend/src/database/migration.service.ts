@@ -5,10 +5,8 @@ import { DatabaseConnectionService } from './database-connection.service';
 import { Order } from 'src/order/entities/order.entity';
 import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
-import { History } from 'src/history/entities/history.entity';
 import { OrderItem } from 'src/order/entities/order_item.entity';
 import { Category } from 'src/category/entities/category.entity';
-import { Staff } from 'src/users/entities/staff.entity';
 
 
 @Injectable()
@@ -29,7 +27,7 @@ export class MigrationService {
             password: process.env.DB_PASSWORD,
             synchronize: false,
             entities: [
-                Order, OrderItem, Category, Article, Table, History, Staff,
+                Order, OrderItem, Category, Article, Table,
             ],
             migrations: [__dirname + '/../../migrations/tenant/*{.js,.ts}'],
         });
@@ -62,7 +60,7 @@ export class MigrationService {
             password: process.env.DB_PASSWORD,
             synchronize: false,
             entities: [
-                Order, OrderItem, Category, Article, Table, History, Staff,
+                Order, OrderItem, Category, Article, Table
             ],
             migrations: [__dirname + '/../../migrations/tenant/*{.js,.ts}'],
         });

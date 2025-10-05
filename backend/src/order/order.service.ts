@@ -10,8 +10,8 @@ import { Article } from 'src/article/entities/article.entity';
 import { TableStatus } from 'src/enums/table_status';
 import { LoggedUser } from 'src/auth/strategy/loggeduser';
 import { UsersService } from 'src/users/users.service';
-import { HistoryService } from 'src/history/history.service';
 import { RepositoryFactory } from 'src/database/repository-factory.service';
+import { JsonContains } from 'typeorm';
 
 @Injectable()
 export class OrderService {
@@ -21,7 +21,6 @@ export class OrderService {
         private readonly tablesService: TablesService,
         private readonly articleService: ArticleService,
         private readonly usersService: UsersService,
-        private readonly historyService: HistoryService,
     ) { }
 
     async passOrder(
@@ -31,7 +30,7 @@ export class OrderService {
     ) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         const orderItemRepo = await this.repositoryFactory.getRepository(dbName, OrderItem);
-        const openedBy = await this.usersService.findStaffById(user.id, dbName);
+        const openedBy = await this.usersService.findEmployerById(user.id);
         const table = await this.tablesService.findOne(createOrderDto.tableId, dbName);
         if (openedBy.building.tableMultiOrder == false) {
             const orderTable = await this.checkTableHaveOrder(createOrderDto.tableId, dbName);
@@ -82,7 +81,7 @@ export class OrderService {
                 article,
                 order,
                 payed: false,
-                passedBy: await this.usersService.findStaffById(user.id, dbName)
+                passedBy: await this.usersService.findEmployerById(user.id)
             });
             return await orderItemRepo.save(orderItem);
         }));
@@ -123,21 +122,23 @@ export class OrderService {
             }
         });
     }
-    async findOrderOfInclCurrUser(dbName: string, user: LoggedUser, status?: OrderStatus,) {
+    async findOrderOfCurrUser(dbName: string, user: LoggedUser, status?: OrderStatus,) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         return await orderRepo.find({
             where: [
                 {
                     ...(status && { status }),
-                    openedBy: { id: user.id }
+                    openedBy: JsonContains({ id: user.id })
                 },
                 {
                     ...(status && { status }),
-                    closedBy: { id: user.id }
+                    closedBy: JsonContains({ id: user.id })
                 },
                 {
                     ...(status && { status }),
-                    items: { passedBy: { id: user.id } }
+                    items: {
+                        passedBy: JsonContains({ id: user.id }),
+                    }
                 }
             ],
             order: {
@@ -175,7 +176,7 @@ export class OrderService {
         if (order.items.every(item => item.payed)) {
             order.status = OrderStatus.PAYED;
             order.table.status = TableStatus.available;
-            order.closedBy = await this.usersService.findStaffById(user.id, dbName);
+            order.closedBy = await this.usersService.findEmployerById(user.id);
             order = await orderRepo.save(order);
         }
         return orderItem;
@@ -215,7 +216,7 @@ export class OrderService {
         // Update the order status to paid
         order.status = OrderStatus.PAYED;
         order.table.status = TableStatus.available;
-        order.closedBy = await this.usersService.findStaffById(user.id, dbName);
+        order.closedBy = await this.usersService.findEmployerById(user.id);
         await orderRepo.save(order);
         return order;
     }
@@ -259,8 +260,5 @@ export class OrderService {
         return true;
     }
 
-    async getOrderHistory(orderId: UUID, dbName: string) {
-        const order = await this.getOrderById(orderId, dbName);
-        return await this.historyService.getHistoryByOrderId(order.id, dbName);
-    }
+
 }

@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Admin } from './entities/admin.entity';
 import { Employer } from './entities/employer.entity';
 import { User } from './entities/user.entity';
-import { Staff } from './entities/staff.entity';
 import { BuildingModule } from 'src/building/building.module';
 
 @Module({
@@ -14,7 +13,6 @@ import { BuildingModule } from 'src/building/building.module';
     TypeOrmModule.forFeature([
       Admin,
       Employer,
-      Staff,
       User
     ]),
   ],

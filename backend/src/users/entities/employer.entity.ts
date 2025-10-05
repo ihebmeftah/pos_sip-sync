@@ -1,5 +1,5 @@
 import { Building } from "src/building/entities/building.entity";
-import { Entity, ManyToOne, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, Column } from 'typeorm';
 import { User } from "./user.entity";
 
 

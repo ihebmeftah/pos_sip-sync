@@ -115,9 +115,12 @@ class IndexView extends GetView<IndexController> {
                       label: 'Orders',
                     ),
                     BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                        radius: 25,
-                        child: Icon(Icons.barcode_reader, size: 20),
+                      icon: GestureDetector(
+                        onTap: () => Get.toNamed(Routes.QRSCAN),
+                        child: CircleAvatar(
+                          radius: 25,
+                          child: Icon(Icons.barcode_reader, size: 20),
+                        ),
                       ),
                       label: 'Scan',
                     ),

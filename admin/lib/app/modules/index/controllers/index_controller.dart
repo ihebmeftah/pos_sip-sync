@@ -2,7 +2,6 @@ import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/enums/user_role.dart';
 import 'package:admin/app/modules/order/controllers/order_controller.dart';
 import 'package:admin/app/modules/tables/controllers/tables_controller.dart';
-import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,10 +11,7 @@ class IndexController extends GetxController {
 
   void changeBnbContent(int index) {
     if (index != currBnb) {
-      if (LocalStorage().user!.type == UserType.employer && index == 1) {
-        Get.toNamed(Routes.QRSCAN);
-        return;
-      }
+      if (LocalStorage().user!.type == UserType.employer && index == 1) return;
       currBnb = index;
       pageVCtr.jumpToPage(index);
       update(["bottomNavigationBar"]);

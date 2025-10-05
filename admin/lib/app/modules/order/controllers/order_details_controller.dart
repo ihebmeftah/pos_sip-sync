@@ -1,4 +1,3 @@
-import 'package:admin/app/data/apis/history_api.dart';
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/history/history.dart';
 import 'package:admin/app/data/model/order/order.dart';
@@ -51,7 +50,7 @@ class OrderDetailsController extends GetxController with StateMixin {
 
   Future<void> getOrderHistory() async {
     try {
-      orderHistory.value = await HistoryApi().getOrderHistory(order?.id ?? id);
+      //  orderHistory.value = await HistoryApi().getOrderHistory(order?.id ?? id);
     } catch (e) {
       Get.snackbar(
         'Error',

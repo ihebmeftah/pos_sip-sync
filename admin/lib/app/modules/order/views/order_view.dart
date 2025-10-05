@@ -232,31 +232,6 @@ class OrderView extends GetView<OrderController> {
                                                                 FontWeight.w600,
                                                           ),
                                                     ),
-                                                    if (item
-                                                                .article
-                                                                .description !=
-                                                            null &&
-                                                        item
-                                                            .article
-                                                            .description!
-                                                            .isNotEmpty) ...[
-                                                      const SizedBox(height: 2),
-                                                      Text(
-                                                        item
-                                                            .article
-                                                            .description!,
-                                                        style: context
-                                                            .textTheme
-                                                            .bodySmall
-                                                            ?.copyWith(
-                                                              color: Colors
-                                                                  .grey[500],
-                                                            ),
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ],
                                                     const SizedBox(height: 4),
                                                     Row(
                                                       children: [
@@ -273,24 +248,30 @@ class OrderView extends GetView<OrderController> {
                                                         const SizedBox(
                                                           width: 4,
                                                         ),
-                                                        Text(
-                                                          item.payed
-                                                              ? 'Paid'
-                                                              : 'Pending Payment',
-                                                          style: context
-                                                              .textTheme
-                                                              .bodySmall
-                                                              ?.copyWith(
-                                                                color:
-                                                                    item.payed
-                                                                    ? Colors
-                                                                          .green
-                                                                    : Colors
-                                                                          .orange,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
+                                                        Expanded(
+                                                          child: Text(
+                                                            item.payed
+                                                                ? 'Paid'
+                                                                : 'Pending Payment',
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: context
+                                                                .textTheme
+                                                                .bodySmall
+                                                                ?.copyWith(
+                                                                  color:
+                                                                      item.payed
+                                                                      ? Colors
+                                                                            .green
+                                                                      : Colors
+                                                                            .orange,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),

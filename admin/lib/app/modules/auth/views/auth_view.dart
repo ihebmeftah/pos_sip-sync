@@ -1,4 +1,5 @@
 import 'package:admin/app/routes/app_pages.dart';
+import 'package:admin/constants/assets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,17 @@ class AuthView extends GetView<AuthController> {
             ),
           ),
         ),
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage(Assets.assetsImagesJpgBg2),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white.withValues(alpha: 0.7),
+                BlendMode.modulate,
+              ),
+            ),
+          ),
           padding: const EdgeInsets.all(25.0),
           child: Column(
             spacing: 10.0,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../constants/assets.dart';
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
@@ -10,6 +11,8 @@ class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(backgroundColor: Colors.transparent),
       body: Theme(
         data: context.theme.copyWith(
           inputDecorationTheme: InputDecorationTheme(
@@ -37,7 +40,17 @@ class RegisterView extends GetView<RegisterController> {
             ),
           ),
         ),
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage(Assets.assetsImagesJpgBg2),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white.withValues(alpha: 0.7),
+                BlendMode.modulate,
+              ),
+            ),
+          ),
           padding: const EdgeInsets.all(25.0),
           child: Column(
             spacing: 10.0,

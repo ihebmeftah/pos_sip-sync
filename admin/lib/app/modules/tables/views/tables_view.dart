@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../data/model/enums/table_status.dart';
+import '../../../data/model/enums/user_role.dart';
 import '../../order/controllers/pass_order_controller.dart';
 import '../controllers/tables_controller.dart';
 import '../widgets/tableitemwidget.dart';
@@ -25,7 +26,14 @@ class TablesView extends GetView<TablesController> {
         padding: const EdgeInsets.all(20.0),
         child: controller.obx(
           (_) => Column(
+            spacing: 5,
             children: [
+              if (LocalStorage().user?.type == UserType.admin)
+                TextButton.icon(
+                  onPressed: controller.generateTablePdfQrcode,
+                  label: const Text('Generate Tables QR Code'),
+                  icon: const Icon(Icons.qr_code),
+                ),
               Row(
                 spacing: 20,
                 mainAxisAlignment: MainAxisAlignment.center,

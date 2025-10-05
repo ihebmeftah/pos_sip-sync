@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:admin/app/data/apis/tables_api.dart';
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 
 import '../../../data/model/enums/table_status.dart';
 import '../../../data/model/table/tables.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class TablesController extends GetxController with StateMixin {
   final tables = <Table>[].obs;
@@ -46,5 +52,60 @@ class TablesController extends GetxController with StateMixin {
       tables[index] = table;
       update([table.id]);
     }
+  }
+
+  void generateTablePdfQrcode() async {
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        build: (context) {
+          return [
+            pw.Center(
+              child: pw.Wrap(
+                alignment: pw.WrapAlignment.center,
+                runSpacing: 15,
+                spacing: 15,
+                children: List.generate(tables.length, (index) {
+                  return pw.Container(
+                    width: 150,
+                    height: 150,
+                    decoration: pw.BoxDecoration(
+                      border: pw.Border.all(color: PdfColors.black, width: 2),
+                      borderRadius: pw.BorderRadius.circular(10),
+                    ),
+                    child: pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      crossAxisAlignment: pw.CrossAxisAlignment.center,
+                      children: [
+                        pw.BarcodeWidget(
+                          barcode: pw.Barcode.qrCode(),
+                          data:
+                              '${tables[index].id}@${LocalStorage().building!.id}',
+                          width: 100,
+                          height: 100,
+                        ),
+                        pw.SizedBox(height: 20),
+                        pw.Text(tables[index].name.replaceAll("№", "")),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ];
+        },
+      ),
+    );
+    final pdfDoc = await pdf.save();
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File(
+      '${directory.path}/"tables"_${LocalStorage().building!.name}.pdf',
+    );
+    await file.writeAsBytes(pdfDoc);
+    print(file.path);
+    await Printing.sharePdf(
+      bytes: pdfDoc,
+      filename: '${tables}_${LocalStorage().building!.name}.pdf',
+    );
   }
 }

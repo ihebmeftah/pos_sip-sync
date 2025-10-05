@@ -7,8 +7,8 @@ import '../modules/article/views/article_form_view.dart';
 import '../modules/article/views/article_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/bindings/register_binding.dart';
-import '../modules/auth/views/register_view.dart';
 import '../modules/auth/views/auth_view.dart';
+import '../modules/auth/views/register_view.dart';
 import '../modules/buildings/bindings/building_add_binding.dart';
 import '../modules/buildings/bindings/buildings_binding.dart';
 import '../modules/buildings/views/building_add_view.dart';
@@ -28,6 +28,8 @@ import '../modules/order/bindings/order_details_binding.dart';
 import '../modules/order/views/order_details_view.dart';
 import '../modules/order/views/order_view.dart';
 import '../modules/order/views/pass_order_view.dart';
+import '../modules/qrscan/bindings/qrscan_binding.dart';
+import '../modules/qrscan/views/qrscan_view.dart';
 import '../modules/staff/bindings/staff_binding.dart';
 import '../modules/staff/bindings/staff_details_binding.dart';
 import '../modules/staff/bindings/staff_form_binding.dart';
@@ -171,6 +173,11 @@ class AppPages {
           binding: StaffDetailsBinding(),
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.QRSCAN,
+      page: () => const QrscanView(),
+      binding: QrscanBinding(),
     ),
   ];
 }

@@ -115,10 +115,17 @@ class IndexView extends GetView<IndexController> {
                       label: 'Orders',
                     ),
                     BottomNavigationBarItem(
+                      icon: CircleAvatar(
+                        radius: 25,
+                        child: Icon(Icons.barcode_reader, size: 20),
+                      ),
+                      label: 'Scan',
+                    ),
+                    BottomNavigationBarItem(
                       icon: SvgPicture.asset(
                         "assets/images/svg/table.svg",
                         colorFilter: ColorFilter.mode(
-                          controller.currBnb == 1
+                          controller.currBnb == 2
                               ? Theme.of(
                                   context,
                                 ).bottomNavigationBarTheme.selectedItemColor!

@@ -53,7 +53,9 @@ class AppFormField extends StatelessWidget {
       children: [
         if (isOutsideLabel && label != null) AppLabel(label: label),
         TextFormField(
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardType: isNumeric
+              ? TextInputType.numberWithOptions(decimal: true)
+              : TextInputType.text,
           readOnly: readOnly,
           onTap: onTap,
           maxLines: maxLines ?? minLines,

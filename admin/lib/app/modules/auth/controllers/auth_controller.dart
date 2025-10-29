@@ -8,16 +8,23 @@ import 'package:admin/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthController extends GetxController {
+class AuthController extends GetxController with StateMixin {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool rememberMe = false;
   bool obscurePassword = true;
 
+  @override
+  void onInit() {
+    change(null, status: RxStatus.success());
+    super.onInit();
+  }
+
   void onLogin() async {
     try {
       if (formKey.currentState!.validate()) {
+        change(null, status: RxStatus.loading());
         final user = await AuthApi().login(
           identifier: emailController.text,
           password: passwordController.text,
@@ -31,6 +38,7 @@ class AuthController extends GetxController {
         } else {
           Get.offAllNamed(Routes.BUILDINGS);
         }
+        change(null, status: RxStatus.success());
       }
     } on AuthException {
       Get.snackbar(

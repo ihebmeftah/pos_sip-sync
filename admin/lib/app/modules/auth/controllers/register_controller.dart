@@ -8,7 +8,7 @@ import '../../../data/local/local_storage.dart';
 import '../../../data/model/enums/user_role.dart' show UserType;
 import '../../../routes/app_pages.dart';
 
-class RegisterController extends GetxController {
+class RegisterController extends GetxController with StateMixin {
   final formKey = GlobalKey<FormState>();
   final TextEditingController fName = TextEditingController();
   final TextEditingController lName = TextEditingController();
@@ -16,6 +16,13 @@ class RegisterController extends GetxController {
   final TextEditingController phone = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController cpassword = TextEditingController();
+
+  @override
+  void onInit() {
+    change(null, status: RxStatus.success());
+    super.onInit();
+  }
+
   bool obscurePassword = true;
   void toggleObscurePwd() {
     obscurePassword = !obscurePassword;
@@ -33,6 +40,7 @@ class RegisterController extends GetxController {
   void onRegister() async {
     try {
       if (formKey.currentState!.validate()) {
+        change(null, status: RxStatus.loading());
         final regUser = await AuthApi().register(user);
         await LocalStorage().saveUser(regUser);
         Get.offAllNamed(Routes.BUILDINGS);
@@ -43,6 +51,7 @@ class RegisterController extends GetxController {
           colorText: Colors.white,
         );
         Get.back();
+        change(null, status: RxStatus.success());
       }
     } on ConflictException {
       Get.snackbar(

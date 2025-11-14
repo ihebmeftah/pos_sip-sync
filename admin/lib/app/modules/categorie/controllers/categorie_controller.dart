@@ -15,6 +15,7 @@ class CategorieController extends GetxController
 
   Future getCategories() async {
     try {
+      change([], status: RxStatus.loading());
       categories(await CategoriesApi().getCategories());
       if (categories.isEmpty) {
         change([], status: RxStatus.empty());

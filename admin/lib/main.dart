@@ -3,8 +3,6 @@ import 'package:admin/themes/apptheme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:network_info_plus/network_info_plus.dart';
-
 import 'app/routes/app_pages.dart';
 
 String url =
@@ -12,10 +10,6 @@ String url =
 String? ip;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ip = await NetworkInfo().getWifiIP();
-  if (ip != null) {
-    url = "http://$ip:3000/";
-  }
   await LocalStorage().init();
   runApp(
     GetMaterialApp(

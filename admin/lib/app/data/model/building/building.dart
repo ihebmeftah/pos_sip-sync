@@ -6,8 +6,8 @@ class Building {
   String? id;
   String name;
   String dbName;
-  String openingTime;
-  String closingTime;
+  DateTime openingTime;
+  DateTime closingTime;
   String location;
   double? long;
   double? lat;
@@ -35,10 +35,18 @@ class Building {
   Map<String, dynamic> addtoJson() => <String, dynamic>{
     'name': name,
     'dbName': dbName,
-    'openingTime': openingTime,
-    'closingTime': closingTime,
+    'openingTime': openingTime.toUtc().toIso8601String(),
+    'closingTime': closingTime.toUtc().toIso8601String(),
     'location': location,
     if (long != null) 'long': long,
     if (lat != null) 'lat': lat,
   };
+
+  String get openAt {
+    return "${openingTime.toLocal().hour.toString().padLeft(2, '0')}:${openingTime.toLocal().minute.toString().padLeft(2, '0')}";
+  }
+
+  String get closeAt {
+    return "${closingTime.toLocal().hour.toString().padLeft(2, '0')}:${closingTime.toLocal().minute.toString().padLeft(2, '0')}";
+  }
 }

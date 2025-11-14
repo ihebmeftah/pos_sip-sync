@@ -56,4 +56,16 @@ export class BuildingController {
   findOne(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.buildingService.findOne(id);
   }
+
+  @Get(':id/status')
+  async getStatus(@Param('id', ParseUUIDPipe) id: UUID) {
+    const building = await this.buildingService.findOne(id);
+    return {
+      isOpen: this.buildingService.isOpen(building),
+      openingTime: this.buildingService.formatOpeningTime(building),
+      closingTime: this.buildingService.formatClosingTime(building),
+      minutesUntilOpening: this.buildingService.getMinutesUntilOpening(building),
+      minutesUntilClosing: this.buildingService.getMinutesUntilClosing(building),
+    };
+  }
 }

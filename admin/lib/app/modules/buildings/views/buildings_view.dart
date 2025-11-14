@@ -61,7 +61,7 @@ class BuildingsView extends GetView<BuildingsController> {
               ),
               title: Text(building.name),
               subtitle: Text(
-                '${building.location} ${building.openingTime} - ${building.closingTime}',
+                '${building.location} ${building.openAt} - ${building.closeAt}',
               ),
               trailing: TextButton(
                 onPressed: () async {

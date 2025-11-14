@@ -9,7 +9,8 @@ import 'buildings_controller.dart';
 
 class BuildingAddController extends GetxController {
   final addFormkey = GlobalKey<FormState>();
-
+  DateTime openingTime = DateTime.now();
+  DateTime closingTime = DateTime.now().add(const Duration(hours: 14));
   final name = TextEditingController(),
       location = TextEditingController(),
       opening = TextEditingController(
@@ -22,8 +23,8 @@ class BuildingAddController extends GetxController {
   Building get addDto => Building(
     name: name.text,
     location: location.text,
-    openingTime: opening.text,
-    closingTime: closing.text,
+    openingTime: openingTime,
+    closingTime: closingTime,
     dbName: name.text.toLowerCase().replaceAll(' ', '_'),
     tableMultiOrder: false,
   );
@@ -64,6 +65,13 @@ class BuildingAddController extends GetxController {
     );
     if (time != null) {
       opening.text = time.format(Get.context!);
+      openingTime = DateTime(
+        openingTime.year,
+        openingTime.month,
+        openingTime.day,
+        time.hour,
+        time.minute,
+      );
     }
   }
 
@@ -74,6 +82,13 @@ class BuildingAddController extends GetxController {
     );
     if (time != null) {
       closing.text = time.format(Get.context!);
+      closingTime = DateTime(
+        closingTime.year,
+        closingTime.month,
+        closingTime.day,
+        time.hour,
+        time.minute,
+      );
     }
   }
 }

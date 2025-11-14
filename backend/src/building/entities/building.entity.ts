@@ -16,10 +16,12 @@ export class Building extends TimestampBaseEntity {
     @Column({ default: false })
     tableMultiOrder: boolean
 
-    @Column()
-    openingTime: string
-    @Column()
-    closingTime: string
+    @Column({ type: 'timestamp' })
+    openingTime: Date
+
+    @Column({ type: 'timestamp' })
+    closingTime: Date
+
     @Column()
     location: string
     @Column({ nullable: true })

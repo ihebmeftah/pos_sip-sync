@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
 import { DatabaseConnectionService } from 'src/database/database-connection.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class BuildingService {
@@ -35,7 +36,12 @@ export class BuildingService {
     // Create the database for this building
     await this.databaseConnectionService.createDatabase(createBuildingDto.dbName);
 
-    const building = await this.buildingRepo.create(createBuildingDto);
+    // Convert ISO string dates to Date objects using moment
+    const building = this.buildingRepo.create({
+      ...createBuildingDto,
+      openingTime: moment(createBuildingDto.openingTime).toDate(),
+      closingTime: moment(createBuildingDto.closingTime).toDate(),
+    });
     building.admin = admin;
     return this.buildingRepo.save(building);
   }
@@ -68,5 +74,48 @@ export class BuildingService {
       throw new NotFoundException(`Building with database name ${dbName} not found`);
     }
     return building;
+  }
+
+  /**
+   * Check if the building is currently open based on opening and closing times
+   */
+  isOpen(building: Building): boolean {
+    const now = moment();
+    const openingTime = moment(building.openingTime);
+    const closingTime = moment(building.closingTime);
+
+    return now.isBetween(openingTime, closingTime);
+  }
+
+  /**
+   * Format opening time using moment
+   */
+  formatOpeningTime(building: Building, format: string = 'HH:mm A'): string {
+    return moment(building.openingTime).format(format);
+  }
+
+  /**
+   * Format closing time using moment
+   */
+  formatClosingTime(building: Building, format: string = 'HH:mm A'): string {
+    return moment(building.closingTime).format(format);
+  }
+
+  /**
+   * Get time until opening (in minutes)
+   */
+  getMinutesUntilOpening(building: Building): number {
+    const now = moment();
+    const openingTime = moment(building.openingTime);
+    return openingTime.diff(now, 'minutes');
+  }
+
+  /**
+   * Get time until closing (in minutes)
+   */
+  getMinutesUntilClosing(building: Building): number {
+    const now = moment();
+    const closingTime = moment(building.closingTime);
+    return closingTime.diff(now, 'minutes');
   }
 }

@@ -67,6 +67,8 @@ class RegisterController extends GetxController with StateMixin {
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
+    } finally {
+      change(null, status: RxStatus.success());
     }
   }
 }

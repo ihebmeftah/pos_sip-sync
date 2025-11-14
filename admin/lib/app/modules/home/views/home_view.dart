@@ -9,10 +9,19 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          "${controller.loggedUser.email} / ${controller.loggedUser.phone} / ${controller.loggedUser.username ?? "--"}",
-          style: TextStyle(fontSize: 20),
+      body: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Column(
+          children: [
+            Text(
+              "Quick launch",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: Colors.black87,
+              ),
+            ),
+          ],
         ),
       ),
     );

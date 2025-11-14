@@ -27,7 +27,7 @@ class TablesApi {
   }
 
   Future<Table> scanTable({required String id}) async {
-    return await HttpHelper.post<Table>(
+    return await HttpHelper.get<Table>(
       endpoint: '/tables/$id/scan',
       fromJson: (json) => Table.fromJson(json as Map<String, dynamic>),
     );

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/order_details_controller.dart';
-import '../widgets/table_info_widget.dart';
 
 class OrderDetailsView extends GetView<OrderDetailsController> {
   const OrderDetailsView({super.key});
@@ -17,7 +16,12 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
         title: GetBuilder<OrderDetailsController>(
           builder: (ctr) {
             return ctr.status.isSuccess
-                ? TableInfoWidget(table: controller.order!.table)
+                ? Text(
+                    ctr.order!.table.name,
+                    style: context.textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : Row(
                     spacing: 5,
                     children: [
@@ -46,6 +50,18 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
           child: Column(
             spacing: 10,
             children: [
+              /*   GetBuilder<OrderDetailsController>(
+                id: 'table-status',
+                builder: (controller) {
+                  return Text(
+                    controller.order!.table.status.name.capitalize!,
+                    style: context.textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ), */
+
               /// Order items details
               Row(
                 spacing: 5,
@@ -83,104 +99,89 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                             child: Row(
                               spacing: 10,
                               children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primaryContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.fastfood,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    size: 28,
-                                  ),
-                                ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        controller
-                                            .order!
-                                            .items[index]
-                                            .article
-                                            .name,
-                                        style: context.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                      Row(
+                                        spacing: 5,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.fastfood,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                          ),
+                                          Text(
+                                            controller
+                                                .order!
+                                                .items[index]
+                                                .article
+                                                .name,
+                                            style: context.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                          Text(
+                                            '${controller.order!.items[index].article.price.toStringAsFixed(2)} DT',
+                                            style: context.textTheme.titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                                ),
+                                          ),
+                                        ],
                                       ),
                                       Text(
                                         "Passed by: ${'${controller.order!.items[index].passedBy.firstname} ${controller.order!.items[index].passedBy.lastname}'}",
-                                      ),
-                                      Text(
-                                        '${controller.order!.items[index].article.price.toStringAsFixed(2)} DT',
-                                        style: context.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                            ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Column(
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            controller.order!.items[index].payed
-                                            ? Colors.green[50]
-                                            : Colors.orange[50],
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        spacing: 5,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            controller.order!.items[index].payed
-                                                ? Icons.check_circle
-                                                : Icons.schedule,
-                                            size: 16,
+                                    Row(
+                                      spacing: 5,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          controller.order!.items[index].payed
+                                              ? Icons.check_circle
+                                              : Icons.schedule,
+                                          size: 16,
+                                          color:
+                                              controller
+                                                  .order!
+                                                  .items[index]
+                                                  .payed
+                                              ? Colors.green
+                                              : Colors.orange,
+                                        ),
+                                        Text(
+                                          controller.order!.items[index].payed
+                                              ? 'PAID'
+                                              : 'UNPAID',
+                                          style: TextStyle(
+                                            fontSize: 12,
                                             color:
                                                 controller
                                                     .order!
                                                     .items[index]
                                                     .payed
-                                                ? Colors.green
-                                                : Colors.orange,
+                                                ? Colors.green[700]
+                                                : Colors.orange[700],
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                          Text(
-                                            controller.order!.items[index].payed
-                                                ? 'PAID'
-                                                : 'UNPAID',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  controller
-                                                      .order!
-                                                      .items[index]
-                                                      .payed
-                                                  ? Colors.green[700]
-                                                  : Colors.orange[700],
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                     if (!controller.order!.items[index].payed)
                                       ElevatedButton(

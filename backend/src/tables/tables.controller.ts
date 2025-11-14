@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseEnumPipe, UseGuards, ParseUUIDPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseEnumPipe,
+  UseGuards,
+  ParseUUIDPipe,
+  Query,
+} from '@nestjs/common';
 import { TablesService } from './tables.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UUID } from 'crypto';
@@ -23,10 +33,7 @@ export class TablesController {
    * @param createTableDto The information of the table to be created.
    * @param dbName The database name for the building where the table will be created.
    */
-  add(
-    @Body() createTableDto: CreateTableDto,
-    @DbName() dbName: string,
-  ) {
+  add(@Body() createTableDto: CreateTableDto, @DbName() dbName: string) {
     return this.tablesService.create(createTableDto, dbName);
   }
 
@@ -40,14 +47,13 @@ export class TablesController {
    */
   findTablesOfBuilding(
     @DbName() dbName: string,
-    @Query(
-      'status',
-      new ParseEnumPipe(TableStatus, { optional: true })) status?: TableStatus,
+    @Query('status', new ParseEnumPipe(TableStatus, { optional: true }))
+    status?: TableStatus,
   ) {
     return this.tablesService.findTablesOfBuilding(dbName, status);
   }
 
-  @Get(":id/scan")
+  @Get(':id/scan')
   @Roles(UserType.Employer, UserType.Client)
   /**
    * Scans the QR code of a table using its ID and verifies if it matches the specified building.
@@ -57,7 +63,6 @@ export class TablesController {
    * @throws ConflictException if the table is currently occupied.
    * @returns The details of the table if the scan is successful.
    */
-
   scanQrCodeTable(
     @Param('id', ParseUUIDPipe) id: UUID,
     @DbName() dbName: string,
@@ -65,7 +70,7 @@ export class TablesController {
     return this.tablesService.scanQrCodeTable(id, dbName);
   }
 
-  @Get(":id/order")
+  @Get(':id/order')
   @Roles(UserType.Employer, UserType.Admin)
   getTableCurrentOrder(
     @Param('id', ParseUUIDPipe) id: UUID,

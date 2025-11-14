@@ -6,13 +6,9 @@ import { OrderModule } from 'src/order/order.module';
 import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  imports: [
-    BuildingModule,
-    DatabaseModule,
-    forwardRef(() => OrderModule),
-  ],
+  imports: [BuildingModule, DatabaseModule, forwardRef(() => OrderModule)],
   controllers: [TablesController],
   providers: [TablesService],
-  exports: [TablesService]
+  exports: [TablesService],
 })
 export class TablesModule { }

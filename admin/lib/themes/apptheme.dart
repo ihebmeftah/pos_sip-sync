@@ -19,6 +19,9 @@ class AppTheme {
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
     ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: Colors.white,

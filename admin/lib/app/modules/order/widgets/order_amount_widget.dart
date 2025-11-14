@@ -120,23 +120,12 @@ class OrderBottomWidget extends StatelessWidget {
                 padding: EdgeInsetsGeometry.all(20),
                 child: Column(
                   children: [
-                    if (order.status == OrderStatus.payed)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Order started by: ${order.openedBy.firstname} ${order.openedBy.lastname}",
-                            style: context.textTheme.titleMedium!.copyWith(
-                              backgroundColor: Colors.blue.shade500,
-                            ),
-                          ),
-                          Text(
-                            "Closed by : ${order.closedBy?.firstname} ${order.closedBy?.lastname}",
-                            style: context.textTheme.titleMedium!.copyWith(
-                              backgroundColor: Colors.red.shade500,
-                            ),
-                          ),
-                        ],
+                    if (order.closedBy != null)
+                      Text(
+                        "Closed by : ${order.closedBy?.firstname} ${order.closedBy?.lastname}",
+                        style: context.textTheme.titleLarge!.copyWith(
+                          color: Colors.red.shade900,
+                        ),
                       ),
                     Expanded(
                       child: history.isEmpty
@@ -154,6 +143,12 @@ class OrderBottomWidget extends StatelessWidget {
                               itemCount: history.length,
                               shrinkWrap: true,
                             ),
+                    ),
+                    Text(
+                      "Order started by: ${order.openedBy.firstname} ${order.openedBy.lastname}",
+                      style: context.textTheme.titleLarge!.copyWith(
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ],
                 ),

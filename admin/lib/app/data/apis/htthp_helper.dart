@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:admin/app/data/apis/apis_exceptions.dart';
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
-import 'package:admin/main.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' as getx;
 import 'package:dio/dio.dart';
 
@@ -12,16 +10,7 @@ abstract class HttpHelper {
   HttpHelper();
 
   static String get _baseUrl {
-    if (kDebugMode && ip != null) {
-      url = ip!;
-      return "http://$ip:3000/api/v1";
-    }
-    print(
-      'Debug Mode: ${kDebugMode.toString()}, IP: ${ip.toString()} url : $url',
-    );
-    return getx.GetPlatform.isAndroid
-        ? "http://100.0.0.0:3000/api/v1"
-        : 'http://localhost:3000/api/v1';
+    return "http://10.252.177.50:3000/api/v1";
   }
 
   static Dio get _dio {

@@ -38,7 +38,6 @@ class AuthController extends GetxController with StateMixin {
         } else {
           Get.offAllNamed(Routes.BUILDINGS);
         }
-        change(null, status: RxStatus.success());
       }
     } on AuthException {
       Get.snackbar(
@@ -46,6 +45,8 @@ class AuthController extends GetxController with StateMixin {
         'May be email or password is incorrect ',
         backgroundColor: Colors.red,
       );
+    }finally {
+      change(null, status: RxStatus.success());
     }
   }
 

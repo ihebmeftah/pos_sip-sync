@@ -4,7 +4,6 @@ import 'package:admin/app/modules/order/controllers/pass_order_controller.dart';
 import 'package:admin/app/modules/order/views/order_view.dart';
 import 'package:admin/app/modules/tables/views/tables_view.dart';
 import 'package:admin/app/routes/app_pages.dart';
-import 'package:admin/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -82,14 +81,23 @@ class IndexView extends GetView<IndexController> {
           ],
         ),
       ),
-
       appBar: AppBar(
+        title: GetX<IndexController>(
+          builder: (_) {
+            return controller.currentCaisse.value == null
+                ? SizedBox()
+                : Text(
+                    "Caisse : ${controller.currentCaisse.value!.day}",
+                    style: TextStyle(color: Colors.black),
+                  );
+          },
+        ),
         actions: [
-          CircleAvatar(
+          /*   CircleAvatar(
             backgroundImage: LocalStorage().building?.logo != null
                 ? NetworkImage(url + LocalStorage().building!.logo!)
                 : null,
-          ),
+          ), */
         ],
       ),
       bottomNavigationBar: GetBuilder<IndexController>(
@@ -212,13 +220,15 @@ class IndexView extends GetView<IndexController> {
           );
         },
       ),
-      body: PageView(
-        physics: NeverScrollableScrollPhysics(),
-        onPageChanged: controller.changeBnbContent,
-        controller: controller.pageVCtr,
-        children: (LocalStorage().user!.type == UserType.employer)
-            ? [OrderView(), TablesView()]
-            : [HomeView(), OrderView(), InventoryView(), TablesView()],
+      body: controller.obx(
+        (s) => PageView(
+          physics: NeverScrollableScrollPhysics(),
+          onPageChanged: controller.changeBnbContent,
+          controller: controller.pageVCtr,
+          children: (LocalStorage().user!.type == UserType.employer)
+              ? [OrderView(), TablesView()]
+              : [HomeView(), OrderView(), InventoryView(), TablesView()],
+        ),
       ),
     );
   }

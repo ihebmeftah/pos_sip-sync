@@ -10,7 +10,7 @@ abstract class HttpHelper {
   HttpHelper();
 
   static String get _baseUrl {
-    return "http://192.168.0.203:3000/api/v1";
+    return "http://localhost:3000/api/v1";
   }
 
   static Dio get _dio {

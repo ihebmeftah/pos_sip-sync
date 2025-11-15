@@ -18,7 +18,6 @@ class BuildingsApi {
     required File? logo,
     required List<File> photos,
   }) async {
-    print(b.openingTime.toUtc().toIso8601String());
     return await HttpHelper.post<Building>(
       endpoint: '/building',
       body: b.addtoJson(),

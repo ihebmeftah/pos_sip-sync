@@ -9,9 +9,12 @@ import { ArticleModule } from './article/article.module';
 import { OrderModule } from './order/order.module';
 import { UsersModule } from './users/users.module';
 import { CategoryModule } from './category/category.module';
+import { CaisseModule } from './caisse/caisse.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     ConfigModule.forRoot({
       envFilePath: ['env']
@@ -23,6 +26,7 @@ import { CategoryModule } from './category/category.module';
     ArticleModule,
     OrderModule,
     UsersModule,
+    CaisseModule,
   ],
   controllers: [],
   providers: [],

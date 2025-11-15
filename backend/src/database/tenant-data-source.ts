@@ -5,8 +5,9 @@ import { Table } from 'src/tables/entities/table.entity';
 import { OrderItem } from 'src/order/entities/order_item.entity';
 import { Category } from 'src/category/entities/category.entity';
 import * as dotenv from 'dotenv';
+import { Caisse } from "src/caisse/entities/caisse.entity";
 dotenv.config();
-export let tenantdata: Map<string, any> = new Map();
+export const tenantdata: Map<string, any> = new Map();
 tenantdata.set("type", "postgres");
 tenantdata.set("host", process.env.DB_HOST);
 tenantdata.set("port", parseInt(process.env.DB_PORT!));
@@ -15,7 +16,7 @@ tenantdata.set("database", process.argv[7]);
 tenantdata.set("password", process.env.DB_PASSWORD);
 tenantdata.set("synchronize", false);
 tenantdata.set("entities", [
-    Order, OrderItem, Category, Article, Table
+    Order, OrderItem, Category, Article, Table, Caisse
 ]);
 tenantdata.set("migrations", [__dirname + '/../../migrations/tenant/*{.js,.ts}']);
 

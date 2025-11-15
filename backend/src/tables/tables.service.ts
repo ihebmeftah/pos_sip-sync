@@ -1,9 +1,7 @@
 import { TableStatus } from './../enums/table_status';
-import { ConflictException, forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTableDto } from './dto/create-table.dto';
-import { Repository } from 'typeorm';
 import { Table } from './entities/table.entity';
-import { BuildingService } from 'src/building/building.service';
 import { UUID } from 'crypto';
 import { OrderService } from 'src/order/order.service';
 import { RepositoryFactory } from 'src/database/repository-factory.service';

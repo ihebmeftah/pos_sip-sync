@@ -17,7 +17,7 @@ export class CategoryService {
     if (existingCategory) {
       throw new ConflictException(`Category with name ${createCategoryDto.name} already exists`);
     }
-    const create = await categoryRepo.create(createCategoryDto);
+    const create = categoryRepo.create(createCategoryDto);
     return await categoryRepo.save(create);
   }
 

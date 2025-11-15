@@ -51,7 +51,7 @@ export class UsersService {
         });
         if (existingEmployer)
             throw new ConflictException("Employer with this email or phone already exists");
-        let employer = await this.employerRepository.create({ ...createUser, building, type: UserType.Employer });
+        const employer = this.employerRepository.create({ ...createUser, building, type: UserType.Employer });
         employer.username = `${employer.email.split('@')[0]}_${employer.phone}`;
         return await this.employerRepository.save(employer);
     }

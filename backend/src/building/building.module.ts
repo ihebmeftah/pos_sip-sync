@@ -4,7 +4,7 @@ import { BuildingController } from './building.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Building } from './entities/building.entity';
 import { UsersModule } from 'src/users/users.module';
-import { DatabaseModule } from 'src/database/database.module';
+
 
 @Module({
   imports: [
@@ -12,7 +12,6 @@ import { DatabaseModule } from 'src/database/database.module';
       Building
     ]),
     forwardRef(() => UsersModule), // Importing UsersModule to resolve circular dependency
-    DatabaseModule,
   ],
   controllers: [BuildingController],
   providers: [BuildingService],

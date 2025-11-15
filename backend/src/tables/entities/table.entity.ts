@@ -8,13 +8,13 @@ export class Table extends TimestampBaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: UUID;
     @Column({ unique: true })
-    name: String;
+    name: string;
     @Column()
     seatsMax: number;
 
     status: TableStatus = TableStatus.available;
 
-    constructor(name: String, seatsMax: number) {
+    constructor(name: string, seatsMax: number) {
         super();
         this.name = name;
         this.seatsMax = seatsMax;

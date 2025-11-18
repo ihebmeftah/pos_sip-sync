@@ -120,7 +120,7 @@ class AuthView extends GetView<AuthController> {
                           },
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: .spaceBetween,
                           children: [
                             Row(
                               children: [

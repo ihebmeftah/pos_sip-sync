@@ -2,7 +2,6 @@ import 'package:admin/app/common/appemptyscreen.dart';
 import 'package:admin/app/modules/article/controllers/article_controller.dart';
 import 'package:admin/app/modules/categorie/controllers/categorie_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
-import 'package:admin/main.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -101,26 +100,16 @@ class InventoryView extends GetView<InventoryController> {
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),
-                                image: ctr.articles[index].image == null
-                                    ? null
-                                    : DecorationImage(
-                                        image: NetworkImage(
-                                          "$url${ctr.articles[index].image!}",
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
                               ),
-                              child: ctr.articles[index].image != null
-                                  ? null
-                                  : Text(
-                                      ctr.articles[index].name
-                                          .substring(0, 1)
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                              child: Text(
+                                ctr.articles[index].name
+                                    .substring(0, 1)
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                             title: Text(ctr.articles[index].name),
                             subtitle: Text(ctr.articles[index].categorie!.name),

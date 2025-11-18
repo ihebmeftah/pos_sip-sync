@@ -2,7 +2,6 @@ import 'package:admin/app/common/appbottomsheet.dart';
 import 'package:admin/app/common/appemptyscreen.dart';
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/routes/app_pages.dart';
-import 'package:admin/main.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +32,7 @@ class BuildingsView extends GetView<BuildingsController> {
                       "Building: ${building.name}",
                       style: context.textTheme.titleLarge,
                     ),
-                    if (building.photos != null)
+                    /*        if (building.photos != null)
                       SizedBox(
                         height: 200,
                         width: double.infinity,
@@ -47,17 +46,12 @@ class BuildingsView extends GetView<BuildingsController> {
                             ),
                           ),
                         ),
-                      ),
+                      ), */
                   ],
                 );
               },
               leading: CircleAvatar(
-                backgroundImage: building.logo != null
-                    ? NetworkImage("$url${building.logo!}")
-                    : null,
-                child: building.logo == null
-                    ? const Icon(FluentIcons.building_24_regular)
-                    : null,
+                child: const Icon(FluentIcons.building_24_regular),
               ),
               title: Text(building.name),
               subtitle: Text(

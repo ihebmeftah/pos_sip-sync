@@ -11,17 +11,20 @@ import { DbName } from 'src/decorators/building.decorator';
 @UseGuards(JwtAuthGuard, RolesGuard, DbNameGuard)
 export class CaisseController {
   constructor(private readonly caisseService: CaisseService) { }
-  @Post("create")
-  async createCaisse(
-    @DbName() db: string,
-  ) {
-    return this.caisseService.create(db);
-  }
+
   @Get()
   @Roles(UserType.Admin)
   findAll(
     @DbName() db: string
   ) {
     return this.caisseService.findAll(db);
+  }
+
+  @Get("day")
+  @Roles(UserType.Admin)
+  getCaisseOfDay(
+    @DbName() db: string
+  ) {
+    return this.caisseService.getCaisseOfDay(db);
   }
 }

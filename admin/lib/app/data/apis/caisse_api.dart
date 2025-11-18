@@ -13,9 +13,9 @@ class CaisseApi {
     );
   }
 
-  Future<Caisse> createCaisse() {
-    return HttpHelper.post(
-      endpoint: '/caisse/create',
+  Future<Caisse> getCaisseOfDay() {
+    return HttpHelper.get(
+      endpoint: '/caisse/day',
       fromJson: (data) {
         return Caisse.fromJson(data as Map<String, dynamic>);
       },

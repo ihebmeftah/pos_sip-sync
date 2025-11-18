@@ -28,7 +28,7 @@ class IndexController extends GetxController with StateMixin {
 
   Future<void> createCaisse() async {
     try {
-      currentCaisse(await CaisseApi().createCaisse());
+      currentCaisse(await CaisseApi().getCaisseOfDay());
       if (LocalStorage().user!.type == UserType.admin) {
         await getCaisses();
       } else {

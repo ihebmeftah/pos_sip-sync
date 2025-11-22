@@ -98,18 +98,28 @@ class InventoryView extends GetView<InventoryController> {
                               height: 50,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
+                                image: ctr.articles[index].image == null
+                                    ? null
+                                    : DecorationImage(
+                                        image: NetworkImage(
+                                          ctr.articles[index].image!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Text(
-                                ctr.articles[index].name
-                                    .substring(0, 1)
-                                    .toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: ctr.articles[index].image != null
+                                  ? null
+                                  : Text(
+                                      ctr.articles[index].name
+                                          .substring(0, 1)
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
                             title: Text(ctr.articles[index].name),
                             subtitle: Text(ctr.articles[index].categorie!.name),

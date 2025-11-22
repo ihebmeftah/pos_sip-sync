@@ -32,7 +32,7 @@ class BuildingsView extends GetView<BuildingsController> {
                       "Building: ${building.name}",
                       style: context.textTheme.titleLarge,
                     ),
-                    /*        if (building.photos != null)
+                    if (building.photos != null)
                       SizedBox(
                         height: 200,
                         width: double.infinity,
@@ -41,17 +41,22 @@ class BuildingsView extends GetView<BuildingsController> {
                           children: List.generate(
                             controller.buildings[index].photos!.length,
                             (i) => Image.network(
-                              "$url${controller.buildings[index].photos![i]}",
+                              controller.buildings[index].photos![i],
                               fit: BoxFit.fill,
                             ),
                           ),
                         ),
-                      ), */
+                      ),
                   ],
                 );
               },
               leading: CircleAvatar(
-                child: const Icon(FluentIcons.building_24_regular),
+                backgroundImage: building.logo != null
+                    ? NetworkImage(building.logo!)
+                    : null,
+                child: building.logo != null
+                    ? const Icon(FluentIcons.building_24_regular)
+                    : null,
               ),
               title: Text(building.name),
               subtitle: Text(

@@ -49,7 +49,7 @@ class ArticleView extends GetView<ArticleController> {
                         ? null
                         : DecorationImage(
                             image: NetworkImage(
-                              "http://localhost:3000/${controller.articles[index].image!}",
+                              controller.articles[index].image!,
                             ),
                             fit: BoxFit.cover,
                           ),

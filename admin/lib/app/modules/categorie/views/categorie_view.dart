@@ -13,7 +13,6 @@ class CategorieView extends GetView<CategorieController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getCategories();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Categories'),
@@ -54,6 +53,12 @@ class CategorieView extends GetView<CategorieController> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
+                    image: category.image == null
+                        ? null
+                        : DecorationImage(
+                            image: NetworkImage(category.image!),
+                            fit: BoxFit.cover,
+                          ),
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
@@ -83,15 +88,17 @@ class CategorieView extends GetView<CategorieController> {
                               topLeft: Radius.circular(16),
                               topRight: Radius.circular(16),
                             ),
-                            child: Center(
-                              child: Icon(
-                                FluentIcons.grid_24_filled,
-                                size: 48,
-                                color: AppTheme().primary.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
-                            ),
+                            child: category.image != null
+                                ? null
+                                : Center(
+                                    child: Icon(
+                                      FluentIcons.grid_24_filled,
+                                      size: 48,
+                                      color: AppTheme().primary.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
@@ -99,6 +106,13 @@ class CategorieView extends GetView<CategorieController> {
                       // Content Section
                       Container(
                         height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            bottomRight: Radius.circular(16),
+                          ),
+                        ),
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

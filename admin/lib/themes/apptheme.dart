@@ -52,7 +52,7 @@ class AppTheme {
       selectedItemColor: primary,
       unselectedItemColor: Colors.grey.shade500,
       showUnselectedLabels: true,
-    ),
+  ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primary,

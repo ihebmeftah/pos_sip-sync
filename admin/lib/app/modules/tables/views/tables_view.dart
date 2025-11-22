@@ -57,6 +57,9 @@ class TablesView extends GetView<TablesController> {
                         : 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
+                    childAspectRatio: GetPlatform.isWeb && !GetPlatform.isMobile
+                        ? 1
+                        : 0.89,
                   ),
                   itemCount: controller.tables.length,
                   itemBuilder: (context, index) => GetBuilder<TablesController>(

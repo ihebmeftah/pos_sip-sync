@@ -11,10 +11,12 @@ import { UsersModule } from './users/users.module';
 import { CategoryModule } from './category/category.module';
 import { CaisseModule } from './caisse/caisse.module';
 import { DatabaseModule } from './database/database.module';
+import { SeederModule } from './database/seeders/seeder.module';
 
 @Module({
   imports: [
     DatabaseModule,
+    SeederModule,
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     ConfigModule.forRoot({
       envFilePath: ['env']

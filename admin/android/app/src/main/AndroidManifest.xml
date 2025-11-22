@@ -21,7 +21,7 @@
     
     
     <application
-        android:label="S&amp;S admin"
+        android:label="Control S&amp;S"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

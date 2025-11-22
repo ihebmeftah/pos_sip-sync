@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1091775425220",
+    "project_id": "sip-sync-admin",
+    "storage_bucket": "sip-sync-admin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091775425220:android:bf8e3a04c0672b52a7f791",
+        "android_client_info": {
+          "package_name": "com.example.sipsync_client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8yakkoe-hPXePPL7EJOL_bMDaZ7EC6eE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091775425220:android:d7f44bc2cac98ce7a7f791",
+        "android_client_info": {
+          "package_name": "com.sipsync.admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8yakkoe-hPXePPL7EJOL_bMDaZ7EC6eE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

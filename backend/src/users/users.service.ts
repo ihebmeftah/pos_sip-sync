@@ -8,6 +8,7 @@ import { User } from './entities/user.entity';
 import { UserType } from 'src/enums/user.roles';
 import { Admin } from './entities/admin.entity';
 import { BuildingService } from 'src/building/building.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,7 @@ export class UsersService {
         if (existingAdmin)
             throw new ConflictException("Admin with this email or phone already exists");
         const createdAdmin = this.adminRepository.create({ ...createUser, type: UserType.Admin });
+        createdAdmin.password = await bcrypt.hash(createUser.password, 10);
         return await this.adminRepository.save(createdAdmin);
     }
 
@@ -53,6 +55,7 @@ export class UsersService {
             throw new ConflictException("Employer with this email or phone already exists");
         const employer = this.employerRepository.create({ ...createUser, building, type: UserType.Employer });
         employer.username = `${employer.email.split('@')[0]}_${employer.phone}`;
+        employer.password = await bcrypt.hash(createUser.password, 10);
         return await this.employerRepository.save(employer);
     }
 

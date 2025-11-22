@@ -4,6 +4,8 @@ import { LoginDto } from './dto/login_dto';
 import { RegisterDto } from './dto/register_dto';
 import { UsersService } from '../users/users.service';
 import { LoggedUser } from './strategy/loggeduser';
+import { compare } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -17,8 +19,7 @@ export class AuthService {
     if (!user.active) {
       throw new UnauthorizedException("User is not active");
     }
-    const isMatch = loginDto.password == user.password
-    //await compare(loginDto.password, account.password);
+    const isMatch = await compare(loginDto.password, user.password);
     if (isMatch) {
       const payload: LoggedUser = {
         id: user.id,

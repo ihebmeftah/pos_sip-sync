@@ -48,7 +48,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBFREsJ2aWnjBJe8aryJ-bvAhVM8U-9ojU',
-    appId: '1:1091775425220:web:0f0cd3193e10ce36a7f791',
+    appId: '1:1091775425220:web:1199459d0489a151a7f791',
     messagingSenderId: '1091775425220',
     projectId: 'sip-sync-admin',
     authDomain: 'sip-sync-admin.firebaseapp.com',
@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA8yakkoe-hPXePPL7EJOL_bMDaZ7EC6eE',
-    appId: '1:1091775425220:android:bf8e3a04c0672b52a7f791',
+    appId: '1:1091775425220:android:1dc46a1b98b2b32da7f791',
     messagingSenderId: '1091775425220',
     projectId: 'sip-sync-admin',
     storageBucket: 'sip-sync-admin.firebasestorage.app',
@@ -65,10 +65,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyA9H3GDZPEpOxyaqTFgodNtrD89q6lvobs',
-    appId: '1:1091775425220:ios:4d0fcf756f4bfd69a7f791',
+    appId: '1:1091775425220:ios:b292a82a12144250a7f791',
     messagingSenderId: '1091775425220',
     projectId: 'sip-sync-admin',
     storageBucket: 'sip-sync-admin.firebasestorage.app',
-    iosBundleId: 'com.example.sipsyncClient',
+    iosBundleId: 'com.sipsync.client',
   );
+
 }

@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.sipsyncClient</string>
+	<string>com.sipsync.client</string>
 	<key>PROJECT_ID</key>
 	<string>sip-sync-admin</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1091775425220:ios:4d0fcf756f4bfd69a7f791</string>
+	<string>1:1091775425220:ios:b292a82a12144250a7f791</string>
 </dict>
 </plist>

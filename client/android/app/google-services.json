@@ -7,28 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1091775425220:android:bf8e3a04c0672b52a7f791",
+        "mobilesdk_app_id": "1:1091775425220:android:1dc46a1b98b2b32da7f791",
         "android_client_info": {
-          "package_name": "com.example.sipsync_client"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA8yakkoe-hPXePPL7EJOL_bMDaZ7EC6eE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1091775425220:android:d7f44bc2cac98ce7a7f791",
-        "android_client_info": {
-          "package_name": "com.sipsync.admin"
+          "package_name": "com.sipsync.client"
         }
       },
       "oauth_client": [],

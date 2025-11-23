@@ -23,7 +23,6 @@ export class UsersController {
     return this.usersService.findEmployers(dbName);
   }
   @Get('employers/:id')
-  @Roles(UserType.Employer)
   findEmployerById(
     @Param('id', ParseUUIDPipe) id: UUID,
   ) {

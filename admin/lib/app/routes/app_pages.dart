@@ -168,7 +168,7 @@ class AppPages {
           binding: StaffFormBinding(),
         ),
         GetPage(
-          name: _Paths.STAFF_DETAILS,
+          name: '${_Paths.STAFF_DETAILS}/:id',
           page: () => const StaffDetailsView(),
           binding: StaffDetailsBinding(),
         ),

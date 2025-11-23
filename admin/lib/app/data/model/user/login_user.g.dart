@@ -6,20 +6,17 @@ part of 'login_user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginUser _$LoginUserFromJson(Map<String, dynamic> json) =>
-    LoginUser(
-        token: json['token'] as String,
-        firstname: json['firstname'] as String,
-        lastname: json['lastname'] as String,
-        email: json['email'] as String,
-        phone: json['phone'] as String,
-        photo: json['photo'] as String?,
-        type: $enumDecode(_$UserTypeEnumMap, json['type']),
-        id: json['id'] as String?,
-        password: json['password'] as String?,
-      )
-      ..username = json['username'] as String?
-      ..employerId = json['employerId'] as String?;
+LoginUser _$LoginUserFromJson(Map<String, dynamic> json) => LoginUser(
+  token: json['token'] as String,
+  firstname: json['firstname'] as String,
+  lastname: json['lastname'] as String,
+  email: json['email'] as String,
+  phone: json['phone'] as String,
+  photo: json['photo'] as String?,
+  type: $enumDecode(_$UserTypeEnumMap, json['type']),
+  id: json['id'] as String?,
+  password: json['password'] as String?,
+);
 
 Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
   'id': instance.id,
@@ -30,8 +27,6 @@ Map<String, dynamic> _$LoginUserToJson(LoginUser instance) => <String, dynamic>{
   'phone': instance.phone,
   'photo': instance.photo,
   'type': _$UserTypeEnumMap[instance.type]!,
-  'username': instance.username,
-  'employerId': instance.employerId,
   'token': instance.token,
 };
 

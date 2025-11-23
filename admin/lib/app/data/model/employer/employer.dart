@@ -9,9 +9,12 @@ part 'employer.g.dart';
 @JsonSerializable()
 class Employer extends User {
   Building? building;
+  String? username;
+
   Employer({
     this.building,
-    String? id,
+    this.username,
+    super.id,
     required super.firstname,
     required super.lastname,
     required super.email,

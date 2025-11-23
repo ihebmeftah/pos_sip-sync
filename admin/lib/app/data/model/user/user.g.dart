@@ -15,8 +15,6 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
   photo: json['photo'] as String?,
   password: json['password'] as String?,
   type: $enumDecode(_$UserTypeEnumMap, json['type']),
-  username: json['username'] as String?,
-  employerId: json['employerId'] as String?,
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -28,8 +26,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'phone': instance.phone,
   'photo': instance.photo,
   'type': _$UserTypeEnumMap[instance.type]!,
-  'username': instance.username,
-  'employerId': instance.employerId,
 };
 
 const _$UserTypeEnumMap = {

@@ -141,7 +141,7 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                                         ],
                                       ),
                                       Text(
-                                        "Passed by: ${'${controller.order!.items[index].passedBy.firstname} ${controller.order!.items[index].passedBy.lastname}'}",
+                                        "Passed by: ${'${controller.order!.items[index].addedBy.firstname} ${controller.order!.items[index].addedBy.lastname}'}",
                                       ),
                                     ],
                                   ),

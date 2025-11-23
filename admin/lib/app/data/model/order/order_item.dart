@@ -9,9 +9,9 @@ class OrderItem {
   String? id;
   Article article;
   bool payed;
-  User passedBy;
+  User addedBy;
 
-  OrderItem({required this.id, required this.article, this.payed = false, required this.passedBy});
+  OrderItem({required this.id, required this.article, this.payed = false, required this.addedBy});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) =>
       _$OrderItemFromJson(json);

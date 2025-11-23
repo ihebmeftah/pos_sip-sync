@@ -79,4 +79,20 @@ export class UsersService {
         if (!user) throw new NotFoundException(`User with identifier ${identifier} not found`);
         return user;
     }
+
+    async findUser(id: UUID, role?: UserType[]) {
+        let user: User | null;
+        if (!role) {
+            user ??= await this.adminRepository.findOneBy({ id });
+            user ??= await this.employerRepository.findOneBy({ id });
+        } else {
+            if (role.includes(UserType.Admin)) {
+                user = await this.adminRepository.findOneBy({ id });
+            } else {
+                user = await this.employerRepository.findOneBy({ id });
+            }
+        }
+        if (!user) throw new NotFoundException(`User with id ${id} not found`);
+        return user;
+    }
 }

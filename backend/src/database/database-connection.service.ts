@@ -4,7 +4,6 @@ import { DataSource } from 'typeorm';
 import { Order } from 'src/order/entities/order.entity';
 import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
-import { OrderItem } from 'src/order/entities/order_item.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Caisse } from 'src/caisse/entities/caisse.entity';
 
@@ -32,7 +31,7 @@ export class DatabaseConnectionService {
             password: this.configService.get<string>('DB_PASSWORD'),
             synchronize: false, // Changed to false
             entities: [
-                Order, OrderItem, Category, Article, Table,Caisse
+                Order, Category, Article, Table, Caisse
             ],
             logging: false,
             migrations: [__dirname + '/../../migrations/tenant/*{.js,.ts}'],

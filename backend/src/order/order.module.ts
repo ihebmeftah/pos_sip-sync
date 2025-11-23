@@ -5,6 +5,7 @@ import { TablesModule } from 'src/tables/tables.module';
 import { ArticleModule } from 'src/article/article.module';
 import { UsersModule } from 'src/users/users.module';
 import { DatabaseModule } from 'src/database/database.module';
+import { BuildingModule } from 'src/building/building.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DatabaseModule } from 'src/database/database.module';
     forwardRef(() => TablesModule),
     ArticleModule,
     UsersModule,
+    BuildingModule
   ],
   controllers: [OrderController],
   providers: [OrderService],

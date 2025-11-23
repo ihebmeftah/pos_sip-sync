@@ -63,7 +63,10 @@ class OrderDetailsController extends GetxController with StateMixin {
 
   Future<void> payForItem(OrderItem item) async {
     try {
-      final updatedItem = await OrderApi().payOrderItem(itemId: item.id!);
+      final updatedItem = await OrderApi().payOrderItem(
+        orderId: order!.id!,
+        itemId: item.id!,
+      );
       order!.items.firstWhere((i) => i.id == updatedItem.id).payed = true;
       update([item.id!, "pay"]);
       if (order!.items.every((item) => item.payed)) {
@@ -73,7 +76,6 @@ class OrderDetailsController extends GetxController with StateMixin {
         if (Get.isRegistered<TablesController>()) {
           Get.find<TablesController>().updateTable(order!.table);
         }
-
         // update(['table-status', 'order-status']);
         change(order, status: RxStatus.success());
       }

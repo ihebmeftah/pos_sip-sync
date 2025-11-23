@@ -2,7 +2,6 @@ import { DataSource } from "typeorm";
 import { Order } from 'src/order/entities/order.entity';
 import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
-import { OrderItem } from 'src/order/entities/order_item.entity';
 import { Category } from 'src/category/entities/category.entity';
 import * as dotenv from 'dotenv';
 import { Caisse } from "src/caisse/entities/caisse.entity";
@@ -16,7 +15,7 @@ tenantdata.set("database", process.argv[7]);
 tenantdata.set("password", process.env.DB_PASSWORD);
 tenantdata.set("synchronize", false);
 tenantdata.set("entities", [
-    Order, OrderItem, Category, Article, Table, Caisse
+    Order, Category, Article, Table, Caisse
 ]);
 tenantdata.set("migrations", [__dirname + '/../../migrations/tenant/*{.js,.ts}']);
 

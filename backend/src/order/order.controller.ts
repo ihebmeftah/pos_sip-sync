@@ -30,6 +30,7 @@ export class OrderController {
         }
         return await this.orderService.findOrderOfBuilding(dbName, status);
     }
+
     @Get("table/:id")
     async findOrderOfTable(
         @DbName() dbName: string,
@@ -48,18 +49,8 @@ export class OrderController {
         return await this.orderService.getOrderById(id, dbName);
     }
 
-
-    @Delete(":id")
-    @Roles(UserType.Employer)
-    async deleteOrder(
-        @Param('id', ParseUUIDPipe) id: UUID,
-        @DbName() dbName: string,
-    ) {
-        return await this.orderService.deleteOrder(id, dbName);
-    }
-
     @Post()
-    @Roles(UserType.Employer)
+    @Roles(UserType.Employer, UserType.Admin)
     async passOrder(
         @Body() createOrderDto: CreateOrderDto,
         @CurrUser() user: LoggedUser,
@@ -68,28 +59,8 @@ export class OrderController {
         return await this.orderService.passOrder(createOrderDto, user, dbName);
     }
 
-    @Patch("/item/:id")
-    @Roles(UserType.Employer)
-    async payOrderItem(
-        @Param("id", ParseUUIDPipe) orderItemId: UUID,
-        @DbName() dbName: string,
-        @CurrUser() user: LoggedUser,
-    ) {
-        return await this.orderService.payOrderItem(orderItemId, dbName, user);
-    }
-
-    @Patch("/:id/pay-items")
-    @Roles(UserType.Employer)
-    async payAllItemsOfOrder(
-        @Param("id", ParseUUIDPipe) orderId: UUID,
-        @DbName() dbName: string,
-        @CurrUser() user: LoggedUser,
-    ) {
-        return await this.orderService.payAllitemsOfOrder(orderId, dbName, user);
-    }
-
     @Patch("/:id/add-items")
-    @Roles(UserType.Employer)
+    @Roles(UserType.Employer, UserType.Admin)
     async addItemsToOrder(
         @Param("id", ParseUUIDPipe) orderId: UUID,
         @Body('articlesIds') articlesIds: UUID[],
@@ -97,5 +68,16 @@ export class OrderController {
         @CurrUser() user: LoggedUser,
     ) {
         return await this.orderService.addItemsToOrder(orderId, articlesIds, dbName, user);
+    }
+
+    @Patch("/:id/items/:itemId")
+    @Roles(UserType.Employer, UserType.Admin)
+    async payItemInOrder(
+        @Param("id", ParseUUIDPipe) orderId: UUID,
+        @Param("itemId", ParseUUIDPipe) itemId: UUID,
+        @DbName() dbName: string,
+        @CurrUser() user: LoggedUser,
+    ) {
+        return await this.orderService.payItemInOrder(orderId, itemId, dbName, user);
     }
 }

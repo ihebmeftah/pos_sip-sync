@@ -4,6 +4,7 @@ import { Article } from './entities/article.entity';
 import { CategoryService } from 'src/category/category.service';
 import { UUID } from 'crypto';
 import { RepositoryFactory } from 'src/database/repository-factory.service';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ArticleService {
@@ -15,7 +16,7 @@ export class ArticleService {
   async create(createArticleDto: CreateArticleDto, dbName: string) {
     const articleRepo = await this.repositoryFactory.getRepository(dbName, Article);
     const category = await this.categoryService.findOne(createArticleDto.categoryId, dbName);
-    const create = await articleRepo.create(createArticleDto);
+    const create = articleRepo.create(createArticleDto);
     create.category = category;
     return await articleRepo.save(create);
   }
@@ -49,4 +50,5 @@ export class ArticleService {
     }
     return article;
   }
+
 }

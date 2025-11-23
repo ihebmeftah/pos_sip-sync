@@ -1,10 +1,11 @@
 import { UUID } from 'crypto';
 import { Category } from 'src/category/entities/category.entity';
+import { TimestampBaseEntity } from 'src/database/base/timestampbase';
 import { DecimalTransformer } from 'src/utils/decimal-transformer';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Article {
+export class Article extends TimestampBaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: UUID;
     @Column()

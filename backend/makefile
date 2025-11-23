@@ -1,6 +1,7 @@
 reset:
 	docker compose down -v
 	docker compose up --build --detach
+	npm run seed
 	npm run start:dev
 
 mig-g-tenant:

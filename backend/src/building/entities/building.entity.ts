@@ -32,6 +32,6 @@ export class Building extends TimestampBaseEntity {
     logo: string
     @Column("text", { nullable: true, array: true })
     photos: string[]
-    @ManyToOne(() => Admin, { nullable: false })
+    @ManyToOne(() => Admin)
     admin: Admin
 }

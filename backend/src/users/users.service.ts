@@ -1,7 +1,7 @@
 import { ConflictException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { Employer } from './entities/employer.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -82,14 +82,25 @@ export class UsersService {
 
     async findUser(id: UUID, role?: UserType[]) {
         let user: User | null;
+        const options: FindOneOptions<User> = {
+            where: { id },
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                type: true, photo: true,
+                phone: true,
+                email: true
+            }
+        }
         if (!role) {
-            user ??= await this.adminRepository.findOneBy({ id });
-            user ??= await this.employerRepository.findOneBy({ id });
+            user ??= await this.adminRepository.findOne(options);
+            user ??= await this.employerRepository.findOne(options);
         } else {
             if (role.includes(UserType.Admin)) {
-                user = await this.adminRepository.findOneBy({ id });
+                user = await this.adminRepository.findOne(options);
             } else {
-                user = await this.employerRepository.findOneBy({ id });
+                user = await this.employerRepository.findOne(options);
             }
         }
         if (!user) throw new NotFoundException(`User with id ${id} not found`);

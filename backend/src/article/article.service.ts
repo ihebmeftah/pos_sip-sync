@@ -44,7 +44,17 @@ export class ArticleService {
 
   async findOne(id: UUID, dbName: string) {
     const articleRepo = await this.repositoryFactory.getRepository(dbName, Article);
-    const article = await articleRepo.findOneBy({ id });
+    const article = await articleRepo.findOne({
+      where: { id }, relations: { category: true }, select: {
+        id: true,
+        name: true,
+        price: true,
+        category: {
+          id: true,
+          name: true,
+        }
+      }
+    });
     if (!article) {
       throw new NotFoundException(`Article with this id ${id} not found`);;
     }

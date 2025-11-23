@@ -12,6 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { CaisseModule } from './caisse/caisse.module';
 import { DatabaseModule } from './database/database.module';
 import { SeederModule } from './database/seeders/seeder.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SeederModule } from './database/seeders/seeder.module';
     OrderModule,
     UsersModule,
     CaisseModule,
+    StatsModule,
   ],
   controllers: [],
   providers: [],

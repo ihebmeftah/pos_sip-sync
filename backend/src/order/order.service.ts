@@ -75,6 +75,7 @@ export class OrderService {
         savedOrder.table.status = TableStatus.occupied;
         return savedOrder;
     }
+
     async addItemsToOrder(
         orderId: UUID,
         articleIds: UUID[],
@@ -104,6 +105,7 @@ export class OrderService {
             items: [...order.items, ...newAddedItems],
         });
     }
+
     async findOrderOfBuilding(dbName: string, status?: OrderStatus) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         return await orderRepo.find({
@@ -121,6 +123,7 @@ export class OrderService {
             },
         });
     }
+
     async findOrderOfTable(dbName: string, tableId: UUID, status?: OrderStatus) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         return await orderRepo.find({
@@ -229,5 +232,19 @@ export class OrderService {
         }
         await orderRepo.save(order);
         return order.items[itemIndex];
+    }
+
+    async payOrder(orderId: UUID, dbName: string, loggedUser: LoggedUser) {
+        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
+        const order = await this.getOrderById(orderId, dbName);
+        const user = await this.usersService.findUser(loggedUser.id, loggedUser.type);
+        order.items = order.items.map(item => ({
+            ...item,
+            payed: true,
+        }));
+        order.status = OrderStatus.PAYED;
+        order.closedBy = user;
+        await orderRepo.save(order);
+        return order;
     }
 }

@@ -69,7 +69,7 @@ class OrderApi {
 
   Future<Order> payOrderAllItems({required String orderId}) async {
     return await HttpHelper.patch<Order>(
-      endpoint: '/order/$orderId/pay-items',
+      endpoint: '/order/$orderId/payment',
       fromJson: (json) => Order.fromJson(json as Map<String, dynamic>),
     );
   }

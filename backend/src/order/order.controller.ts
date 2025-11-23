@@ -80,4 +80,15 @@ export class OrderController {
     ) {
         return await this.orderService.payItemInOrder(orderId, itemId, dbName, user);
     }
+
+
+    @Patch("/:id/payment")
+    @Roles(UserType.Employer, UserType.Admin)
+    async payOrder(
+        @Param("id", ParseUUIDPipe) orderId: UUID,
+        @DbName() dbName: string,
+        @CurrUser() user: LoggedUser,
+    ) {
+        return await this.orderService.payOrder(orderId, dbName, user);
+    }
 }

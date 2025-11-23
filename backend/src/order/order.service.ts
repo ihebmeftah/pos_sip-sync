@@ -30,82 +30,6 @@ export class OrderService {
         private readonly buildingService: BuildingService,
     ) { }
 
-    async passOrder(
-        createOrderDto: CreateOrderDto,
-        user: LoggedUser,
-        dbName: string,
-    ) {
-        const building = await this.buildingService.findByDbName(dbName);
-        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
-        const openedBy = await this.usersService.findUser(user.id, user.type);
-        const table = await this.tablesService.findOne(
-            createOrderDto.tableId,
-            dbName,
-        );
-        if (building.tableMultiOrder == false) {
-            const orderTable = await this.checkTableHaveOrder(
-                createOrderDto.tableId,
-                dbName,
-            );
-            if (orderTable) {
-                throw new ConflictException(
-                    `this table ${table.name} already have an order`,
-                );
-            }
-        }
-        const articles: Article[] = [];
-        for (const articleId of createOrderDto.articlesIds) {
-            const article = await this.articleService.findOne(articleId, dbName);
-            articles.push(article);
-        }
-        const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
-        const order = orderRepo.create({
-            table,
-            ref: `REF-${uniqueNumber}`,
-            items: articles.map((article) => ({
-                id: crypto.randomUUID(),
-                article,
-                addedBy: openedBy,
-                payed: false,
-            })),
-            status: OrderStatus.PROGRESS,
-            openedBy,
-        });
-        const savedOrder = await orderRepo.save(order);
-        savedOrder.table.status = TableStatus.occupied;
-        return savedOrder;
-    }
-
-    async addItemsToOrder(
-        orderId: UUID,
-        articleIds: UUID[],
-        dbName: string,
-        user: LoggedUser,
-    ) {
-        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
-        const order = await this.getOrderById(orderId, dbName);
-        const addedBy = await this.usersService.findUser(user.id, user.type);
-        if (order.status === OrderStatus.PAYED) {
-            throw new ConflictException(
-                `Order with ID ${orderId} is already paid and cannot be modified.`,
-            );
-        }
-        const articles: Article[] = [];
-        for (const articleId of articleIds) {
-            const article = await this.articleService.findOne(articleId, dbName);
-            articles.push(article);
-        }
-        const newAddedItems = articles.map((article) => ({
-            article,
-            addedBy,
-            payed: false,
-        }));
-        return await orderRepo.save({
-            ...order,
-            items: [...order.items, ...newAddedItems],
-        });
-    }
-
     async findOrderOfBuilding(dbName: string, status?: OrderStatus) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
         return await orderRepo.find({
@@ -188,6 +112,83 @@ export class OrderService {
         });
         return order;
     }
+
+    async passOrder(
+        createOrderDto: CreateOrderDto,
+        user: LoggedUser,
+        dbName: string,
+    ) {
+        const building = await this.buildingService.findByDbName(dbName);
+        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
+        const openedBy = await this.usersService.findUser(user.id, user.type);
+        const table = await this.tablesService.findOne(
+            createOrderDto.tableId,
+            dbName,
+        );
+        if (building.tableMultiOrder == false) {
+            const orderTable = await this.checkTableHaveOrder(
+                createOrderDto.tableId,
+                dbName,
+            );
+            if (orderTable) {
+                throw new ConflictException(
+                    `this table ${table.name} already have an order`,
+                );
+            }
+        }
+        const articles: Article[] = [];
+        for (const articleId of createOrderDto.articlesIds) {
+            const article = await this.articleService.findOne(articleId, dbName);
+            articles.push(article);
+        }
+        const uniqueNumber = Math.floor(1000 + Math.random() * 9000);
+        const order = orderRepo.create({
+            table,
+            ref: `REF-${uniqueNumber}`,
+            items: articles.map((article) => ({
+                id: crypto.randomUUID(),
+                article,
+                addedBy: openedBy,
+                payed: false,
+            })),
+            status: OrderStatus.PROGRESS,
+            openedBy,
+        });
+        const savedOrder = await orderRepo.save(order);
+        savedOrder.table.status = TableStatus.occupied;
+        return savedOrder;
+    }
+
+    async addItemsToOrder(
+        orderId: UUID,
+        articleIds: UUID[],
+        dbName: string,
+        user: LoggedUser,
+    ) {
+        const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);
+        const order = await this.getOrderById(orderId, dbName);
+        const addedBy = await this.usersService.findUser(user.id, user.type);
+        if (order.status === OrderStatus.PAYED) {
+            throw new ConflictException(
+                `Order with ID ${orderId} is already paid and cannot be modified.`,
+            );
+        }
+        const articles: Article[] = [];
+        for (const articleId of articleIds) {
+            const article = await this.articleService.findOne(articleId, dbName);
+            articles.push(article);
+        }
+        const newAddedItems = articles.map((article) => ({
+            article,
+            addedBy,
+            payed: false,
+        }));
+        return await orderRepo.save({
+            ...order,
+            items: [...order.items, ...newAddedItems],
+        });
+    }
+
 
     async getOrderById(id: UUID, dbName: string) {
         const orderRepo = await this.repositoryFactory.getRepository(dbName, Order);

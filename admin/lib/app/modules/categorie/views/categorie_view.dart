@@ -49,7 +49,7 @@ class CategorieView extends GetView<CategorieController> {
               return GestureDetector(
                 onTap: () => Get.toNamed(
                   Routes.ARTICLE,
-                  parameters: {'cat': category.id},
+                  parameters: {'catId': category.id},
                 ),
                 child: Container(
                   decoration: BoxDecoration(

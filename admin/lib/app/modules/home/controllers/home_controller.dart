@@ -1,4 +1,6 @@
 import 'package:admin/app/data/local/local_storage.dart';
+import 'package:admin/app/data/model/article/article.dart';
+import 'package:admin/app/data/model/categorie/categorie.dart';
 import 'package:admin/app/data/model/stats/buildingstats.dart';
 import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,7 @@ class HomeController extends GetxController with StateMixin {
   int get totalCategories => buildingStats?.totalCategories ?? 0;
   int get totalItemsSold => buildingStats?.totalItemsSold ?? 0;
 
-  List<MapEntry<dynamic, int>> get topArticles {
+  List<MapEntry<Article, int>> get topArticles {
     if (buildingStats?.mostPopularArticles == null) return [];
     return buildingStats!.mostPopularArticles!
         .where((item) => item.article != null)
@@ -27,7 +29,7 @@ class HomeController extends GetxController with StateMixin {
         .toList();
   }
 
-  List<MapEntry<dynamic, int>> get topCategories {
+  List<MapEntry<Categorie, int>> get topCategories {
     if (buildingStats?.mostPopularCategories == null) return [];
     return buildingStats!.mostPopularCategories!
         .where((item) => item.category != null)

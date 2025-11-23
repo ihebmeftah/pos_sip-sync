@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseUUIDPipe, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseUUIDPipe, UseGuards, UseInterceptors, UploadedFiles, Query } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UUID } from 'crypto';
@@ -35,9 +35,10 @@ export class ArticleController {
 
   @Get()
   findAll(
-    @DbName() dbName: string
+    @DbName() dbName: string,
+    @Query('categoryId', new ParseUUIDPipe({ optional: true })) categoryId: UUID
   ) {
-    return this.articleService.findAll(dbName);
+    return this.articleService.findAll(dbName, categoryId);
   }
 
   @Get('Category/:CategoryId')

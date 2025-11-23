@@ -4,9 +4,10 @@ import 'package:admin/app/data/model/article/article.dart';
 import 'htthp_helper.dart';
 
 class ArticleApi {
-  Future<List<Article>> getArticle() async {
+  Future<List<Article>> getArticle({String? catId}) async {
     return await HttpHelper.get<List<Article>>(
       endpoint: '/article',
+      queryParams: {if (catId != null) "catId": catId},
       fromJson: (data) {
         return (data as List)
             .map((e) => Article.fromJson(e as Map<String, dynamic>))

@@ -21,9 +21,12 @@ export class ArticleService {
     return await articleRepo.save(create);
   }
 
-  async findAll(dbName: string) {
+  async findAll(dbName: string, categoryId?: UUID) {
     const articleRepo = await this.repositoryFactory.getRepository(dbName, Article);
     return await articleRepo.find({
+      where: {
+        category: categoryId && { id: categoryId }
+      },
       relations: {
         category: true
       }

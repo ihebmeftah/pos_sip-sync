@@ -6,7 +6,7 @@ class OrderApi {
   Future<List<Order>> getOrders([OrderStatus? orderStatus]) {
     return HttpHelper.get<List<Order>>(
       endpoint: '/order',
-      queryParams: orderStatus != null ? {'status': orderStatus.name} : null,
+      queryParams: {if (orderStatus != null) 'status': orderStatus.name},
       fromJson: (json) => (json as List)
           .map((e) => Order.fromJson(e as Map<String, dynamic>))
           .toList(),

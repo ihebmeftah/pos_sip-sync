@@ -89,7 +89,8 @@ class ArticleView extends GetView<ArticleController> {
                   "${controller.articles[index].price} DT",
                   style: context.theme.textTheme.titleLarge,
                 ),
-                if (Get.previousRoute == Routes.PASS_ORDER)
+                if (Get.previousRoute == Routes.PASS_ORDER ||
+                    Get.find<PassOrderController>().table != null)
                   _addArticleWidget(index)
                 else
                   Switch(value: true, onChanged: (value) {}),

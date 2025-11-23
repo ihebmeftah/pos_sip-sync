@@ -13,8 +13,9 @@ class ArticleController extends GetxController with StateMixin {
 
   Future getArticles() async {
     try {
-      articles.value = await ArticleApi().getArticle();
-
+      articles.value = await ArticleApi().getArticle(
+        catId: Get.parameters["catId"],
+      );
       if (articles.isEmpty) {
         change(null, status: RxStatus.empty());
       } else {

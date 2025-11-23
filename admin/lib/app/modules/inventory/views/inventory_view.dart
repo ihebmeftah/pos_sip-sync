@@ -1,6 +1,5 @@
 import 'package:admin/app/common/appemptyscreen.dart';
-import 'package:admin/app/modules/article/controllers/article_controller.dart';
-import 'package:admin/app/modules/categorie/controllers/categorie_controller.dart';
+import 'package:admin/app/modules/home/controllers/home_controller.dart';
 import 'package:admin/app/routes/app_pages.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +39,11 @@ class InventoryView extends GetView<InventoryController> {
             ),
             SizedBox(
               height: 40,
-              child: GetX<CategorieController>(
-                init: CategorieController(),
+              child: GetBuilder<HomeController>(
                 builder: (ctr) {
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: ctr.categories.length + 1,
+                    itemCount: ctr.topCategories.length + 1,
                     separatorBuilder: (context, index) =>
                         const SizedBox(width: 10),
                     itemBuilder: (context, index) => TextButton.icon(
@@ -62,7 +60,9 @@ class InventoryView extends GetView<InventoryController> {
                             : Theme.of(context).colorScheme.primary,
                       ),
                       label: Text(
-                        index == 0 ? "Add" : ctr.categories[index - 1].name,
+                        index == 0
+                            ? "Add"
+                            : ctr.topCategories[index - 1].key.name,
                       ),
                       icon: Icon(
                         index == 0
@@ -85,34 +85,33 @@ class InventoryView extends GetView<InventoryController> {
               ],
             ),
             Expanded(
-              child: GetX<ArticleController>(
-                init: ArticleController(),
+              child: GetBuilder<HomeController>(
                 builder: (ctr) {
-                  return ctr.articles.isEmpty
+                  return ctr.topArticles.isEmpty
                       ? Appemptyscreen(route: Routes.ARTICLE)
                       : ListView.builder(
-                          itemCount: ctr.articles.length,
+                          itemCount: ctr.topArticles.length,
                           itemBuilder: (context, index) => ListTile(
                             leading: Container(
                               width: 50,
                               height: 50,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                image: ctr.articles[index].image == null
+                                image: ctr.topArticles[index].key.image == null
                                     ? null
                                     : DecorationImage(
                                         image: NetworkImage(
-                                          ctr.articles[index].image!,
+                                          ctr.topArticles[index].key.image!,
                                         ),
                                         fit: BoxFit.cover,
                                       ),
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: ctr.articles[index].image != null
+                              child: ctr.topArticles[index].key.image != null
                                   ? null
                                   : Text(
-                                      ctr.articles[index].name
+                                      ctr.topArticles[index].key.name
                                           .substring(0, 1)
                                           .toUpperCase(),
                                       style: TextStyle(
@@ -121,8 +120,11 @@ class InventoryView extends GetView<InventoryController> {
                                       ),
                                     ),
                             ),
-                            title: Text(ctr.articles[index].name),
-                            subtitle: Text(ctr.articles[index].categorie!.name),
+                            title: Text(ctr.topArticles[index].key.name),
+                            subtitle: Text(
+                              ctr.topArticles[index].key.categorie?.name ??
+                                  "No Categorie",
+                            ),
                           ),
                         );
                 },

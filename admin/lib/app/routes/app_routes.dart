@@ -26,6 +26,8 @@ abstract class Routes {
   static const STAFF_DETAILS = _Paths.STAFF + _Paths.STAFF_DETAILS;
   static const REGISTER = _Paths.AUTH + _Paths.REGISTER;
   static const QRSCAN = _Paths.QRSCAN;
+  static const INGREDIENT = _Paths.INGREDIENT;
+  static const INGREDIENT_FORM = _Paths.INGREDIENT + _Paths.INGREDIENT_FORM;
 }
 
 abstract class _Paths {
@@ -50,4 +52,6 @@ abstract class _Paths {
   static const STAFF_DETAILS = '/staff-details';
   static const REGISTER = '/register';
   static const QRSCAN = '/qrscan';
+  static const INGREDIENT = '/ingredient';
+  static const INGREDIENT_FORM = '/ingredient-form';
 }

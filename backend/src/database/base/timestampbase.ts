@@ -21,7 +21,4 @@ export class TimestampBaseEntity {
 
     @VersionColumn()
     version: number;
-
-    @Column({ default: true })
-    active: boolean;
 }

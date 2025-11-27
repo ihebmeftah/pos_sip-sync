@@ -6,6 +6,10 @@ import 'package:get/get.dart';
 class BuildingsController extends GetxController
     with StateMixin<List<Building>> {
   final buildings = <Building>[].obs;
+  final BuildingsApi _api;
+
+  BuildingsController({BuildingsApi? api}) : _api = api ?? BuildingsApi();
+
   @override
   void onInit() async {
     await getBuilding();
@@ -14,7 +18,7 @@ class BuildingsController extends GetxController
 
   Future getBuilding() async {
     try {
-      buildings(await BuildingsApi().getBuildings());
+      buildings(await _api.getBuildings());
       if (buildings.isEmpty) {
         change(null, status: RxStatus.empty());
       } else {

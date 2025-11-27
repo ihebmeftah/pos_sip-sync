@@ -11,14 +11,26 @@ class BuildingAddController extends GetxController {
   final addFormkey = GlobalKey<FormState>();
   DateTime openingTime = DateTime.now();
   DateTime closingTime = DateTime.now().add(const Duration(hours: 14));
-  final name = TextEditingController(),
-      location = TextEditingController(),
-      opening = TextEditingController(
-        text: TimeOfDay(hour: 07, minute: 00).format(Get.context!),
-      ),
-      closing = TextEditingController(
-        text: TimeOfDay(hour: 23, minute: 00).format(Get.context!),
-      );
+  late final TextEditingController name;
+  late final TextEditingController location;
+  late final TextEditingController opening;
+  late final TextEditingController closing;
+  final BuildingsApi _api;
+
+  BuildingAddController({BuildingsApi? api}) : _api = api ?? BuildingsApi() {
+    name = TextEditingController();
+    location = TextEditingController();
+    opening = TextEditingController(
+      text: Get.context != null
+          ? TimeOfDay(hour: 07, minute: 00).format(Get.context!)
+          : '07:00 AM',
+    );
+    closing = TextEditingController(
+      text: Get.context != null
+          ? TimeOfDay(hour: 23, minute: 00).format(Get.context!)
+          : '11:00 PM',
+    );
+  }
 
   Building get addDto => Building(
     name: name.text,
@@ -28,10 +40,11 @@ class BuildingAddController extends GetxController {
     dbName: name.text.toLowerCase().replaceAll(' ', '_'),
     tableMultiOrder: false,
   );
+
   Future<void> addBuilding() async {
     try {
       if (addFormkey.currentState!.validate()) {
-        await BuildingsApi().createBuilding(
+        await _api.createBuilding(
           addDto,
           logo: Get.find<FileuploadController>().convertselectedFile,
           photos: Get.find<FileuploadController>().convertselectedFiles,

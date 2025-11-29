@@ -16,9 +16,6 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.UsersService.findUserByEmailOrUsername(loginDto.identifier);
-    if (!user.active) {
-      throw new UnauthorizedException("User is not active");
-    }
     const isMatch = await compare(loginDto.password, user.password);
     if (isMatch) {
       const payload: LoggedUser = {
@@ -37,9 +34,6 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     const registred = await this.UsersService.createAdmin(registerDto)
     if (!registred) throw new NotFoundException(`User with this email ${registerDto.email} exists`);
-    if (!registred.active) {
-      throw new UnauthorizedException("User is not active");
-    }
     const payload: LoggedUser = {
       id: registred.id,
       email: registred.email,

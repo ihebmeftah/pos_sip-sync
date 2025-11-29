@@ -22,9 +22,9 @@ export class AdminSeeder {
 
         const adminsData = [
             {
-                firstname: 'John',
-                lastname: 'Anderson',
-                email: 'john.anderson@posadmin.com',
+                firstname: 'Iheb',
+                lastname: 'Meftah',
+                email: 'iheb.meftah@posadmin.com',
                 phone: '+1234567890',
                 password: hashedPassword,
                 photo: 'https://i.pravatar.cc/300?img=12',

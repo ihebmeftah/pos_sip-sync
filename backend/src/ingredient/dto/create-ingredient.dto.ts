@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import { UnitsType } from "src/enums/units_type";
 
 export class CreateIngredientDto {
     @IsNotEmpty()
@@ -12,14 +13,14 @@ export class CreateIngredientDto {
 
     @IsNotEmpty()
     @IsString()
-    stockUnit: string;
+    @IsEnum(UnitsType)
+    stockUnit: UnitsType;
 
-    @IsNumber()
-    @Min(1)
-    currentStock: number; // Current quantity in stock
+    @IsNumber({}, { message: 'currentStock must be a number' })
+    @Min(1.0000000000001, { message: 'currentStock must be greater than 1' })
+    currentStock: number; // Current quantity in stock (must be > 1, floats allowed)
 
     @IsOptional()
     @IsNumber()
-    @Min(0)
     minimumStock: number; // Alert threshold
 }

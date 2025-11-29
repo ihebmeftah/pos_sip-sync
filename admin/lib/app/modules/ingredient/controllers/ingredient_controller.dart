@@ -1,23 +1,25 @@
+import 'package:admin/app/data/apis/ingredient_api.dart';
+import 'package:admin/app/data/model/ingredient/ingredient.dart';
 import 'package:get/get.dart';
 
-class IngredientController extends GetxController {
-  //TODO: Implement IngredientController
-
-  final count = 0.obs;
+class IngredientController extends GetxController with StateMixin {
+  final ingredients = <Ingredient>[].obs;
   @override
-  void onInit() {
+  void onInit() async {
+    await getIngredients();
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  Future<void> getIngredients() async {
+    try {
+      ingredients(await IngredientApi().fetchIngredients());
+      if (ingredients.isEmpty) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(ingredients, status: RxStatus.success());
+      }
+    } catch (e) {
+      change(null, status: RxStatus.error(e.toString()));
+    }
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

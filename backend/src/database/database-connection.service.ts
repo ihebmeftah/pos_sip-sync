@@ -6,6 +6,8 @@ import { Article } from 'src/article/entities/article.entity';
 import { Table } from 'src/tables/entities/table.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { Caisse } from 'src/caisse/entities/caisse.entity';
+import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
+import { ArticleCompo } from 'src/article/entities/article-compo.entity';
 
 @Injectable()
 export class DatabaseConnectionService {
@@ -31,7 +33,7 @@ export class DatabaseConnectionService {
             password: this.configService.get<string>('DB_PASSWORD'),
             synchronize: false, // Changed to false
             entities: [
-                Order, Category, Article, Table, Caisse
+                Order, Category, Article, Table, Caisse,Ingredient,ArticleCompo,
             ],
             logging: false,
             migrations: [__dirname + '/../../migrations/tenant/*{.js,.ts}'],

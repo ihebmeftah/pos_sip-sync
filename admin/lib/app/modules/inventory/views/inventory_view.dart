@@ -18,12 +18,98 @@ class InventoryView extends GetView<InventoryController> {
         child: Column(
           spacing: 10,
           children: [
-            TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(FluentIcons.search_12_regular),
-                hintText: "Search dishes, cafe, etc..",
+            Theme(
+              data: Theme.of(context).copyWith(
+                textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              child: Row(
+                spacing: 5,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.toNamed(Routes.INGREDIENT),
+                    child: Text("Ingredients"),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.toNamed(Routes.INGREDIENT),
+                    child: Text("Articles Composition"),
+                  ),
+                ],
               ),
             ),
+
+            /// Out stock ingredient Section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Out of Stock Ingredients",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                TextButton(
+                  onPressed: () => Get.toNamed(Routes.INGREDIENT),
+                  child: Text("View All"),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 80,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                separatorBuilder: (context, index) => const SizedBox(width: 10),
+                itemBuilder: (context, index) => Container(
+                  width: 120,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.red.shade200, width: 1),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            FluentIcons.warning_16_filled,
+                            size: 16,
+                            color: Colors.red.shade700,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              "Ingredient ${index + 1}",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red.shade900,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Out of stock",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.red.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            /// Categories Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -74,6 +160,8 @@ class InventoryView extends GetView<InventoryController> {
                 },
               ),
             ),
+
+            /// Articles Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

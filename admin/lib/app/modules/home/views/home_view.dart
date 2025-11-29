@@ -13,169 +13,6 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: controller.obx(
-        (_) => RefreshIndicator(
-          onRefresh: controller.getStats,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Welcome Header
-                Text(
-                  'Welcome back, ${controller.loggedUser.firstname}!',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Revenue and Order Statistics Cards
-                Row(
-                  children: [
-                    Expanded(
-                      child: StatsCardWidget(
-                        title: 'Total Revenue',
-                        value:
-                            '${controller.totalRevenue.toStringAsFixed(2)} DT',
-                        icon: FluentIcons.money_24_filled,
-                        color: AppTheme().primary,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: StatsCardWidget(
-                        title: 'Avg Order Value',
-                        value:
-                            '${controller.avgOrderValue.toStringAsFixed(2)} DT',
-                        icon: FluentIcons.receipt_money_24_filled,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: StatsCardWidget(
-                        title: 'Total Orders',
-                        value: '${controller.totalOrders}',
-                        icon: FluentIcons.receipt_24_filled,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: StatsCardWidget(
-                        title: 'Paid Orders',
-                        value: '${controller.paidOrders}',
-                        icon: FluentIcons.checkmark_circle_24_filled,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Order Status Chart
-                _buildChartSection(
-                  context,
-                  title: 'Order Status Distribution',
-                  child: _buildOrderStatusChart(context),
-                ),
-                const SizedBox(height: 24),
-
-                // Items Sold Chart
-                _buildChartSection(
-                  context,
-                  title: 'Business Overview',
-                  child: _buildBusinessOverviewChart(context),
-                ),
-                const SizedBox(height: 24),
-
-                // Top Articles Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Top Articles',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => Get.toNamed(Routes.ARTICLE),
-                      child: const Text('View All'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                controller.topArticles.isEmpty
-                    ? EmptyStatsWidget(
-                        message: 'No articles data yet',
-                        icon: FluentIcons.food_24_regular,
-                      )
-                    : Column(
-                        children: controller.topArticles.map((entry) {
-                          return TopItemWidget(
-                            title: entry.key.name,
-                            subtitle:
-                                entry.key.categorie?.name ?? 'No category',
-                            count: entry.value,
-                            price: entry.key.price,
-                            icon: FluentIcons.food_24_regular,
-                          );
-                        }).toList(),
-                      ),
-
-                const SizedBox(height: 24),
-
-                // Top Categories Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Top Categories',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => Get.toNamed(Routes.CATEGORIE),
-                      child: const Text('View All'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                controller.topCategories.isEmpty
-                    ? EmptyStatsWidget(
-                        message: 'No categories data yet',
-                        icon: FluentIcons.grid_24_regular,
-                      )
-                    : Column(
-                        children: controller.topCategories.map((entry) {
-                          return TopItemWidget(
-                            title: entry.key.name,
-                            subtitle: '${entry.value} orders',
-                            count: entry.value,
-                            icon: FluentIcons.grid_24_regular,
-                          );
-                        }).toList(),
-                      ),
-              ],
-            ),
-          ),
-        ),
-        onLoading: const Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
 
   Widget _buildChartSection(
     BuildContext context, {
@@ -417,6 +254,170 @@ class HomeView extends GetView<HomeController> {
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: controller.obx(
+        (_) => RefreshIndicator(
+          onRefresh: controller.getStats,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Welcome Header
+                Text(
+                  'Welcome back, ${controller.loggedUser.firstname}!',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Revenue and Order Statistics Cards
+                Row(
+                  children: [
+                    Expanded(
+                      child: StatsCardWidget(
+                        title: 'Total Revenue',
+                        value:
+                            '${controller.totalRevenue.toStringAsFixed(2)} DT',
+                        icon: FluentIcons.money_24_filled,
+                        color: AppTheme().primary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatsCardWidget(
+                        title: 'Avg Order Value',
+                        value:
+                            '${controller.avgOrderValue.toStringAsFixed(2)} DT',
+                        icon: FluentIcons.receipt_money_24_filled,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: StatsCardWidget(
+                        title: 'Total Orders',
+                        value: '${controller.totalOrders}',
+                        icon: FluentIcons.receipt_24_filled,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatsCardWidget(
+                        title: 'Paid Orders',
+                        value: '${controller.paidOrders}',
+                        icon: FluentIcons.checkmark_circle_24_filled,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Order Status Chart
+                _buildChartSection(
+                  context,
+                  title: 'Order Status Distribution',
+                  child: _buildOrderStatusChart(context),
+                ),
+                const SizedBox(height: 24),
+
+                // Items Sold Chart
+                _buildChartSection(
+                  context,
+                  title: 'Business Overview',
+                  child: _buildBusinessOverviewChart(context),
+                ),
+                const SizedBox(height: 24),
+
+                // Top Articles Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Top Articles',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Get.toNamed(Routes.ARTICLE),
+                      child: const Text('View All'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                controller.topArticles.isEmpty
+                    ? EmptyStatsWidget(
+                        message: 'No articles data yet',
+                        icon: FluentIcons.food_24_regular,
+                      )
+                    : Column(
+                        children: controller.topArticles.map((entry) {
+                          return TopItemWidget(
+                            title: entry.key.name,
+                            subtitle:
+                                entry.key.categorie?.name ?? 'No category',
+                            count: entry.value,
+                            price: entry.key.price,
+                            icon: FluentIcons.food_24_regular,
+                          );
+                        }).toList(),
+                      ),
+
+                const SizedBox(height: 24),
+
+                // Top Categories Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Top Categories',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Get.toNamed(Routes.CATEGORIE),
+                      child: const Text('View All'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                controller.topCategories.isEmpty
+                    ? EmptyStatsWidget(
+                        message: 'No categories data yet',
+                        icon: FluentIcons.grid_24_regular,
+                      )
+                    : Column(
+                        children: controller.topCategories.map((entry) {
+                          return TopItemWidget(
+                            title: entry.key.name,
+                            subtitle: '${entry.value} orders',
+                            count: entry.value,
+                            icon: FluentIcons.grid_24_regular,
+                          );
+                        }).toList(),
+                      ),
+              ],
+            ),
+          ),
+        ),
+        onLoading: const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

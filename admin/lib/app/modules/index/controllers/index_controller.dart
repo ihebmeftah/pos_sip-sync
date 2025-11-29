@@ -48,14 +48,14 @@ class IndexController extends GetxController with StateMixin {
       currBnb = index;
       pageVCtr.jumpToPage(index);
       update(["bottomNavigationBar"]);
-      if ((LocalStorage().user!.type == UserType.employer && index != 2) ||
-          (LocalStorage().user!.type == UserType.admin && index != 3)) {
+      if ((LocalStorage().user!.type == UserType.employer && index != 0) ||
+          (LocalStorage().user!.type == UserType.admin && index != 2)) {
         Get.delete<TablesController>();
       } else {
         Get.put<TablesController>(TablesController());
       }
       if ((LocalStorage().user!.type == UserType.employer && index != 0) ||
-          (LocalStorage().user!.type == UserType.admin && index != 1)) {
+          (LocalStorage().user!.type == UserType.admin && index != 3)) {
         Get.delete<OrderController>();
       } else {
         Get.put<OrderController>(OrderController());

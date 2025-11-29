@@ -108,7 +108,7 @@ class IndexView extends GetView<IndexController> {
                 ? [
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        "assets/images/svg/order.svg",
+                        "assets/images/svg/table.svg",
                         colorFilter: ColorFilter.mode(
                           controller.currBnb == 0
                               ? Theme.of(
@@ -120,8 +120,9 @@ class IndexView extends GetView<IndexController> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: 'Orders',
+                      label: 'Tables',
                     ),
+
                     BottomNavigationBarItem(
                       icon: GestureDetector(
                         onTap: () => Get.toNamed(Routes.QRSCAN),
@@ -134,7 +135,7 @@ class IndexView extends GetView<IndexController> {
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        "assets/images/svg/table.svg",
+                        "assets/images/svg/order.svg",
                         colorFilter: ColorFilter.mode(
                           controller.currBnb == 2
                               ? Theme.of(
@@ -146,7 +147,7 @@ class IndexView extends GetView<IndexController> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: 'Tables',
+                      label: 'Orders',
                     ),
                   ]
                 : [
@@ -166,9 +167,10 @@ class IndexView extends GetView<IndexController> {
                       ),
                       label: 'Dashboard',
                     ),
+
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        "assets/images/svg/order.svg",
+                        "assets/images/svg/inventory.svg",
                         colorFilter: ColorFilter.mode(
                           controller.currBnb == 1
                               ? Theme.of(
@@ -180,11 +182,12 @@ class IndexView extends GetView<IndexController> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: 'Orders',
+                      label: 'Inventory',
                     ),
+
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        "assets/images/svg/inventory.svg",
+                        "assets/images/svg/table.svg",
                         colorFilter: ColorFilter.mode(
                           controller.currBnb == 2
                               ? Theme.of(
@@ -196,11 +199,12 @@ class IndexView extends GetView<IndexController> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: 'Inventory',
+                      label: 'Tables',
                     ),
+
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        "assets/images/svg/table.svg",
+                        "assets/images/svg/order.svg",
                         colorFilter: ColorFilter.mode(
                           controller.currBnb == 3
                               ? Theme.of(
@@ -212,7 +216,7 @@ class IndexView extends GetView<IndexController> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: 'Tables',
+                      label: 'Orders',
                     ),
                   ],
             currentIndex: controller.currBnb,
@@ -226,8 +230,8 @@ class IndexView extends GetView<IndexController> {
           onPageChanged: controller.changeBnbContent,
           controller: controller.pageVCtr,
           children: (LocalStorage().user!.type == UserType.employer)
-              ? [OrderView(), TablesView()]
-              : [HomeView(), OrderView(), InventoryView(), TablesView()],
+              ? [TablesView(), OrderView()]
+              : [HomeView(), InventoryView(), TablesView(), OrderView()],
         ),
       ),
     );

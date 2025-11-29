@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class EmptyStatsWidget extends StatelessWidget {
-  const EmptyStatsWidget({super.key ,required this.icon , this.message});
+  const EmptyStatsWidget({super.key, required this.icon, this.message});
   final IconData icon;
   final String? message;
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,

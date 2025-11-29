@@ -18,9 +18,9 @@ class OrderView extends GetView<OrderController> {
       initialIndex: controller.currentTabIndex,
       child: Scaffold(
         appBar:
-            (Get.find<IndexController>().currBnb != 3 &&
+            (Get.find<IndexController>().currBnb != 2 &&
                     LocalStorage().user!.type == UserType.admin) ||
-                (Get.find<IndexController>().currBnb != 1 &&
+                (Get.find<IndexController>().currBnb != 0 &&
                     LocalStorage().user!.type == UserType.employer)
             ? null
             : AppBar(title: const Text('Orders'), centerTitle: true),

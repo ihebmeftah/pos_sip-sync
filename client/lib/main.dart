@@ -7,8 +7,8 @@ import 'app/routes/app_pages.dart';
 void main() {
   runApp(
     GetMaterialApp(
-      title: "Application",
-      initialRoute: Routes.HOME,
+      title: "Sip&Sync",
+      initialRoute: Routes.INDEX,
       getPages: AppPages.routes,
     ),
   );

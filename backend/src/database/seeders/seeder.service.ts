@@ -32,15 +32,18 @@ export class SeederService {
 
             // 3. Seed tenant databases (categories and articles)
             this.logger.log('📂 Seeding tenant databases...');
+            let totalIngredients = 0;
             let totalCategories = 0;
             let totalArticles = 0;
 
             for (const building of buildings) {
                 await this.tenantSeeder.seedTenantDatabase(building.dbName);
-                totalCategories += 12; // We create 12 categories per tenant
-                totalArticles += 60; // We create ~60 articles per tenant
+                totalIngredients += 28; // We create 28 ingredients per tenant
+                totalCategories += 14; // We create 14 categories per tenant (added 2 drink categories)
+                totalArticles += 99; // We create ~99 articles per tenant (added 39 drink items)
             }
 
+            this.logger.log(`✅ Created ${totalIngredients} ingredients across all tenants`);
             this.logger.log(`✅ Created ${totalCategories} categories across all tenants`);
             this.logger.log(`✅ Created ${totalArticles} articles across all tenants`);
 
@@ -54,6 +57,7 @@ export class SeederService {
             return {
                 admins: admins.length,
                 buildings: buildings.length,
+                ingredients: totalIngredients,
                 categories: totalCategories,
                 articles: totalArticles,
                 employers: employers.length,

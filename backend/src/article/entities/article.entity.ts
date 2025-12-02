@@ -2,7 +2,8 @@ import { UUID } from 'crypto';
 import { Category } from 'src/category/entities/category.entity';
 import { TimestampBaseEntity } from 'src/database/base/timestampbase';
 import { DecimalTransformer } from 'src/utils/decimal-transformer';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ArticleCompo } from './article-compo.entity';
 
 @Entity()
 export class Article extends TimestampBaseEntity {
@@ -17,5 +18,10 @@ export class Article extends TimestampBaseEntity {
     @Column({ type: 'decimal', precision: 10, scale: 2, transformer: new DecimalTransformer() })
     price: number;
     @ManyToOne(() => Category)
-    category: Category
+    category: Category;
+    @OneToMany(
+        () => ArticleCompo,
+        (articleCompo) => articleCompo.article,
+        { nullable: true, cascade: true, eager: true })
+    compositions: ArticleCompo[];
 }

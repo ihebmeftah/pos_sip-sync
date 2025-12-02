@@ -9,6 +9,7 @@ import { UserType } from 'src/enums/user.roles';
 import { CustomFileUploadInterceptor } from 'src/utils/custom-file-upload';
 import { DbNameGuard } from 'src/guards/dbname.guard';
 import { DbName } from 'src/decorators/building.decorator';
+import { AddComposArticleDto } from './dto/add-compos-article.dto';
 
 @Controller('article')
 @UseGuards(JwtAuthGuard, RolesGuard, DbNameGuard)
@@ -32,13 +33,19 @@ export class ArticleController {
     }
     return this.articleService.create(createArticleDto, dbName);
   }
-
   @Get()
   findAll(
     @DbName() dbName: string,
     @Query('categoryId', new ParseUUIDPipe({ optional: true })) categoryId: UUID
   ) {
     return this.articleService.findAll(dbName, categoryId);
+  }
+  @Get(':id')
+  getArticleById(
+    @Param('id', new ParseUUIDPipe) id: UUID,
+    @DbName() dbName: string
+  ) {
+    return this.articleService.findOne(id, dbName);
   }
 
   @Get('Category/:CategoryId')
@@ -47,5 +54,14 @@ export class ArticleController {
     @DbName() dbName: string
   ) {
     return this.articleService.findArticleByCategoryId(CategoryId, dbName);
+  }
+
+  @Post(":id/compos")
+  @Roles(UserType.Admin)
+  async addComposToArticle(
+    @Param('id', new ParseUUIDPipe) id: UUID,
+    @Body() addComposArticleDto: AddComposArticleDto,
+    @DbName() dbName: string) {
+    return await this.articleService.addComposToArticle(dbName, addComposArticleDto, id);
   }
 }

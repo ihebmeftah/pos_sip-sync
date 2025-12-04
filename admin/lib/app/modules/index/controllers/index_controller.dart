@@ -19,7 +19,9 @@ class IndexController extends GetxController with StateMixin {
 
   Future<void> getCaisses() async {
     try {
-      caisses(await CaisseApi().getCaisse());
+      if (LocalStorage().user!.type == UserType.admin) {
+        caisses(await CaisseApi().getCaisse());
+      }
       change(null, status: RxStatus.success());
     } catch (e) {
       change(null, status: RxStatus.error(e.toString()));
@@ -28,9 +30,13 @@ class IndexController extends GetxController with StateMixin {
 
   Future<void> createCaisse() async {
     try {
-      currentCaisse(await CaisseApi().getCaisseOfDay());
       if (LocalStorage().user!.type == UserType.admin) {
-        await getCaisses();
+        currentCaisse(await CaisseApi().getCaisseOfDay());
+        if (LocalStorage().user!.type == UserType.admin) {
+          await getCaisses();
+        } else {
+          change(null, status: RxStatus.success());
+        }
       } else {
         change(null, status: RxStatus.success());
       }
@@ -54,7 +60,7 @@ class IndexController extends GetxController with StateMixin {
       } else {
         Get.put<TablesController>(TablesController());
       }
-      if ((LocalStorage().user!.type == UserType.employer && index != 0) ||
+      if ((LocalStorage().user!.type == UserType.employer && index != 2) ||
           (LocalStorage().user!.type == UserType.admin && index != 3)) {
         Get.delete<OrderController>();
       } else {

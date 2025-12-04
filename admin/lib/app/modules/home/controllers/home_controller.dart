@@ -1,6 +1,7 @@
 import 'package:admin/app/data/local/local_storage.dart';
 import 'package:admin/app/data/model/article/article.dart';
 import 'package:admin/app/data/model/categorie/categorie.dart';
+import 'package:admin/app/data/model/enums/user_role.dart';
 import 'package:admin/app/data/model/stats/buildingstats.dart';
 import 'package:admin/app/data/model/user/login_user.dart';
 import 'package:get/get.dart';
@@ -45,9 +46,13 @@ class HomeController extends GetxController with StateMixin {
 
   Future<void> getStats() async {
     try {
-      buildingStats = await StatsApi.getStats();
-      if (buildingStats == null) {
-        change(null, status: RxStatus.empty());
+      if (LocalStorage().user!.type != UserType.employer) {
+        buildingStats = await StatsApi.getStats();
+        if (buildingStats == null) {
+          change(null, status: RxStatus.empty());
+        } else {
+          change(buildingStats, status: RxStatus.success());
+        }
       } else {
         change(buildingStats, status: RxStatus.success());
       }

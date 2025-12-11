@@ -20,13 +20,18 @@ RUN npm run build
 FROM node:20-alpine
 WORKDIR /app
 
-# Copy only built files and node_modules from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+# Install Python and build tools for native modules
+RUN apk add --no-cache python3 make g++
+
+# Copy package files and install production dependencies
 COPY package*.json ./
+RUN npm install --only=production --legacy-peer-deps
+
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
 
 # Expose port (default NestJS port)
 EXPOSE 3000
 
 # Start the app
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
